@@ -1,0 +1,15 @@
+POST https://api.ratemanu.com/api/login_check
+Content-Type: application/json
+###
+
+POST https://api.ratemanu.com/api/authentication/register
+Content-Type: application/json
+
+{
+  "email": "lirim@veliu.net",
+  "password": "liveislive"
+}
+###
+
+GET https://api.ratemanu.com/api/authentication/me
+###
