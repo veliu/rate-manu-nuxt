@@ -1,8 +1,4 @@
-<script setup lang="ts">
-import Cookies from "js-cookie";
-const route = useRoute();
-const jwt = Cookies.get("ratemanu-token");
-</script>
+<script setup lang="ts"></script>
 <template>
   <NuxtLoadingIndicator />
   <NuxtLayout>
