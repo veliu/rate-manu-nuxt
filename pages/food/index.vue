@@ -1,9 +1,29 @@
 <script setup lang="ts">
+import type { FoodCollection } from "~/types/FoodCollection";
+import type { Reactive } from "vue";
+
 definePageMeta({
   middleware: "auth",
 });
+
+const { $api } = useNuxtApp();
+
+const { data, status, error } = await $api.food.search();
+
+if (status.value === "error") {
+  if (error.value?.statusCode === 401) {
+    navigateTo("/login");
+  }
+
+  console.log(error);
+}
+
+const foodCollection: Reactive<FoodCollection> | null = data.value
+  ? reactive(data.value)
+  : null;
 </script>
 
 <template>
-  <h1>Hello</h1>
+  <Header />
+  <Listing :food-collection="foodCollection" />
 </template>

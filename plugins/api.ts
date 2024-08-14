@@ -2,9 +2,11 @@ import { $fetch, type FetchOptions } from "ofetch";
 
 // locals
 import AuthModule from "~/repository/modules/auth";
+import FoodModule from "~/repository/modules/food";
 
 interface IApiInstance {
   auth: AuthModule;
+  food: FoodModule;
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -20,6 +22,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // An object containing all repositories we need to expose
   const modules: IApiInstance = {
     auth: new AuthModule(apiFecther),
+    food: new FoodModule(apiFecther),
   };
 
   return {
