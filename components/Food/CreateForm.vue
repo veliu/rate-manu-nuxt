@@ -1,10 +1,32 @@
 <script setup lang="ts">
 import { PhotoIcon } from "@heroicons/vue/20/solid";
+import type { LoginRequest } from "~/types/LoginRequest";
+import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
+
+const { $api } = useNuxtApp();
+
+const form = reactive<CreateFoodRequest>({
+  name: "",
+  description: null,
+});
+
+const handleSubmit = async () => {
+  const request: CreateFoodRequest = {
+    name: form.name,
+    description: form.description,
+  };
+
+  const { data, status, error } = await $api.food.create(request);
+
+  if (status.value === "success") {
+    reloadNuxtApp();
+  }
+};
 </script>
 
 <template>
   <h2 class="font-semibold">Bewertung erstellen</h2>
-  <form>
+  <form @submit.prevent="handleSubmit">
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
       <div class="sm:col-span-4">
         <label
@@ -17,6 +39,7 @@ import { PhotoIcon } from "@heroicons/vue/20/solid";
             class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
           >
             <input
+              v-model="form.name"
               type="text"
               name="name"
               id="name"
@@ -37,6 +60,7 @@ import { PhotoIcon } from "@heroicons/vue/20/solid";
       >
       <div class="mt-2">
         <textarea
+          v-model="form.description"
           id="description"
           name="description"
           rows="3"

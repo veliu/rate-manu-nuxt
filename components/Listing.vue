@@ -3,6 +3,7 @@ import type { FoodRating } from "~/types/FoodRating";
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { FoodCollection } from "~/types/FoodCollection";
 import type { Reactive, Ref } from "vue";
+import Card from "~/components/Food/Card.vue";
 
 const props = defineProps<{
   foodCollection: Reactive<FoodCollection> | null;
@@ -23,7 +24,9 @@ const props = defineProps<{
           v-for="food in foodCollection.items"
           :key="food.id"
           class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
-        ></div>
+        >
+          <Card :food="food" />
+        </div>
       </div>
     </div>
   </div>

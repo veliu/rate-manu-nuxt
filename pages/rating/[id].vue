@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import View from "~/components/Rating/View.vue";
+import View from "~/components/Food/View.vue";
 import type { FoodRating } from "~/types/FoodRating";
 
 const route = useRoute();

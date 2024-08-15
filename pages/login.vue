@@ -108,7 +108,7 @@ const handleSubmit = async () => {
         Not a member?
         {{ " " }}
         <NuxtLink
-          to="/user/register"
+          to="/register"
           class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
         >
           Register now

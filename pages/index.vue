@@ -13,5 +13,5 @@ const foodRatings: FoodRating[] = [
 </script>
 <template>
   <Header />
-  <Listing :food-ratings="foodRatings" />
+  <div>Hello and welcome</div>
 </template>

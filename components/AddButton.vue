@@ -26,6 +26,6 @@ const toggleCreateForm = function () {
     ]"
     class="max-w-md"
   >
-    <RatingCreateForm />
+    <FoodCreateForm />
   </div>
 </template>
