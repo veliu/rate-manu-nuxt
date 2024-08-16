@@ -8,14 +8,16 @@ const props = defineProps<{
 console.log(props.food);
 </script>
 <template>
-  <div
-    class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
-  >
-    <NuxtImg
-      :src="food.image ? food.image : `/pizza.jpeg`"
-      class="h-full w-full object-cover object-center sm:h-full sm:w-full"
-    />
-  </div>
+  <NuxtLink :to="'/food/' + food.id">
+    <div
+      class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
+    >
+      <NuxtImg
+        :src="food.image ? food.image : `/pizza.jpeg`"
+        class="h-full w-full object-cover object-center sm:h-full sm:w-full"
+      />
+    </div>
+  </NuxtLink>
   <div class="flex flex-1 flex-col space-y-2 p-4">
     <h3 class="text-sm font-medium text-gray-900"></h3>
     <p class="text-sm text-gray-500">{{ food.name }}</p>

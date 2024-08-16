@@ -11,6 +11,23 @@ class FoodModule extends HttpFactory {
 
   private token = useCookie("ratemanu-login").value?.token ?? "";
 
+  async get(foodId: string, asyncDataOptions?: AsyncDataOptions<Food>) {
+    return useAsyncData(() => {
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<Food>(
+        "GET",
+        `${this.RESOURCE}/${foodId}`,
+        undefined,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
   async search(asyncDataOptions?: AsyncDataOptions<FoodCollection>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
