@@ -4,6 +4,7 @@ import type { FetchOptions } from "ofetch";
 import type { FoodCollection } from "~/types/FoodCollection";
 import type { Food } from "~/types/Food";
 import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
+import type { UpdateFoodImageRequest } from "~/types/UpdateFoodImageRequest";
 
 class FoodModule extends HttpFactory {
   private RESOURCE = "/food";
@@ -42,6 +43,29 @@ class FoodModule extends HttpFactory {
         "POST",
         `${this.RESOURCE}/`,
         request,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
+  async updateImage(
+    foodId: string,
+    request: UpdateFoodImageRequest,
+    asyncDataOptions?: AsyncDataOptions<Food>,
+  ) {
+    return useAsyncData(() => {
+      const formData = new FormData();
+      formData.append("image", request.image);
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<Food>(
+        "POST",
+        `${this.RESOURCE}/${foodId}/update-image`,
+        formData,
         fetchOptions,
       );
     }, asyncDataOptions);

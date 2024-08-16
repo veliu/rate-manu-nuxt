@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { FoodRating } from "~/types/FoodRating";
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
 
 const props = defineProps<{
   food: Food;
 }>();
+console.log(props.food);
 </script>
 <template>
   <div
     class="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
   >
     <NuxtImg
-      src="/pizza.jpeg"
+      :src="food.image ? food.image : `/pizza.jpeg`"
       class="h-full w-full object-cover object-center sm:h-full sm:w-full"
     />
   </div>

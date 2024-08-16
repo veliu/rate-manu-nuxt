@@ -6,4 +6,5 @@ export type Food = {
   group: string;
   createdAt: Date;
   updatedAt: Date;
+  image?: string;
 };
