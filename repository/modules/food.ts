@@ -28,6 +28,23 @@ class FoodModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
+  async delete(foodId: string, asyncDataOptions?: AsyncDataOptions<undefined>) {
+    return useAsyncData(() => {
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<undefined>(
+        "DELETE",
+        `${this.RESOURCE}/${foodId}`,
+        undefined,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
   async search(asyncDataOptions?: AsyncDataOptions<FoodCollection>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {

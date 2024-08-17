@@ -2,10 +2,9 @@
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
 
-const props = defineProps<{
+defineProps<{
   food: Food;
 }>();
-console.log(props.food);
 </script>
 <template>
   <NuxtLink :to="'/food/' + food.id">
