@@ -3,11 +3,13 @@ import type { AsyncDataOptions } from "#app";
 import type { FetchOptions } from "ofetch";
 import type { FoodRating } from "~/types/FoodRating";
 import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
+import type { Token } from "~/types/Token";
+import type { Ref } from "vue";
 
 class FoodRatingModule extends HttpFactory {
   private RESOURCE = "/food-rating";
 
-  private token = useCookie("ratemanu-login").value?.token ?? "";
+  private loginCookie = useCookie("ratemanu-login") as Ref<Token>;
 
   async getPersonalRating(
     foodId: string,
@@ -16,7 +18,7 @@ class FoodRatingModule extends HttpFactory {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
@@ -36,7 +38,7 @@ class FoodRatingModule extends HttpFactory {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };

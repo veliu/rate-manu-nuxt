@@ -1,15 +1,16 @@
 import type { Token } from "~/types/Token";
+import type { Ref } from "vue";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const cookie = useCookie("ratemanu-login");
+  const loginCookie = useCookie("ratemanu-login") as Ref<Token | null>;
 
-  if (typeof cookie.value == undefined) {
+  if (typeof loginCookie.value == undefined) {
     return navigateTo("/login");
   }
 
   const token: Token = {
-    token: <string>cookie.value?.token,
-    refresh_token: <string>cookie.value?.refresh_token,
+    token: <string>loginCookie.value?.token,
+    refresh_token: <string>loginCookie.value?.refresh_token,
   };
 
   const { $api } = useNuxtApp();
@@ -20,5 +21,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/login");
   }
 
-  cookie.value = data.value;
+  loginCookie.value = data.value;
 });

@@ -1,7 +1,7 @@
 import { type $Fetch, type FetchOptions } from "ofetch";
 
 class HttpFactory {
-  private $fetch: $Fetch;
+  private readonly $fetch: $Fetch;
 
   constructor(fetcher: $Fetch) {
     this.$fetch = fetcher;

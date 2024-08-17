@@ -18,14 +18,14 @@ export default defineNuxtPlugin((nuxtApp) => {
     baseURL: config.public.apiBaseUrl,
   };
 
-  // Create a new instance of $fecther with custom option
-  const apiFecther = $fetch.create(fetchOptions);
+  // Create a new instance of $fetcher with custom option
+  const apiFetcher = $fetch.create(fetchOptions);
 
   // An object containing all repositories we need to expose
   const modules: IApiInstance = {
-    auth: new AuthModule(apiFecther),
-    food: new FoodModule(apiFecther),
-    foodRating: new FoodRatingModule(apiFecther),
+    auth: new AuthModule(apiFetcher),
+    food: new FoodModule(apiFetcher),
+    foodRating: new FoodRatingModule(apiFetcher),
   };
 
   return {

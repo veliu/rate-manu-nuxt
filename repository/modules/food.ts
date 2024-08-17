@@ -5,17 +5,19 @@ import type { FoodCollection } from "~/types/FoodCollection";
 import type { Food } from "~/types/Food";
 import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
 import type { UpdateFoodImageRequest } from "~/types/UpdateFoodImageRequest";
+import type { Token } from "~/types/Token";
+import type { Ref } from "vue";
 
 class FoodModule extends HttpFactory {
   private RESOURCE = "/food";
 
-  private token = useCookie("ratemanu-login").value?.token ?? "";
+  private loginCookie = useCookie("ratemanu-login") as Ref<Token>;
 
   async get(foodId: string, asyncDataOptions?: AsyncDataOptions<Food>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
@@ -32,7 +34,7 @@ class FoodModule extends HttpFactory {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
@@ -49,7 +51,7 @@ class FoodModule extends HttpFactory {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
@@ -69,7 +71,7 @@ class FoodModule extends HttpFactory {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
@@ -92,7 +94,7 @@ class FoodModule extends HttpFactory {
       formData.append("image", request.image);
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
           "Accept-Language": "en-US",
         },
       };
