@@ -12,7 +12,7 @@ const props = defineProps<{
 
 <template>
   <AddButton />
-  <div class="bg-white">
+  <div class="">
     <div class="mx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <h2 class="sr-only">Products</h2>
 

@@ -1,7 +1,8 @@
 export type FoodRating = {
   id: string;
-  name: string;
-  description?: string;
-  images?: string[];
+  food: string;
   rating: number;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
