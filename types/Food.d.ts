@@ -7,4 +7,5 @@ export type Food = {
   createdAt: Date;
   updatedAt: Date;
   image?: string;
+  averageRating: number;
 };

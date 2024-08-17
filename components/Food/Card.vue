@@ -28,10 +28,12 @@ defineProps<{
         <p class="sr-only">1 out of 5 stars</p>
         <div class="flex items-center">
           <StarIcon
-            v-for="ratings in [0, 1, 2, 3, 4]"
-            :key="ratings"
+            v-for="rating in [1, 2, 3, 4, 5]"
+            :key="rating"
             :class="[
-              0 > ratings ? 'text-yellow-400' : 'text-gray-200',
+              food.averageRating <= rating
+                ? 'text-yellow-400'
+                : 'text-gray-200',
               'h-5 w-5 flex-shrink-0',
             ]"
             aria-hidden="true"
