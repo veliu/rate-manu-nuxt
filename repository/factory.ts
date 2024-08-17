@@ -1,4 +1,4 @@
-import { type $Fetch, type FetchOptions } from "ofetch";
+import type { $Fetch, FetchOptions } from "ofetch";
 
 class HttpFactory {
   private readonly $fetch: $Fetch;

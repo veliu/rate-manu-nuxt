@@ -1,23 +1,29 @@
-import {
+import type {
   ResponseContext,
   RequestContext,
-  HttpFile,
-  HttpInfo,
+  HttpInfo} from "../http/http";
+import {
+  HttpFile
 } from "../http/http";
-import { Configuration } from "../configuration";
-import { Observable, of, from } from "../rxjsStub";
-import { mergeMap, map } from "../rxjsStub";
-import { CreateFoodRequest } from "../models/CreateFoodRequest";
-import { CreateRatingRequest } from "../models/CreateRatingRequest";
-import { FoodCollectionResponse } from "../models/FoodCollectionResponse";
+import type { Configuration } from "../configuration";
+import type { Observable} from "../rxjsStub";
+import { of, from , mergeMap, map } from "../rxjsStub";
+import type { CreateFoodRequest } from "../models/CreateFoodRequest";
+import type { CreateRatingRequest } from "../models/CreateRatingRequest";
+import type { FoodCollectionResponse } from "../models/FoodCollectionResponse";
 import { FoodResponse } from "../models/FoodResponse";
-import { RegisterUserRequest } from "../models/RegisterUserRequest";
-import { UpdateRatingRequest } from "../models/UpdateRatingRequest";
+import type { RegisterUserRequest } from "../models/RegisterUserRequest";
+import type { UpdateRatingRequest } from "../models/UpdateRatingRequest";
 
 import {
   DefaultApiRequestFactory,
   DefaultApiResponseProcessor,
 } from "../apis/DefaultApi";
+
+import {
+  FoodApiRequestFactory,
+  FoodApiResponseProcessor,
+} from "../apis/FoodApi";
 export class ObservableDefaultApi {
   private requestFactory: DefaultApiRequestFactory;
   private responseProcessor: DefaultApiResponseProcessor;
@@ -50,7 +56,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -63,7 +69,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -104,7 +110,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -117,7 +123,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -158,7 +164,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -171,7 +177,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -215,7 +221,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -228,7 +234,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -272,7 +278,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -285,7 +291,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -329,7 +335,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -342,7 +348,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -389,7 +395,7 @@ export class ObservableDefaultApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -402,7 +408,7 @@ export class ObservableDefaultApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -434,11 +440,6 @@ export class ObservableDefaultApi {
     ).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
   }
 }
-
-import {
-  FoodApiRequestFactory,
-  FoodApiResponseProcessor,
-} from "../apis/FoodApi";
 export class ObservableFoodApi {
   private requestFactory: FoodApiRequestFactory;
   private responseProcessor: FoodApiResponseProcessor;
@@ -468,7 +469,7 @@ export class ObservableFoodApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -481,7 +482,7 @@ export class ObservableFoodApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );
@@ -524,7 +525,7 @@ export class ObservableFoodApi {
 
     // build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    for (let middleware of this.configuration.middleware) {
+    for (const middleware of this.configuration.middleware) {
       middlewarePreObservable = middlewarePreObservable.pipe(
         mergeMap((ctx: RequestContext) => middleware.pre(ctx)),
       );
@@ -537,7 +538,7 @@ export class ObservableFoodApi {
       .pipe(
         mergeMap((response: ResponseContext) => {
           let middlewarePostObservable = of(response);
-          for (let middleware of this.configuration.middleware) {
+          for (const middleware of this.configuration.middleware) {
             middlewarePostObservable = middlewarePostObservable.pipe(
               mergeMap((rsp: ResponseContext) => middleware.post(rsp)),
             );

@@ -4,22 +4,23 @@ import {
   RequiredError,
   COLLECTION_FORMATS,
 } from "./baseapi";
-import { Configuration } from "../configuration";
-import {
+import type { Configuration } from "../configuration";
+import type {
   RequestContext,
+  ResponseContext} from "../http/http";
+import {
   HttpMethod,
-  ResponseContext,
   HttpFile,
   HttpInfo,
 } from "../http/http";
 import { ObjectSerializer } from "../models/ObjectSerializer";
 import { ApiException } from "./exception";
 import { canConsumeForm, isCodeInRange } from "../util";
-import { SecurityAuthentication } from "../auth/auth";
+import type { SecurityAuthentication } from "../auth/auth";
 
-import { CreateRatingRequest } from "../models/CreateRatingRequest";
-import { RegisterUserRequest } from "../models/RegisterUserRequest";
-import { UpdateRatingRequest } from "../models/UpdateRatingRequest";
+import type { CreateRatingRequest } from "../models/CreateRatingRequest";
+import type { RegisterUserRequest } from "../models/RegisterUserRequest";
+import type { UpdateRatingRequest } from "../models/UpdateRatingRequest";
 
 /**
  * no description
@@ -32,7 +33,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     token: string,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'token' is not null or undefined
     if (token === null || token === undefined) {
@@ -83,7 +84,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
   public async getVeliuRatemanuApplicationRestapiAuthenticationMeactionInvoke(
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // Path Params
     const localVarPath = "/api/authentication/me";
@@ -119,7 +120,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     token: string,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'token' is not null or undefined
     if (token === null || token === undefined) {
@@ -172,7 +173,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     registerUserRequest: RegisterUserRequest,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'registerUserRequest' is not null or undefined
     if (registerUserRequest === null || registerUserRequest === undefined) {
@@ -232,7 +233,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     createRatingRequest: CreateRatingRequest,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'createRatingRequest' is not null or undefined
     if (createRatingRequest === null || createRatingRequest === undefined) {
@@ -292,7 +293,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     emailAddress: string,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'emailAddress' is not null or undefined
     if (emailAddress === null || emailAddress === undefined) {
@@ -342,7 +343,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     updateRatingRequest: UpdateRatingRequest,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'id' is not null or undefined
     if (id === null || id === undefined) {

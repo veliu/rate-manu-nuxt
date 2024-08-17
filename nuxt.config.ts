@@ -5,7 +5,12 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     },
   },
-  modules: ["@nuxt/image", "@nuxt/ui"],
+  modules: ["@nuxt/image", "@nuxt/ui", "@nuxt/eslint"],
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+  eslint: {
+    config: {
+      stylistic: true
+    }
+  }
 });

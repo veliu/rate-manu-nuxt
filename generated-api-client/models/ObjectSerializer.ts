@@ -1,10 +1,3 @@
-export * from "../models/CreateFoodRequest";
-export * from "../models/CreateRatingRequest";
-export * from "../models/FoodCollectionResponse";
-export * from "../models/FoodResponse";
-export * from "../models/RegisterUserRequest";
-export * from "../models/UpdateRatingRequest";
-
 import { CreateFoodRequest } from "../models/CreateFoodRequest";
 import { CreateRatingRequest } from "../models/CreateRatingRequest";
 import { FoodCollectionResponse } from "../models/FoodCollectionResponse";
@@ -12,8 +5,15 @@ import { FoodResponse } from "../models/FoodResponse";
 import { RegisterUserRequest } from "../models/RegisterUserRequest";
 import { UpdateRatingRequest } from "../models/UpdateRatingRequest";
 
+export * from "../models/CreateFoodRequest";
+export * from "../models/CreateRatingRequest";
+export * from "../models/FoodCollectionResponse";
+export * from "../models/FoodResponse";
+export * from "../models/RegisterUserRequest";
+export * from "../models/UpdateRatingRequest";
+
 /* tslint:disable:no-unused-variable */
-let primitives = [
+const primitives = [
   "string",
   "boolean",
   "double",
@@ -24,9 +24,9 @@ let primitives = [
   "any",
 ];
 
-let enumsMap: Set<string> = new Set<string>([]);
+const enumsMap: Set<string> = new Set<string>([]);
 
-let typeMap: { [index: string]: any } = {
+const typeMap: { [index: string]: any } = {
   CreateFoodRequest: CreateFoodRequest,
   CreateRatingRequest: CreateRatingRequest,
   FoodCollectionResponse: FoodCollectionResponse,
@@ -122,12 +122,12 @@ export class ObjectSerializer {
       }
 
       // Check the discriminator
-      let discriminatorProperty = typeMap[expectedType].discriminator;
+      const discriminatorProperty = typeMap[expectedType].discriminator;
       if (discriminatorProperty == null) {
         return expectedType; // the type does not have a discriminator. use it.
       } else {
         if (data[discriminatorProperty]) {
-          var discriminatorType = data[discriminatorProperty];
+          const discriminatorType = data[discriminatorProperty];
           if (typeMap[discriminatorType]) {
             return discriminatorType; // use the type given in the discriminator
           } else {
@@ -149,8 +149,8 @@ export class ObjectSerializer {
       // string.startsWith pre es6
       let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
       subType = subType.substring(0, subType.length - 1); // Type> => Type
-      let transformedData: any[] = [];
-      for (let date of data) {
+      const transformedData: any[] = [];
+      for (const date of data) {
         transformedData.push(ObjectSerializer.serialize(date, subType, format));
       }
       return transformedData;
@@ -178,9 +178,9 @@ export class ObjectSerializer {
       type = this.findCorrectType(data, type);
 
       // get the map for the correct type.
-      let attributeTypes = typeMap[type].getAttributeTypeMap();
-      let instance: { [index: string]: any } = {};
-      for (let attributeType of attributeTypes) {
+      const attributeTypes = typeMap[type].getAttributeTypeMap();
+      const instance: { [index: string]: any } = {};
+      for (const attributeType of attributeTypes) {
         instance[attributeType.baseName] = ObjectSerializer.serialize(
           data[attributeType.name],
           attributeType.type,
@@ -202,8 +202,8 @@ export class ObjectSerializer {
       // string.startsWith pre es6
       let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
       subType = subType.substring(0, subType.length - 1); // Type> => Type
-      let transformedData: any[] = [];
-      for (let date of data) {
+      const transformedData: any[] = [];
+      for (const date of data) {
         transformedData.push(
           ObjectSerializer.deserialize(date, subType, format),
         );
@@ -221,10 +221,10 @@ export class ObjectSerializer {
         // dont know the type
         return data;
       }
-      let instance = new typeMap[type]();
-      let attributeTypes = typeMap[type].getAttributeTypeMap();
-      for (let attributeType of attributeTypes) {
-        let value = ObjectSerializer.deserialize(
+      const instance = new typeMap[type]();
+      const attributeTypes = typeMap[type].getAttributeTypeMap();
+      for (const attributeType of attributeTypes) {
+        const value = ObjectSerializer.deserialize(
           data[attributeType.baseName],
           attributeType.type,
           attributeType.format,

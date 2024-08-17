@@ -20,8 +20,8 @@ const props = defineProps<{
         class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8"
       >
         <div
-          v-if="foodCollection"
           v-for="food in foodCollection.items"
+          v-if="foodCollection"
           :key="food.id"
           class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
         >

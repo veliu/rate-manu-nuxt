@@ -2,7 +2,7 @@
 import { PlusCircleIcon } from "@heroicons/vue/20/solid";
 import type { Ref } from "vue";
 
-let openForm: Ref<boolean> = ref(false);
+const openForm: Ref<boolean> = ref(false);
 
 const toggleCreateForm = function () {
   openForm.value = !openForm.value;

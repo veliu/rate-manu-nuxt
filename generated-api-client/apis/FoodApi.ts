@@ -4,21 +4,22 @@ import {
   RequiredError,
   COLLECTION_FORMATS,
 } from "./baseapi";
-import { Configuration } from "../configuration";
-import {
+import type { Configuration } from "../configuration";
+import type {
   RequestContext,
+  ResponseContext} from "../http/http";
+import {
   HttpMethod,
-  ResponseContext,
   HttpFile,
   HttpInfo,
 } from "../http/http";
 import { ObjectSerializer } from "../models/ObjectSerializer";
 import { ApiException } from "./exception";
 import { canConsumeForm, isCodeInRange } from "../util";
-import { SecurityAuthentication } from "../auth/auth";
+import type { SecurityAuthentication } from "../auth/auth";
 
-import { CreateFoodRequest } from "../models/CreateFoodRequest";
-import { FoodCollectionResponse } from "../models/FoodCollectionResponse";
+import type { CreateFoodRequest } from "../models/CreateFoodRequest";
+import type { FoodCollectionResponse } from "../models/FoodCollectionResponse";
 
 /**
  * no description
@@ -29,7 +30,7 @@ export class FoodApiRequestFactory extends BaseAPIRequestFactory {
   public async getVeliuRatemanuApplicationRestapiFoodFoodcrudSearch(
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // Path Params
     const localVarPath = "/api/food/";
@@ -65,7 +66,7 @@ export class FoodApiRequestFactory extends BaseAPIRequestFactory {
     createFoodRequest: CreateFoodRequest,
     _options?: Configuration,
   ): Promise<RequestContext> {
-    let _config = _options || this.configuration;
+    const _config = _options || this.configuration;
 
     // verify required parameter 'createFoodRequest' is not null or undefined
     if (createFoodRequest === null || createFoodRequest === undefined) {

@@ -1,23 +1,29 @@
+import type {
+  HttpInfo} from "../http/http";
 import {
   ResponseContext,
   RequestContext,
-  HttpFile,
-  HttpInfo,
+  HttpFile
 } from "../http/http";
-import { Configuration } from "../configuration";
+import type { Configuration } from "../configuration";
 
-import { CreateFoodRequest } from "../models/CreateFoodRequest";
-import { CreateRatingRequest } from "../models/CreateRatingRequest";
-import { FoodCollectionResponse } from "../models/FoodCollectionResponse";
+import type { CreateFoodRequest } from "../models/CreateFoodRequest";
+import type { CreateRatingRequest } from "../models/CreateRatingRequest";
+import type { FoodCollectionResponse } from "../models/FoodCollectionResponse";
 import { FoodResponse } from "../models/FoodResponse";
-import { RegisterUserRequest } from "../models/RegisterUserRequest";
-import { UpdateRatingRequest } from "../models/UpdateRatingRequest";
+import type { RegisterUserRequest } from "../models/RegisterUserRequest";
+import type { UpdateRatingRequest } from "../models/UpdateRatingRequest";
 
-import { ObservableDefaultApi } from "./ObservableAPI";
-import {
+import { ObservableDefaultApi , ObservableFoodApi } from "./ObservableAPI";
+import type {
   DefaultApiRequestFactory,
   DefaultApiResponseProcessor,
 } from "../apis/DefaultApi";
+
+import type {
+  FoodApiRequestFactory,
+  FoodApiResponseProcessor,
+} from "../apis/FoodApi";
 
 export interface DefaultApiGetVeliuRatemanuApplicationRestapiAuthenticationConfirmuserregistrationactionInvokeRequest {
   /**
@@ -304,12 +310,6 @@ export class ObjectDefaultApi {
       .toPromise();
   }
 }
-
-import { ObservableFoodApi } from "./ObservableAPI";
-import {
-  FoodApiRequestFactory,
-  FoodApiResponseProcessor,
-} from "../apis/FoodApi";
 
 export interface FoodApiGetVeliuRatemanuApplicationRestapiFoodFoodcrudSearchRequest {}
 

@@ -1,4 +1,5 @@
-import { Observable, from } from "../rxjsStub";
+import type { Observable} from "../rxjsStub";
+import { from } from "../rxjsStub";
 
 export * from "./isomorphic-fetch";
 

@@ -1,4 +1,4 @@
-import { RequestContext } from "../http/http";
+import type { RequestContext } from "../http/http";
 
 /**
  * Interface authentication schemes.
@@ -66,7 +66,7 @@ export type AuthMethodsConfiguration = {
 export function configureAuthMethods(
   config: AuthMethodsConfiguration | undefined,
 ): AuthMethods {
-  let authMethods: AuthMethods = {};
+  const authMethods: AuthMethods = {};
 
   if (!config) {
     return authMethods;

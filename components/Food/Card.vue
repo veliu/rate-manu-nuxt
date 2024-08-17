@@ -19,7 +19,7 @@ defineProps<{
       </div>
     </NuxtLink>
     <div class="flex flex-1 flex-col space-y-2 p-4">
-      <h3 class="text-sm font-medium text-gray-900"></h3>
+      <h3 class="text-sm font-medium text-gray-900"/>
       <p class="text-sm text-gray-500">{{ food.name }}</p>
       <div class="flex flex-1 flex-col justify-end">
         <p class="text-sm italic text-gray-500">{{ food.description }}</p>

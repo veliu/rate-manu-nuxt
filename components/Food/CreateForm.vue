@@ -76,14 +76,14 @@ const handleSubmit = async () => {
             class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
           >
             <input
+              id="name"
               v-model="form.name"
               type="text"
               name="name"
-              id="name"
               autocomplete="name"
               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               placeholder="Nudeln mit Gemüse"
-            />
+            >
           </div>
         </div>
       </div>
@@ -97,8 +97,8 @@ const handleSubmit = async () => {
       >
       <div class="mt-2">
         <textarea
-          v-model="form.description"
           id="description"
+          v-model="form.description"
           name="description"
           rows="3"
           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -130,12 +130,12 @@ const handleSubmit = async () => {
             >
               <span>Bild hochladen</span>
               <input
-                v-on:change="setImage"
                 id="file-upload"
                 name="file-upload"
                 type="file"
                 class="sr-only"
-              />
+                @change="setImage"
+              >
             </label>
             <p class="pl-1">oder per drag and drop</p>
           </div>

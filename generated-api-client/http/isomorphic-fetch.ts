@@ -1,11 +1,13 @@
-import { HttpLibrary, RequestContext, ResponseContext } from "./http";
-import { from, Observable } from "../rxjsStub";
+import type { HttpLibrary, RequestContext} from "./http";
+import { ResponseContext } from "./http";
+import type { Observable } from "../rxjsStub";
+import { from } from "../rxjsStub";
 import "whatwg-fetch";
 
 export class IsomorphicFetchHttpLibrary implements HttpLibrary {
   public send(request: RequestContext): Observable<ResponseContext> {
-    let method = request.getHttpMethod().toString();
-    let body = request.getBody();
+    const method = request.getHttpMethod().toString();
+    const body = request.getBody();
 
     const resultPromise = fetch(request.getUrl(), {
       method: method,

@@ -24,8 +24,8 @@ const props = defineProps<{
               <Tab
                 v-for="image in foodRating.images"
                 :key="image"
-                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                 v-slot="{ selected }"
+                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
               >
                 <span class="sr-only">{{ image }}</span>
                 <span class="absolute inset-0 overflow-hidden rounded-md">

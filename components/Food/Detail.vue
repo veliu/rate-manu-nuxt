@@ -93,13 +93,13 @@ async function handlePersist() {
 <template>
   <LoadingOverlay v-if="isLoading" />
   <UButton
-    @click="handleDelete"
     label="Delete"
     variant="soft"
     size="xl"
     class="mt-4 justify-center"
     icon="i-heroicons-x-mark"
     trailing
+    @click="handleDelete"
   />
 
   <div class="dark:text-white">
@@ -116,8 +116,8 @@ async function handlePersist() {
             <TabList v-if="food.image" class="grid grid-cols-4 gap-6">
               <Tab
                 :key="food.image"
-                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                 v-slot="{ selected }"
+                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
               >
                 <span class="sr-only">{{ food.image }}</span>
                 <span class="absolute inset-0 overflow-hidden rounded-md">
@@ -176,8 +176,8 @@ async function handlePersist() {
           </div>
 
           <UInputMenu
-            size="xl"
             v-model="selectedRating"
+            size="xl"
             :options="possibleRatings"
             value-attribute="id"
             option-attribute="name"
@@ -195,7 +195,6 @@ async function handlePersist() {
         </div>
       </div>
       <UButton
-        @click="handlePersist"
         :loading="isLoading"
         block
         label="Save"
@@ -204,6 +203,7 @@ async function handlePersist() {
         class="mt-4 justify-center"
         icon="i-heroicons-pencil-square"
         trailing
+        @click="handlePersist"
       />
     </div>
   </div>

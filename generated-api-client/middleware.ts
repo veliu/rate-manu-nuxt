@@ -1,5 +1,6 @@
-import { RequestContext, ResponseContext } from "./http/http";
-import { Observable, from } from "./rxjsStub";
+import type { RequestContext, ResponseContext } from "./http/http";
+import type { Observable} from "./rxjsStub";
+import { from } from "./rxjsStub";
 
 /**
  * Defines the contract for a middleware intercepting requests before

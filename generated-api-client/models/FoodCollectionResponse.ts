@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-import { FoodResponse } from "../models/FoodResponse";
+import type { FoodResponse } from "../models/FoodResponse";
 import { HttpFile } from "../http/http";
 
 export class FoodCollectionResponse {
