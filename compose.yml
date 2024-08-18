@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        PNPM_VERSION: ${PNPM_VERSION:-9.6.0}
+        API_BASE_URL: ${API_BASE_URL:-https://my.shop/store-api}
+    volumes:
+      - ".:/usr/src/app"
+    env_file:
+      - .env
+    user: "node"
+    ports:
+      - "3000:3000"
+      - "24678:24678"
+    command: ["pnpm", "dev"]

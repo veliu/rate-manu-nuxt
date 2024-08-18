@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { FoodRating } from "~/types/FoodRating";
 import { StarIcon } from "@heroicons/vue/20/solid";
-import type { FoodCollection } from "~/types/FoodCollection";
 import type { Reactive, Ref } from "vue";
+import type { FoodRating } from "~/types/FoodRating";
+import type { FoodCollection } from "~/types/FoodCollection";
 import Card from "~/components/Food/Card.vue";
 
 const props = defineProps<{

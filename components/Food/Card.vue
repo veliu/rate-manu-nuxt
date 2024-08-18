@@ -6,6 +6,7 @@ defineProps<{
   food: Food;
 }>();
 </script>
+
 <template>
   <div class="dark:bg-primary-500">
     <NuxtLink :to="'/food/' + food.id">
@@ -19,10 +20,14 @@ defineProps<{
       </div>
     </NuxtLink>
     <div class="flex flex-1 flex-col space-y-2 p-4">
-      <h3 class="text-sm font-medium text-gray-900"/>
-      <p class="text-sm text-gray-500">{{ food.name }}</p>
+      <h3 class="text-sm font-medium text-gray-900" />
+      <p class="text-sm text-gray-500">
+        {{ food.name }}
+      </p>
       <div class="flex flex-1 flex-col justify-end">
-        <p class="text-sm italic text-gray-500">{{ food.description }}</p>
+        <p class="text-sm italic text-gray-500">
+          {{ food.description }}
+        </p>
       </div>
       <div class="mt-3 flex flex-col items-center">
         <p class="sr-only">1 out of 5 stars</p>

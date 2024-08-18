@@ -1,10 +1,10 @@
+import type { FetchOptions } from "ofetch";
+import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
-import type { FetchOptions } from "ofetch";
 import type { FoodRating } from "~/types/FoodRating";
 import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
 import type { Token } from "~/types/Token";
-import type { Ref } from "vue";
 
 class FoodRatingModule extends HttpFactory {
   private RESOURCE = "/food-rating";

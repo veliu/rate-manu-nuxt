@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { PhotoIcon } from "@heroicons/vue/20/solid";
+import type { Ref } from "vue";
 import type { LoginRequest } from "~/types/LoginRequest";
 import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
 import type { UpdateFoodImageRequest } from "~/types/UpdateFoodImageRequest";
-import type { Ref } from "vue";
 
 const { $api } = useNuxtApp();
 
@@ -83,7 +83,7 @@ const handleSubmit = async () => {
               autocomplete="name"
               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               placeholder="Nudeln mit Gemüse"
-            >
+            />
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@ const handleSubmit = async () => {
                 type="file"
                 class="sr-only"
                 @change="setImage"
-              >
+              />
             </label>
             <p class="pl-1">oder per drag and drop</p>
           </div>

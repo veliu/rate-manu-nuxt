@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { FoodCollection } from "~/types/FoodCollection";
 import type { Reactive } from "vue";
+import type { FoodCollection } from "~/types/FoodCollection";
 
 definePageMeta({
   middleware: "auth",

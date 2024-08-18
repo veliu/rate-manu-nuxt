@@ -48,8 +48,12 @@ onMounted(() => {
                 />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
-                <p class="text-sm font-medium text-gray-900">{{ title }}</p>
-                <p class="mt-1 text-sm text-gray-500">{{ description }}</p>
+                <p class="text-sm font-medium text-gray-900">
+                  {{ title }}
+                </p>
+                <p class="mt-1 text-sm text-gray-500">
+                  {{ description }}
+                </p>
               </div>
               <div class="ml-4 flex flex-shrink-0">
                 <button

@@ -1,13 +1,13 @@
+import type { FetchOptions } from "ofetch";
+import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { RegisterRequest } from "~/types/RegisterRequest";
 import type { RegisterResponse } from "~/types/RegisterResponse";
 import type { AsyncDataOptions } from "#app";
-import type { FetchOptions } from "ofetch";
 import type { LoginResponse } from "~/types/LoginResponse";
 import type { LoginRequest } from "~/types/LoginRequest";
 import type { LoginCheck } from "~/types/LoginCheck";
 import type { RefreshToken } from "~/types/RefreshToken";
-import type { Ref } from "vue";
 import type { Token } from "~/types/Token";
 
 class AuthModule extends HttpFactory {

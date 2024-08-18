@@ -1,12 +1,12 @@
+import type { FetchOptions } from "ofetch";
+import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
-import type { FetchOptions } from "ofetch";
 import type { FoodCollection } from "~/types/FoodCollection";
 import type { Food } from "~/types/Food";
 import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
 import type { UpdateFoodImageRequest } from "~/types/UpdateFoodImageRequest";
 import type { Token } from "~/types/Token";
-import type { Ref } from "vue";
 
 class FoodModule extends HttpFactory {
   private RESOURCE = "/food";

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { PlusCircleIcon } from "@heroicons/vue/20/solid";
 import type { Ref } from "vue";
 
 const openForm: Ref<boolean> = ref(false);
