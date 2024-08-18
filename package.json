@@ -8,8 +8,10 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prettier": "prettier --write \"**/*.{ts,tsx,md,vue}\"",
-    "generate-client": "pnpm openapi --input https://api.ratemanu.com/doc.json --output ./api-client/"
+    "format": "prettier --write \"**/*.{ts,tsx,md,vue}\"",
+    "lint:prettier": "prettier --check \"**/*.{ts,tsx,md,vue}\"",
+    "generate-client": "pnpm openapi --input https://api.ratemanu.com/doc.json --output ./api-client/",
+    "lint": "pnpm lint:prettier"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
