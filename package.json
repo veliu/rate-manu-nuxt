@@ -12,7 +12,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,vue}\"",
     "lint:prettier": "prettier --check \"**/*.{ts,tsx,md,vue}\"",
     "generate-client": "pnpm openapi --input https://api.ratemanu.com/doc.json --output ./api-client/",
-    "lint": "eslint && pnpm lint:prettier && pnpm run typecheck"
+    "lint": "eslint . && pnpm lint:prettier && pnpm run typecheck"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
