@@ -23,10 +23,10 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
-    "js-cookie": "^3.0.5",
     "nuxt": "^3.12.4",
     "vue": "latest",
-    "vue3-carousel-nuxt": "^1.1.2"
+    "vue3-carousel-nuxt": "^1.1.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.1.24",

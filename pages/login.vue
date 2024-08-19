@@ -1,23 +1,32 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import Cookies from "js-cookie";
+import { object, string, type InferType } from "yup";
 import type { LoginRequest } from "~/types/LoginRequest";
 import type { LoginResponse } from "~/types/LoginResponse";
-import router from "#app/plugins/router";
+import type { FormSubmitEvent } from "#ui/types";
 
 const { $api } = useNuxtApp();
 
-const form = reactive<LoginRequest>({
-  username: "",
+const schema = object({
+  email: string().email("Invalid email").required("Required"),
+  password: string()
+    .min(8, "Must be at least 8 characters")
+    .required("Required"),
+});
+
+type Schema = InferType<typeof schema>;
+
+const state = reactive({
+  email: "",
   password: "",
 });
 
 const errorMessage = ref("");
 
-const handleSubmit = async () => {
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   const credentials: LoginRequest = {
-    username: form.username,
-    password: form.password,
+    username: event.data.email,
+    password: event.data.password,
   };
 
   const { data, status, error } = await $api.auth.login(credentials);
@@ -30,7 +39,8 @@ const handleSubmit = async () => {
 
   if (status.value === "success") {
     const loginResponse = data.value as LoginResponse;
-    Cookies.set("ratemanu-login", JSON.stringify(loginResponse));
+    const loginCookie = useCookie("ratemanu-login");
+    loginCookie.value = JSON.stringify(loginResponse);
     navigateTo("/");
   }
 };
@@ -40,81 +50,46 @@ const handleSubmit = async () => {
   <div
     class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8"
   >
-    <p>{{ errorMessage }}</p>
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <img
+      <NuxtImg
+        src="apple-touch-icon.png"
         class="mx-auto h-10 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-        alt="Your Company"
+        alt="RateManu Logo"
       />
       <h2
-        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-primary-500"
       >
         Sign in to your account
       </h2>
     </div>
-
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-      <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form class="space-y-6" @submit.prevent="handleSubmit">
-          <div>
-            <label
-              for="email"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >Email address</label
-            >
-            <div class="mt-2">
-              <input
-                id="email"
-                v-model="form.username"
-                name="email"
-                type="email"
-                autocomplete="email"
-                required
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
+        <UFormGroup label="Email" name="email">
+          <UInput v-model="state.email" />
+        </UFormGroup>
 
-          <div>
-            <label
-              for="password"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >Password</label
-            >
-            <div class="mt-2">
-              <input
-                id="password"
-                v-model="form.password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-          <div>
-            <button
-              type="submit"
-              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
-            </button>
-          </div>
-        </form>
-      </div>
+        <UFormGroup label="Password" name="password">
+          <UInput v-model="state.password" type="password" />
+        </UFormGroup>
 
-      <p class="mt-10 text-center text-sm text-gray-500">
-        Not a member?
-        {{ " " }}
-        <NuxtLink
-          to="/register"
-          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >
-          Register now
-        </NuxtLink>
-      </p>
+        <UButton type="submit"> Submit </UButton>
+      </UForm>
     </div>
+    <p class="mt-10 text-center text-sm text-gray-500">
+      Not a member?
+      {{ " " }}
+      <ULink
+        to="/register"
+        active-class="text-primary"
+        inactive-class="text-gray-500 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-200"
+      >
+        Register now
+      </ULink>
+    </p>
   </div>
 </template>

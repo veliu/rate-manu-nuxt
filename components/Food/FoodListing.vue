@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { StarIcon } from "@heroicons/vue/20/solid";
-import type { Reactive, Ref } from "vue";
-import type { FoodRating } from "~/types/FoodRating";
+import type { Reactive } from "vue";
 import type { FoodCollection } from "~/types/FoodCollection";
-import Card from "~/components/Food/FoodCard.vue";
 
-const props = defineProps<{
+defineProps<{
   foodCollection: Reactive<FoodCollection> | null;
 }>();
 </script>
@@ -23,7 +20,7 @@ const props = defineProps<{
         v-if="foodCollection"
         class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
       >
-        <Card
+        <FoodCard
           v-for="food in foodCollection.items"
           :key="food.id"
           :food="food"

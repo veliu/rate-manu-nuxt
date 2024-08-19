@@ -25,6 +25,6 @@ const foodCollection: Reactive<FoodCollection> | null = data.value
 </script>
 
 <template>
-  <Header />
-  <Listing :food-collection="foodCollection" />
+  <DefaultHeader />
+  <FoodListing :food-collection="foodCollection" />
 </template>
