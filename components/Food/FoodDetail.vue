@@ -187,10 +187,9 @@ async function handlePersist() {
           <div class="mt-6">
             <h3 class="sr-only">Description</h3>
 
-            <div
-              class="space-y-6 text-base white:text-gray-700"
-              v-html="food.description"
-            />
+            <div class="space-y-6 text-base white:text-gray-700">
+              {{ food.description }}
+            </div>
           </div>
         </div>
       </div>

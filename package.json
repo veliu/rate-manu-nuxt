@@ -8,14 +8,16 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "typecheck": "nuxt prepare && nuxi typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md,vue}\"",
     "lint:prettier": "prettier --check \"**/*.{ts,tsx,md,vue}\"",
     "generate-client": "pnpm openapi --input https://api.ratemanu.com/doc.json --output ./api-client/",
-    "lint": "pnpm lint:prettier"
+    "lint": "eslint . && pnpm lint:prettier && pnpm run typecheck"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
+    "@nuxt/eslint": "^0.5.1",
     "@nuxt/image": "^1.7.0",
     "@nuxt/ui": "^2.18.4",
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -31,9 +33,12 @@
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@openapitools/openapi-generator-cli": "^2.13.4",
     "@types/js-cookie": "^3.0.6",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.27.0",
     "ofetch": "^1.3.4",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
+    "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.0.29"
   }
 }

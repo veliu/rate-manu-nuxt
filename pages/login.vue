@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import Cookies from "js-cookie";
 import type { LoginRequest } from "~/types/LoginRequest";

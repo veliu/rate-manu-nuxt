@@ -1,5 +1,6 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import Detail from "~/components/Food/Detail.vue";
+import Detail from "~/components/Food/FoodDetail.vue";
 
 definePageMeta({
   middleware: "auth",

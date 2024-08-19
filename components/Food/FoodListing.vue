@@ -3,7 +3,7 @@ import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Reactive, Ref } from "vue";
 import type { FoodRating } from "~/types/FoodRating";
 import type { FoodCollection } from "~/types/FoodCollection";
-import Card from "~/components/Food/Card.vue";
+import Card from "~/components/Food/FoodCard.vue";
 
 const props = defineProps<{
   foodCollection: Reactive<FoodCollection> | null;
@@ -18,15 +18,16 @@ const props = defineProps<{
 
       <div
         class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8"
+      ></div>
+      <div
+        v-if="foodCollection"
+        class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
       >
-        <div
+        <Card
           v-for="food in foodCollection.items"
-          v-if="foodCollection"
           :key="food.id"
-          class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
-        >
-          <Card :food="food" />
-        </div>
+          :food="food"
+        />
       </div>
     </div>
   </div>
