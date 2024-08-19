@@ -8,17 +8,14 @@ defineProps<{
 </script>
 
 <template>
-  <AddButton />
   <div class="">
-    <div class="mx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-      <h2 class="sr-only">Products</h2>
-
+    <div class="mx-auto max-w-2xl py-8 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div
         class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8"
       ></div>
       <div
         v-if="foodCollection"
-        class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
+        class="group relative flex flex-col gap-8 overflow-hidden rounded-lg"
       >
         <FoodCard
           v-for="food in foodCollection.items"

@@ -1,18 +1,25 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-const route = useRoute();
-
 const links = [
-  {
-    label: "Home",
-    icon: "i-heroicons-home",
-    to: "/",
-  },
-  {
-    label: "Food List",
-    icon: "i-heroicons-numbered-list",
-    to: "/food",
-  },
+  [
+    {
+      label: "Home",
+      icon: "i-heroicons-home",
+      to: "/",
+    },
+    {
+      label: "Food List",
+      icon: "i-heroicons-numbered-list",
+      to: "/food",
+    },
+  ],
+  [
+    {
+      label: "Account",
+      icon: "i-heroicons-user",
+      to: "/account",
+    },
+  ],
 ];
 </script>
 
