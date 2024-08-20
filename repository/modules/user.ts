@@ -44,6 +44,23 @@ class UserModule extends HttpFactory {
       );
     }, asyncDataOptions);
   }
+
+  async invite(email: string, asyncDataOptions?: AsyncDataOptions<{}>) {
+    return useAsyncData(() => {
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<{}>(
+        "GET",
+        `${this.RESOURCE}/invite/${email}`,
+        undefined,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
 }
 
 export default UserModule;
