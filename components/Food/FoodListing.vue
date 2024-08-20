@@ -15,7 +15,7 @@ defineProps<{
       ></div>
       <div
         v-if="foodCollection"
-        class="group relative flex flex-col gap-8 overflow-hidden rounded-lg"
+        class="group relative flex flex-col gap-8 overflow-hidden rounded-lg md:grid md:grid-cols-3"
       >
         <FoodCard
           v-for="food in foodCollection.items"

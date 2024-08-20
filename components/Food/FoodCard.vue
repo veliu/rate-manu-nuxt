@@ -8,7 +8,21 @@ defineProps<{
 </script>
 
 <template>
-  <div class="dark:bg-primary-500">
+  <UCard>
+    <template #header>
+      <div class="flex items-center">
+        <StarIcon
+          v-for="rating in [1, 2, 3, 4, 5]"
+          :key="rating"
+          :class="[
+            food.averageRating <= rating ? 'text-yellow-400' : 'text-gray-200',
+            'h-5 w-5 flex-shrink-0',
+          ]"
+          aria-hidden="true"
+        />
+      </div>
+    </template>
+
     <NuxtLink :to="'/food/' + food.id">
       <div
         class="aspect-h-2 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
@@ -19,32 +33,18 @@ defineProps<{
         />
       </div>
     </NuxtLink>
-    <div class="flex flex-1 flex-col space-y-2 p-4">
-      <h3 class="text-sm font-medium text-gray-900" />
-      <p class="text-sm text-gray-500">
-        {{ food.name }}
-      </p>
-      <div class="flex flex-1 flex-col justify-end">
-        <p class="text-sm italic text-gray-500">
-          {{ food.description }}
-        </p>
-      </div>
-      <div class="mt-3 flex flex-col items-center">
-        <p class="sr-only">1 out of 5 stars</p>
-        <div class="flex items-center">
-          <StarIcon
-            v-for="rating in [1, 2, 3, 4, 5]"
-            :key="rating"
-            :class="[
-              food.averageRating <= rating
-                ? 'text-yellow-400'
-                : 'text-gray-200',
-              'h-5 w-5 flex-shrink-0',
-            ]"
-            aria-hidden="true"
-          />
+
+    <template #footer>
+      <div class="flex flex-1 flex-col space-y-2 p-4">
+        <h3 class="text-white text-xl font-medium text-gray-900">
+          {{ food.name }}
+        </h3>
+        <div class="flex flex-1 flex-col justify-end">
+          <p class="text-sm italic text-gray-500">
+            {{ food.description }}
+          </p>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </UCard>
 </template>
