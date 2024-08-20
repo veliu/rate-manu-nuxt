@@ -3,7 +3,6 @@
 import type { RegisterRequest } from "~/types/RegisterRequest";
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
-import type { LoginRequest } from "~/types/LoginRequest";
 
 const notificationSend = ref(false);
 const loading = ref(false);
