@@ -9,6 +9,7 @@ import type { LoginRequest } from "~/types/LoginRequest";
 import type { LoginCheck } from "~/types/LoginCheck";
 import type { RefreshToken } from "~/types/RefreshToken";
 import type { Token } from "~/types/Token";
+import type { ConfirmRegistrationRequest } from "~/types/ConfirmRegistrationRequest";
 
 class AuthModule extends HttpFactory {
   private RESOURCE = "/authentication";
@@ -33,20 +34,19 @@ class AuthModule extends HttpFactory {
   }
 
   async confirmRegistration(
-    token: string,
+    request: ConfirmRegistrationRequest,
     asyncDataOptions?: AsyncDataOptions<{}>,
   ) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Accept-Language": "en-US",
         },
       };
       return this.call<{}>(
         "GET",
         `${this.RESOURCE}/confirm-registration`,
-        undefined,
+        request,
         fetchOptions,
       );
     }, asyncDataOptions);
