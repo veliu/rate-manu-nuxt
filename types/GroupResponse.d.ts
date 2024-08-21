@@ -1,7 +1,8 @@
-import type { User } from "~/types/User";
+import type { GroupMember } from "~/types/GroupMember";
 
 export type GroupResponse = {
   uuid: string;
   name: string;
-  members: Array<User>;
+  role: String<"owner" | "member">;
+  members: Array<GroupMember>;
 };

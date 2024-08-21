@@ -32,6 +32,26 @@ class AuthModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
+  async confirmRegistration(
+    token: string,
+    asyncDataOptions?: AsyncDataOptions<{}>,
+  ) {
+    return useAsyncData(() => {
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<{}>(
+        "GET",
+        `${this.RESOURCE}/confirm-registration`,
+        undefined,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
   async login(
     login: LoginRequest,
     asyncDataOptions?: AsyncDataOptions<LoginResponse>,

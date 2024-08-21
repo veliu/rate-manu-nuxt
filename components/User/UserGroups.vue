@@ -8,7 +8,7 @@ defineProps<{
 
 const { $api } = useNuxtApp();
 
-const { data: groups } = await $api.user.myGroups();
+const { data: groups, error, status } = await $api.user.myGroups();
 </script>
 
 <template>

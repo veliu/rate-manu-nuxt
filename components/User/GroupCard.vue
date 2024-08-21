@@ -40,7 +40,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 <template>
   <UCard>
     <template #header>
-      <h3 class="pb-2">Group: {{ group.name }}</h3>
+      <div class="flex flex-row justify-between">
+        <h3 class="pb-2">Group: {{ group.name }}</h3>
+        <UBadge color="black" variant="solid" :label="group.role" />
+      </div>
+
       <p class="text-xs font-italic">
         Member count: {{ group.members.length }}
       </p>
