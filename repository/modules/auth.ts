@@ -44,7 +44,7 @@ class AuthModule extends HttpFactory {
         },
       };
       return this.call<{}>(
-        "GET",
+        "POST",
         `${this.RESOURCE}/confirm-registration`,
         request,
         fetchOptions,
