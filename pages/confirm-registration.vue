@@ -13,7 +13,7 @@ const request: ConfirmRegistrationRequest = {
 
 const { status, error } = await $api.auth.confirmRegistration(request);
 
-if (status === "error") {
+if (status.value === "error") {
   console.log(error);
 }
 </script>

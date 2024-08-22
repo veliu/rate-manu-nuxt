@@ -5,6 +5,7 @@ import type { AsyncDataOptions } from "#app";
 import type { Token } from "~/types/Token";
 import type { User } from "~/types/User";
 import type { GroupsResponse } from "~/types/GroupsResponse";
+import type { InviteUserToGroupRequest } from "~/types/InviteUserToGroupRequest";
 
 class UserModule extends HttpFactory {
   private RESOURCE = "/user";
@@ -45,7 +46,10 @@ class UserModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async invite(email: string, asyncDataOptions?: AsyncDataOptions<{}>) {
+  async inviteUserToGroup(
+    request: InviteUserToGroupRequest,
+    asyncDataOptions?: AsyncDataOptions<{}>,
+  ) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
@@ -54,9 +58,9 @@ class UserModule extends HttpFactory {
         },
       };
       return this.call<{}>(
-        "GET",
-        `${this.RESOURCE}/invite/${email}`,
-        undefined,
+        "POST",
+        `${this.RESOURCE}/invite`,
+        request,
         fetchOptions,
       );
     }, asyncDataOptions);
