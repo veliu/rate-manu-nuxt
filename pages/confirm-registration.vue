@@ -3,16 +3,19 @@ import type { ConfirmRegistrationRequest } from "~/types/ConfirmRegistrationRequ
 
 const route = useRoute();
 
-const token = <string>route.params.token;
+const token = <string>route.query.token;
 
 const { $api } = useNuxtApp();
 
-const { status, error } = await $api.auth.confirmRegistration({
+const request: ConfirmRegistrationRequest = {
   token: token,
-} as ConfirmRegistrationRequest);
+};
 
-console.log(status);
-console.log(error);
+const { status, error } = await $api.auth.confirmRegistration(request);
+
+if (status === "error") {
+  console.log(error);
+}
 </script>
 
 <template>
