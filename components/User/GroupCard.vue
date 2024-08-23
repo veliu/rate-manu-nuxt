@@ -28,7 +28,7 @@ const selected = ref(undefined);
       </p>
     </template>
 
-    <div class="h-32">
+    <div class="min-h-32">
       <UTable v-model="selected" :rows="group.members" :columns="columns" />
     </div>
 

@@ -3,6 +3,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
 import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
+import { useFood } from "~/composables/useFood";
 
 const props = defineProps<{
   food: Food;
@@ -88,6 +89,8 @@ async function handlePersist() {
   }
   isLoading.value = false;
 }
+
+const { createdBy, assignedToGroup } = await useFood(props.food);
 </script>
 
 <template>
@@ -150,10 +153,17 @@ async function handlePersist() {
         </TabGroup>
 
         <!-- Product info -->
-        <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+        <div class="mt-10 sm:mt-16 sm:px-0 lg:mt-0">
           <h1 class="text-3xl font-bold tracking-tight white:text-gray-900">
             {{ food.name }}
           </h1>
+          <div class="my-6">
+            <h3 class="sr-only">Description</h3>
+
+            <div class="space-y-6 text-base white:text-gray-700">
+              {{ food.description }}
+            </div>
+          </div>
 
           <div class="mt-3">
             <h3 class="sr-only">Reviews</h3>
@@ -174,25 +184,16 @@ async function handlePersist() {
               <p class="sr-only">0 out of 5 stars</p>
             </div>
           </div>
-
-          <UInputMenu
-            v-model="selectedRating"
-            size="xl"
-            :options="possibleRatings"
-            value-attribute="id"
-            option-attribute="name"
-            class="my-4"
-          />
-
-          <div class="mt-6">
-            <h3 class="sr-only">Description</h3>
-
-            <div class="space-y-6 text-base white:text-gray-700">
-              {{ food.description }}
-            </div>
-          </div>
         </div>
       </div>
+      <UInputMenu
+        v-model="selectedRating"
+        size="xl"
+        :options="possibleRatings"
+        value-attribute="id"
+        option-attribute="name"
+        class="my-4"
+      />
       <UButton
         :loading="isLoading"
         block
@@ -205,5 +206,12 @@ async function handlePersist() {
         @click="handlePersist"
       />
     </div>
+    <div class="my-4">
+      <div v-for="rating in food.ratings">
+        {{ rating.createdBy }}: {{ rating.rating }}
+      </div>
+    </div>
+    <div>Created by {{ createdBy }}</div>
+    <div>Visible for group {{ assignedToGroup }}</div>
   </div>
 </template>

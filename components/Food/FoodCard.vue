@@ -1,25 +1,36 @@
 <script setup lang="ts">
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
+import type { GroupsResponse } from "~/types/GroupsResponse";
+import { useFood } from "~/composables/useFood";
 
-defineProps<{
+const props = defineProps<{
   food: Food;
 }>();
+
+const { createdBy, assignedToGroup } = await useFood(props.food);
 </script>
 
 <template>
   <UCard>
     <template #header>
-      <div class="flex items-center">
-        <StarIcon
-          v-for="rating in [1, 2, 3, 4, 5]"
-          :key="rating"
-          :class="[
-            food.averageRating <= rating ? 'text-yellow-400' : 'text-gray-200',
-            'h-5 w-5 flex-shrink-0',
-          ]"
-          aria-hidden="true"
-        />
+      <div class="flex flex-row justify-between">
+        <div class="flex items-center">
+          <StarIcon
+            v-for="rating in [1, 2, 3, 4, 5]"
+            :key="rating"
+            :class="[
+              food.averageRating <= rating
+                ? 'text-yellow-400'
+                : 'text-gray-200',
+              'h-5 w-5 flex-shrink-0',
+            ]"
+            aria-hidden="true"
+          />
+        </div>
+        <div>
+          <UBadge color="black" variant="solid">{{ assignedToGroup }}</UBadge>
+        </div>
       </div>
     </template>
 
@@ -32,11 +43,8 @@ defineProps<{
           class="h-full w-full object-cover object-center sm:h-full sm:w-full"
         />
       </div>
-    </NuxtLink>
-
-    <template #footer>
-      <div class="flex flex-1 flex-col space-y-2 p-4">
-        <h3 class="text-white text-xl font-medium text-gray-900">
+      <div class="flex flex-1 flex-col space-y-2 py-4">
+        <h3 class="text-white text-xl font-medium">
           {{ food.name }}
         </h3>
         <div class="flex flex-1 flex-col justify-end">
@@ -44,6 +52,12 @@ defineProps<{
             {{ food.description }}
           </p>
         </div>
+      </div>
+    </NuxtLink>
+
+    <template #footer>
+      <div>
+        <p>Created by {{ createdBy }}</p>
       </div>
     </template>
   </UCard>

@@ -1,3 +1,5 @@
+import type { FoodRating } from "~/types/FoodRating";
+
 export type Food = {
   id: string;
   name: string;
@@ -8,4 +10,5 @@ export type Food = {
   updatedAt: Date;
   image?: string;
   averageRating: number;
+  ratings?: FoodRating[];
 };
