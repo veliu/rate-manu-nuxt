@@ -10,7 +10,9 @@ const { $api } = useNuxtApp();
 
 const { data: groups, error, status } = await $api.user.myGroups();
 
-console.log(error);
+if (status.value === "error") {
+  console.log(error);
+}
 </script>
 
 <template>

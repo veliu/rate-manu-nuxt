@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
-import type { GroupsResponse } from "~/types/GroupsResponse";
 import { useFood } from "~/composables/useFood";
 
 const props = defineProps<{
