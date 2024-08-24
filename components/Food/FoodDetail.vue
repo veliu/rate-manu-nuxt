@@ -100,7 +100,7 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
   />
 
   <div class="dark:text-white">
-    <div class="mx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-2xl py-4 sm:py-24 lg:max-w-7xl">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
         <TabGroup as="div" class="flex flex-col-reverse">
@@ -163,28 +163,27 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
           </div>
         </div>
       </div>
-      <UInputMenu
-        v-model="selectedRating"
-        size="xl"
-        :options="possibleRatings"
-        value-attribute="id"
-        option-attribute="name"
-        class="my-4"
-      />
-      <UButton
-        :loading="isLoading"
-        block
-        label="Save"
-        variant="soft"
-        size="xl"
-        class="mt-4 justify-center"
-        icon="i-heroicons-pencil-square"
-        trailing
-        @click="handlePersist"
-      />
+      <div class="flex flex-fow gap-2">
+        <UInputMenu
+          v-model="selectedRating"
+          size="xl"
+          :options="possibleRatings"
+          value-attribute="id"
+          option-attribute="name"
+          class="my-4 basis-3/4"
+        />
+        <UButton
+          :loading="isLoading"
+          variant="soft"
+          class="justify-center my-4 basis-1/4"
+          icon="i-heroicons-check"
+          trailing
+          @click="handlePersist"
+        />
+      </div>
     </div>
     <div class="my-4" v-if="ratings">
-      <h3 class="font-bold text-xl mb-2">All ratings</h3>
+      <h3 class="font-bold text-xl mb-2">All other ratings</h3>
       <div v-for="rating in ratings.items">
         <div
           v-if="myRating?.createdBy !== rating.createdBy.id"
