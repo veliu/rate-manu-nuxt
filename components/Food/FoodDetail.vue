@@ -9,7 +9,7 @@ const props = defineProps<{
   food: Food;
 }>();
 
-const foodId = ref(props.food.id);
+const foodId = props.food.id;
 
 const isLoading = ref(false);
 
@@ -40,29 +40,17 @@ const possibleRatings = [
   },
 ];
 
-const selectedRating = ref(possibleRatings[5].id);
+const selectedRating: Ref<number> = ref(possibleRatings[5].id);
 
 const { $api } = useNuxtApp();
 
-const { data, status, error } = await $api.foodRating.getPersonalRating(
-  foodId.value,
-);
-
-if (status.value === "error") {
-  if (error?.value?.statusCode === 404) {
-    selectedRating.value = possibleRatings[5].id;
-  } else {
-    console.log(error.value);
-  }
-}
-
-if (status.value === "success") {
-  selectedRating.value = data?.value?.rating ?? 1;
-}
+const { data: myRating } = await $api.foodRating.getPersonalRating(foodId);
+selectedRating.value = myRating?.value?.rating ?? 1;
+const { data: ratings } = await $api.foodRating.getRatings(foodId);
 
 async function handleDelete() {
   isLoading.value = true;
-  const { status, error } = await $api.food.delete(foodId.value);
+  const { status, error } = await $api.food.delete(foodId);
 
   if (status.value === "success") {
     navigateTo("/food");
@@ -79,14 +67,20 @@ async function handlePersist() {
   isLoading.value = true;
 
   const createRequest: UpsertFoodRatingRequest = {
-    food: foodId.value,
+    food: foodId,
     rating: selectedRating.value,
   };
-  const { status, error } = await $api.foodRating.upsert(createRequest);
+  const {
+    status,
+    error,
+    data: myRating,
+  } = await $api.foodRating.upsert(createRequest);
 
   if (status.value === "error") {
     console.log(error.value);
   }
+
+  selectedRating.value = myRating?.value?.rating ?? 1;
   isLoading.value = false;
 }
 
@@ -106,9 +100,7 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
   />
 
   <div class="dark:text-white">
-    <div
-      class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
-    >
+    <div class="mx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
         <TabGroup as="div" class="flex flex-col-reverse">
@@ -166,23 +158,8 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
           </div>
 
           <div class="mt-3">
-            <h3 class="sr-only">Reviews</h3>
-            <div class="flex items-center">
-              <div class="flex items-center">
-                <StarIcon
-                  v-for="rating in [1, 2, 3, 4, 5]"
-                  :key="rating"
-                  :class="[
-                    selectedRating <= rating
-                      ? 'text-yellow-400'
-                      : 'text-gray-300',
-                    'h-5 w-5 flex-shrink-0',
-                  ]"
-                  aria-hidden="true"
-                />
-              </div>
-              <p class="sr-only">0 out of 5 stars</p>
-            </div>
+            <h3 class="sr-only">Ratings</h3>
+            <Rating :user-rating="selectedRating" />
           </div>
         </div>
       </div>
@@ -206,9 +183,16 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
         @click="handlePersist"
       />
     </div>
-    <div class="my-4">
-      <div v-for="rating in food.ratings">
-        {{ rating.createdBy }}: {{ rating.rating }}
+    <div class="my-4" v-if="ratings">
+      <h3 class="font-bold text-xl mb-2">All ratings</h3>
+      <div v-for="rating in ratings.items">
+        <div
+          v-if="myRating?.createdBy !== rating.createdBy.id"
+          class="flex flex-row gap-2"
+        >
+          <Rating :user-rating="rating.rating" />
+          {{ rating.createdBy.email }}
+        </div>
       </div>
     </div>
     <div>Created by {{ createdBy }}</div>
