@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import { StarIcon } from "@heroicons/vue/20/solid";
 import type { Food } from "~/types/Food";
 import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
 import { useFood } from "~/composables/useFood";
@@ -90,6 +89,7 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
 <template>
   <LoadingOverlay v-if="isLoading" />
   <UButton
+    v-if="food.author === myRating?.createdBy"
     label="Delete"
     variant="soft"
     size="xl"
