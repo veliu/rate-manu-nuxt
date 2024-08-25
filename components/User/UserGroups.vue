@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from "~/types/User";
+import type { User } from "~/types/ApiTypes";
 import GroupCard from "~/components/User/GroupCard.vue";
 
 defineProps<{

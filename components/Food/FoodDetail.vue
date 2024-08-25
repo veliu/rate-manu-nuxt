@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import type { Food } from "~/types/Food";
-import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
+import type { UpsertFoodRatingRequest, Food } from "~/types/ApiTypes";
 import { useFood } from "~/composables/useFood";
 
 const props = defineProps<{

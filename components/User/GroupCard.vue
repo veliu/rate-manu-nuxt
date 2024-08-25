@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GroupResponse } from "~/types/GroupResponse";
+import type { GroupResponse } from "~/types/ApiTypes";
 
 defineProps<{
   group: GroupResponse;

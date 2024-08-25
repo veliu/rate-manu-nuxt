@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "#ui/types";
 import { type InferType, object, string } from "yup";
-import type { InviteUserToGroupRequest } from "~/types/InviteUserToGroupRequest";
+import type { InviteUserToGroupRequest } from "~/types/ApiTypes";
 
 const props = defineProps<{
   groupId: string;

@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import type { Token } from "~/types/Token";
+import type { Token } from "~/types/ApiTypes";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const loginCookie = useCookie("ratemanu-login") as Ref<Token | null>;

@@ -1,9 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { object, string, type InferType } from "yup";
-import type { LoginRequest } from "~/types/LoginRequest";
-import type { LoginResponse } from "~/types/LoginResponse";
 import type { FormSubmitEvent } from "#ui/types";
+import type { LoginRequest, Token } from "~/types/ApiTypes";
 
 const { $api } = useNuxtApp();
 
@@ -38,7 +37,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   }
 
   if (status.value === "success") {
-    const loginResponse = data.value as LoginResponse;
+    const loginResponse = data.value as Token;
     const loginCookie = useCookie("ratemanu-login");
     loginCookie.value = JSON.stringify(loginResponse);
     navigateTo("/");

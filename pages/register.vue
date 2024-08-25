@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import type { RegisterRequest } from "~/types/RegisterRequest";
+import type { RegisterRequest } from "~/types/ApiTypes";
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 

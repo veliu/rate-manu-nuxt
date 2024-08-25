@@ -1,22 +1,19 @@
 import type { FetchOptions } from "ofetch";
-import type { Ref } from "vue";
 import HttpFactory from "../factory";
-import type { RegisterRequest } from "~/types/RegisterRequest";
-import type { RegisterResponse } from "~/types/RegisterResponse";
 import type { AsyncDataOptions } from "#app";
-import type { LoginResponse } from "~/types/LoginResponse";
-import type { LoginRequest } from "~/types/LoginRequest";
-import type { LoginCheck } from "~/types/LoginCheck";
-import type { RefreshToken } from "~/types/RefreshToken";
-import type { Token } from "~/types/Token";
-import type { ConfirmRegistrationRequest } from "~/types/ConfirmRegistrationRequest";
+import type {
+  ConfirmRegistrationRequest,
+  LoginRequest,
+  RegisterRequest,
+  Token,
+} from "~/types/ApiTypes";
 
 class AuthModule extends HttpFactory {
   private RESOURCE = "/authentication";
 
   async register(
     register: RegisterRequest,
-    asyncDataOptions?: AsyncDataOptions<RegisterResponse>,
+    asyncDataOptions?: AsyncDataOptions<{}>,
   ) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
@@ -24,7 +21,7 @@ class AuthModule extends HttpFactory {
           "Accept-Language": "en-US",
         },
       };
-      return this.call<RegisterResponse>(
+      return this.call<{}>(
         "POST",
         `${this.RESOURCE}/register`,
         register,
@@ -52,22 +49,14 @@ class AuthModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async login(
-    login: LoginRequest,
-    asyncDataOptions?: AsyncDataOptions<LoginResponse>,
-  ) {
+  async login(login: LoginRequest, asyncDataOptions?: AsyncDataOptions<Token>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
           "Accept-Language": "en-US",
         },
       };
-      return this.call<LoginResponse>(
-        "POST",
-        "/login_check",
-        login,
-        fetchOptions,
-      );
+      return this.call<Token>("POST", "/login_check", login, fetchOptions);
     }, asyncDataOptions);
   }
 
@@ -76,7 +65,7 @@ class AuthModule extends HttpFactory {
     asyncDataOptions?: AsyncDataOptions<Token>,
   ) {
     return useAsyncData(() => {
-      const refreshTokenRequest: RefreshToken = { refresh_token: refreshToken };
+      const refreshTokenRequest = { refresh_token: refreshToken };
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
           "Accept-Language": "en-US",

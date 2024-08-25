@@ -2,11 +2,12 @@ import type { FetchOptions } from "ofetch";
 import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
-import type { FoodRating } from "~/types/FoodRating";
-import type { UpsertFoodRatingRequest } from "~/types/UpsertFoodRatingRequest";
-import type { Token } from "~/types/Token";
-import type { PersonalFoodRating } from "~/types/PersonalFoodRating";
-import type { FoodRatingCollection } from "~/types/FoodRatingCollection";
+import type {
+  FoodRating,
+  FoodRatingCollection,
+  Token,
+  UpsertFoodRatingRequest,
+} from "~/types/ApiTypes";
 
 class FoodRatingModule extends HttpFactory {
   private RESOURCE = "/food-rating";
@@ -15,7 +16,7 @@ class FoodRatingModule extends HttpFactory {
 
   async getPersonalRating(
     foodId: string,
-    asyncDataOptions?: AsyncDataOptions<PersonalFoodRating>,
+    asyncDataOptions?: AsyncDataOptions<FoodRating>,
   ) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
@@ -24,7 +25,7 @@ class FoodRatingModule extends HttpFactory {
           "Accept-Language": "en-US",
         },
       };
-      return this.call<PersonalFoodRating>(
+      return this.call<FoodRating>(
         "GET",
         `${this.RESOURCE}/my/${foodId}`,
         undefined,
@@ -55,7 +56,7 @@ class FoodRatingModule extends HttpFactory {
 
   async upsert(
     request: UpsertFoodRatingRequest,
-    asyncDataOptions?: AsyncDataOptions<PersonalFoodRating>,
+    asyncDataOptions?: AsyncDataOptions<FoodRating>,
   ) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
@@ -64,7 +65,7 @@ class FoodRatingModule extends HttpFactory {
           "Accept-Language": "en-US",
         },
       };
-      return this.call<PersonalFoodRating>(
+      return this.call<FoodRating>(
         "POST",
         `${this.RESOURCE}/`,
         request,

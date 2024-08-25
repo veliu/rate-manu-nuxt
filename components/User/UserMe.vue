@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { User } from "~/types/User";
 import { type InferType, object, string } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
-import type { PutMeRequest } from "~/types/ApiTypes";
+import type { PutMeRequest, User } from "~/types/ApiTypes";
 
 const props = defineProps<{
   user: User;

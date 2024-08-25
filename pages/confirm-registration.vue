@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfirmRegistrationRequest } from "~/types/ConfirmRegistrationRequest";
+import type { ConfirmRegistrationRequest } from "~/types/ApiTypes";
 
 const route = useRoute();
 

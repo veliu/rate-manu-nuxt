@@ -6,12 +6,12 @@ import FoodModule from "~/repository/modules/food";
 import FoodRatingModule from "~/repository/modules/food-rating";
 import UserModule from "~/repository/modules/user";
 
-interface IApiInstance {
+export type IApiInstance = {
   auth: AuthModule;
   food: FoodModule;
   foodRating: FoodRatingModule;
   user: UserModule;
-}
+};
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();

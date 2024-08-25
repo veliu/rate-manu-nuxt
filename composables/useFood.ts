@@ -1,4 +1,4 @@
-import type { Food } from "~/types/Food";
+import type { Food, GroupResponse } from "~/types/ApiTypes";
 
 export type useFoodReturn = {
   createdBy: string;
@@ -13,7 +13,7 @@ export async function useFood(food: Food): Promise<useFoodReturn> {
   let createdBy = "unknown";
   let assignedToGroup = "unknown";
 
-  myGroups.value?.items.forEach((group) => {
+  myGroups.value?.items.forEach((group: GroupResponse) => {
     if (group.id === food.group) {
       assignedToGroup = group.name;
     }

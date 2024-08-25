@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { object, string, type InferType } from "yup";
+import { object, string, mixed, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
-import type { CreateFoodRequest } from "~/types/CreateFoodRequest";
-import type { UpdateFoodImageRequest } from "~/types/UpdateFoodImageRequest";
+import type {
+  UpdateFoodImageRequest,
+  CreateFoodRequest,
+} from "~/types/ApiTypes";
 import type { Ref } from "vue";
 
 const schema = object({
   name: string().required("Required"),
   description: string(),
-  image: string(),
+  image: mixed().test("fileSize", "The file is too large", (value) => {
+    if (!value || !Array.isArray(value)) return true;
+    return value[0].size <= 8388608;
+  }),
 });
 
 type Schema = InferType<typeof schema>;

@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import type { Reactive } from "vue";
-import type { FoodCollection } from "~/types/FoodCollection";
+import type { FoodCollection } from "~/types/ApiTypes";
 
 definePageMeta({
   middleware: "auth",

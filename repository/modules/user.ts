@@ -2,11 +2,13 @@ import type { FetchOptions } from "ofetch";
 import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
-import type { Token } from "~/types/Token";
-import type { User } from "~/types/User";
-import type { GroupsResponse } from "~/types/GroupsResponse";
-import type { InviteUserToGroupRequest } from "~/types/InviteUserToGroupRequest";
-import type { PutMeRequest } from "~/types/ApiTypes";
+import type {
+  GroupCollectionResponse,
+  InviteUserToGroupRequest,
+  PutMeRequest,
+  Token,
+  User,
+} from "~/types/ApiTypes";
 
 class UserModule extends HttpFactory {
   private RESOURCE = "/user";
@@ -50,7 +52,7 @@ class UserModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async myGroups(asyncDataOptions?: AsyncDataOptions<GroupsResponse>) {
+  async myGroups(asyncDataOptions?: AsyncDataOptions<GroupCollectionResponse>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
@@ -58,7 +60,7 @@ class UserModule extends HttpFactory {
           "Accept-Language": "en-US",
         },
       };
-      return this.call<GroupsResponse>(
+      return this.call<GroupCollectionResponse>(
         "GET",
         `${this.RESOURCE}/my-groups`,
         undefined,
