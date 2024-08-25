@@ -23,7 +23,6 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
-    "@vite-pwa/nuxt": "^0.10.0",
     "nuxt": "^3.12.4",
     "vue": "latest",
     "vue3-carousel-nuxt": "^1.1.2",
