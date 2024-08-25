@@ -31,7 +31,7 @@ dependencies:
     version: 0.5.14(tailwindcss@3.4.10)
   '@vite-pwa/nuxt':
     specifier: ^0.10.0
-    version: 0.10.0(rollup@2.79.1)(vite@5.4.2)(workbox-build@7.1.1)(workbox-window@7.1.0)
+    version: 0.10.1(rollup@2.79.1)(vite@5.4.2)(workbox-build@7.1.1)(workbox-window@7.1.0)
   nuxt:
     specifier: ^3.12.4
     version: 3.13.0(eslint@8.57.0)(rollup@2.79.1)(typescript@5.5.4)(vite@5.4.2)(vue-tsc@2.0.29)
@@ -3922,8 +3922,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vite-pwa/nuxt@0.10.0(rollup@2.79.1)(vite@5.4.2)(workbox-build@7.1.1)(workbox-window@7.1.0):
-    resolution: {integrity: sha512-8GHfdsSHL5H6MCw4ol8vE4IDt+uogyOPlKnQvKkUFc8wxiDlHtRttgW0vp0vpaN82n0MstOwouQzHwG9SMR/jQ==}
+  /@vite-pwa/nuxt@0.10.1(rollup@2.79.1)(vite@5.4.2)(workbox-build@7.1.1)(workbox-window@7.1.0):
+    resolution: {integrity: sha512-VAGNeIlKXit21C/tywU2WYCpdq+EB4nXILAjVfaUjUBSXtDUNdZIEn+v+lqyN16iA9dvSVmyoq+jQd7a8hlqEw==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.4
     peerDependenciesMeta:
@@ -6188,8 +6188,8 @@ packages:
     dependencies:
       reusify: 1.0.4
 
-  /fdir@6.2.0(picomatch@4.0.2):
-    resolution: {integrity: sha512-9XaWcDl0riOX5j2kYfy0kKdg7skw3IY6kA4LFT8Tk2yF9UdrADUy8D6AJuBLtf7ISm/MksumwAHE3WVbMRyCLw==}
+  /fdir@6.3.0(picomatch@4.0.2):
+    resolution: {integrity: sha512-QOnuT+BOtivR77wYvCWHfGt9s4Pz1VIMbD463vegT5MLqNXy8rYFT/lPVEqf/bhYeT6qmqrNHhsX+rWwe3rOCQ==}
     peerDependencies:
       picomatch: ^3 || ^4
     peerDependenciesMeta:
@@ -9982,7 +9982,7 @@ packages:
     resolution: {integrity: sha512-Dlqgt6h0QkoHttG53/WGADNh9QhcjCAIZMTERAVhdpmIBEejSuLI9ZmGKWzB7tweBjlk30+s/ofi4SLmBeTYhw==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      fdir: 6.2.0(picomatch@4.0.2)
+      fdir: 6.3.0(picomatch@4.0.2)
       picomatch: 4.0.2
     dev: false
 
