@@ -7,7 +7,7 @@ export type useFoodReturn = {
 
 export async function useFood(food: Food): Promise<useFoodReturn> {
   const { $api } = useNuxtApp();
-  const { data: me } = await $api.user.me();
+  const { data: me } = await $api.user.getMe();
   const { data: myGroups } = await $api.user.myGroups();
 
   let createdBy = "unknown";
@@ -19,7 +19,7 @@ export async function useFood(food: Food): Promise<useFoodReturn> {
     }
     group.members.forEach((member) => {
       if (member.id === food.author) {
-        createdBy = member.email;
+        createdBy = member.name ?? member.email;
       }
     });
   });

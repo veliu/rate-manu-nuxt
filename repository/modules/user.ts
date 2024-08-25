@@ -6,13 +6,14 @@ import type { Token } from "~/types/Token";
 import type { User } from "~/types/User";
 import type { GroupsResponse } from "~/types/GroupsResponse";
 import type { InviteUserToGroupRequest } from "~/types/InviteUserToGroupRequest";
+import type { PutMeRequest } from "~/types/ApiTypes";
 
 class UserModule extends HttpFactory {
   private RESOURCE = "/user";
 
   private loginCookie = useCookie("ratemanu-login") as Ref<Token>;
 
-  async me(asyncDataOptions?: AsyncDataOptions<User>) {
+  async getMe(asyncDataOptions?: AsyncDataOptions<User>) {
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
@@ -24,6 +25,26 @@ class UserModule extends HttpFactory {
         "GET",
         `${this.RESOURCE}/me`,
         undefined,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
+  async putMe(
+    request: PutMeRequest,
+    asyncDataOptions?: AsyncDataOptions<User>,
+  ) {
+    return useAsyncData(() => {
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          Authorization: `Bearer ${this.loginCookie.value.token}`,
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<User>(
+        "PUT",
+        `${this.RESOURCE}/me`,
+        request,
         fetchOptions,
       );
     }, asyncDataOptions);

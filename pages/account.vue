@@ -6,7 +6,7 @@ definePageMeta({
 
 const { $api } = useNuxtApp();
 
-const { data: user } = await $api.user.me();
+const { data: user } = await $api.user.getMe();
 
 const items = [
   {

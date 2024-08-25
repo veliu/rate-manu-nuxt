@@ -3,4 +3,5 @@ export type User = {
   email: string;
   status?: string;
   groups: string[];
+  name: string | undefined;
 };
