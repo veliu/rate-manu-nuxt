@@ -37,6 +37,8 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
     >
       <NuxtLink :to="'/food/' + food.id">
         <NuxtImg
+          format="webp"
+          sizes="100vw sm:50vw md:400px"
           :src="food.image ? food.image : `/pizza.jpeg`"
           class="h-full w-full object-cover object-center sm:h-full sm:w-full"
         />
