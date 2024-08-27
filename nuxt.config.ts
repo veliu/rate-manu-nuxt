@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   routeRules: {
-    "/": { prerender: true },
+    "/": { swr: false },
   },
   experimental: { asyncContext: true },
   runtimeConfig: {
@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     },
   },
-  modules: ["@nuxt/image", "@nuxt/ui", "@nuxt/eslint"],
+  modules: ["@nuxt/image", "@nuxt/ui", "@nuxt/eslint", "nuxt-twemoji"],
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   typescript: {

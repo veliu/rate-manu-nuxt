@@ -1,7 +1,47 @@
 <!-- eslint-disable vue/multi-word-component-names -->
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { FoodCollection } from "~/types/ApiTypes";
+
+definePageMeta({
+  middleware: "auth",
+});
+
+const { $api } = useNuxtApp();
+
+const { data, status } = await $api.food.search();
+
+const foodCollection = data.value as FoodCollection;
+
+const isOpen = ref(false);
+</script>
 
 <template>
   <DefaultHeader />
-  <h1>Hello and welcome!</h1>
+  <UButton
+    icon="i-heroicons-pencil-square"
+    color="primary"
+    label="New Food"
+    variant="solid"
+    block
+    :trailing="false"
+    @click="isOpen = true"
+  />
+
+  <USlideover v-model="isOpen">
+    <div class="p-4 flex-1">
+      <UButton
+        color="gray"
+        variant="ghost"
+        size="sm"
+        icon="i-heroicons-x-mark-20-solid"
+        class="flex sm:hidden absolute end-5 top-5 z-10"
+        square
+        padded
+        @click="isOpen = false"
+      />
+      <FoodCreateForm />
+    </div>
+  </USlideover>
+
+  <FoodListing :food-collection="foodCollection" />
 </template>

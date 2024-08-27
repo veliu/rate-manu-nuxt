@@ -32,28 +32,26 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
         </div>
       </div>
     </template>
-
-    <NuxtLink :to="'/food/' + food.id">
-      <div
-        class="aspect-h-2 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
-      >
+    <div
+      class="aspect-h-2 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
+    >
+      <NuxtLink :to="'/food/' + food.id">
         <NuxtImg
           :src="food.image ? food.image : `/pizza.jpeg`"
           class="h-full w-full object-cover object-center sm:h-full sm:w-full"
         />
+      </NuxtLink>
+    </div>
+    <div class="flex flex-1 flex-col space-y-2 py-4">
+      <h3 class="text-white text-xl font-medium">
+        {{ food.name }}
+      </h3>
+      <div class="flex flex-1 flex-col justify-end">
+        <p class="text-sm italic text-gray-500">
+          {{ food.description }}
+        </p>
       </div>
-      <div class="flex flex-1 flex-col space-y-2 py-4">
-        <h3 class="text-white text-xl font-medium">
-          {{ food.name }}
-        </h3>
-        <div class="flex flex-1 flex-col justify-end">
-          <p class="text-sm italic text-gray-500">
-            {{ food.description }}
-          </p>
-        </div>
-      </div>
-    </NuxtLink>
-
+    </div>
     <template #footer>
       <div>
         <p>Created by {{ createdBy }}</p>

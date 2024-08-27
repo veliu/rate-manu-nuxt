@@ -7,11 +7,6 @@ const links = [
       icon: "i-heroicons-home",
       to: "/",
     },
-    {
-      label: "Food List",
-      icon: "i-heroicons-numbered-list",
-      to: "/food",
-    },
   ],
   [
     {

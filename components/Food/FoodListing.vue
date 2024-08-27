@@ -3,7 +3,7 @@ import type { Reactive } from "vue";
 import type { FoodCollection } from "~/types/ApiTypes";
 
 defineProps<{
-  foodCollection: Reactive<FoodCollection> | null;
+  foodCollection: FoodCollection;
 }>();
 </script>
 
