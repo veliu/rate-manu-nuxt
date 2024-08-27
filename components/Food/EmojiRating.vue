@@ -1,9 +1,13 @@
 <script setup lang="ts">
 const props = defineProps<{
-  initialRating: number;
+  modelValue: number;
 }>();
 
-const initialValue = ref(props.initialRating);
+const emit = defineEmits(["update:modelValue"]);
+
+const handleInput = (rating: number) => {
+  emit("update:modelValue", rating);
+};
 
 const emojiRatings = {
   1: { value: 1, emoji: "❤" },
@@ -21,15 +25,13 @@ const emojiRatings = {
       v-for="emojiRating in emojiRatings"
       :key="emojiRating.value"
       variant="link"
-      @click="$emit('update-rating', emojiRating.value)"
+      @click="handleInput(emojiRating.value)"
     >
       <Twemoji
         :emoji="emojiRating.emoji"
         size="1.7em"
         :class="
-          emojiRating.value !== initialValue
-            ? 'brightness-50'
-            : 'animate-bounce'
+          emojiRating.value !== modelValue ? 'brightness-50' : 'animate-bounce'
         "
       />
     </UButton>

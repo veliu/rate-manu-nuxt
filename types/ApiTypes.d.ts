@@ -54,6 +54,7 @@ export type Food = {
   image?: string;
   averageRating: number;
   ratings?: string[];
+  personalRating: FoodRating | null;
 };
 export type FoodCollection = {
   count: number;

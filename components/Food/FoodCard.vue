@@ -1,34 +1,56 @@
 <script setup lang="ts">
-import { StarIcon } from "@heroicons/vue/20/solid";
-import type { Food } from "~/types/ApiTypes";
+import type { Food, UpsertFoodRatingRequest } from "~/types/ApiTypes";
 import { useFood } from "~/composables/useFood";
+import EmojiRating from "~/components/Food/EmojiRating.vue";
 
 const props = defineProps<{
   food: Food;
 }>();
 
+const food = reactive(props.food);
+
+const personalRating = ref(food.personalRating?.rating ?? 6);
+
+const emojiRatings = [
+  { value: 1, emoji: "❤" },
+  { value: 2, emoji: "👍" },
+  { value: 3, emoji: "😐" },
+  { value: 4, emoji: "🙄" },
+  { value: 5, emoji: "😫" },
+  { value: 6, emoji: "🤢" },
+];
+
 const { createdBy, assignedToGroup } = await useFood(props.food);
+
+const { $api } = useNuxtApp();
+
+async function updateRating(rating: number) {
+  const request: UpsertFoodRatingRequest = {
+    food: props.food.id,
+    rating: rating,
+  };
+  await $api.foodRating.upsert(request);
+}
+
+watch(personalRating, (newValue) => {
+  updateRating(newValue);
+});
 </script>
 
 <template>
   <UCard>
     <template #header>
       <div class="flex flex-row justify-between">
-        <div class="flex items-center">
-          <StarIcon
-            v-for="rating in [1, 2, 3, 4, 5]"
-            :key="rating"
-            :class="[
-              food.averageRating <= rating
-                ? 'text-yellow-400'
-                : 'text-gray-200',
-              'h-5 w-5 flex-shrink-0',
-            ]"
-            aria-hidden="true"
-          />
-        </div>
+        <Twemoji
+          :emoji="
+            food.averageRating
+              ? emojiRatings[food.averageRating - 1].emoji
+              : 'U+1F937'
+          "
+          size="2em"
+        />
         <div>
-          <UBadge color="black" variant="solid">{{ assignedToGroup }}</UBadge>
+          <UBadge color="black" variant="solid">{{ createdBy }}</UBadge>
         </div>
       </div>
     </template>
@@ -56,7 +78,7 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
     </div>
     <template #footer>
       <div>
-        <p>Created by {{ createdBy }}</p>
+        <EmojiRating v-model="personalRating" />
       </div>
     </template>
   </UCard>
