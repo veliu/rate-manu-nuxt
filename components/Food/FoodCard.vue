@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Food, UpsertFoodRatingRequest } from "~/types/ApiTypes";
-import { useFood } from "~/composables/useFood";
+import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
 import EmojiRating from "~/components/Food/EmojiRating.vue";
 
 const props = defineProps<{
@@ -10,15 +10,6 @@ const props = defineProps<{
 const food = ref(props.food);
 
 const personalRating = ref(food.value.personalRating?.rating ?? 6);
-
-const emojiRatings = [
-  { value: 1, emoji: "❤" },
-  { value: 2, emoji: "👍" },
-  { value: 3, emoji: "😐" },
-  { value: 4, emoji: "🙄" },
-  { value: 5, emoji: "😫" },
-  { value: 6, emoji: "🤢" },
-];
 
 const { $api } = useNuxtApp();
 
@@ -42,14 +33,7 @@ watch(personalRating, (newValue) => {
     <template #header>
       <div class="flex flex-row justify-between">
         <span>Durschnittliche Bewertung </span>
-        <Twemoji
-          :emoji="
-            food.averageRating
-              ? emojiRatings[food.averageRating - 1].emoji
-              : 'U+1F937'
-          "
-          size="2em"
-        />
+        <EmojiRating :rating-value="food.averageRating" />
       </div>
     </template>
     <div class="aspect-h-2 aspect-w-3 sm:aspect-none hover:opacity-75 sm:h-96">
@@ -73,7 +57,7 @@ watch(personalRating, (newValue) => {
       </div>
     </div>
     <template #footer>
-      <EmojiRating v-model="personalRating" />
+      <EmojiRatingBar v-model="personalRating" />
     </template>
   </UCard>
 </template>

@@ -2,12 +2,14 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import type { UpsertFoodRatingRequest, Food } from "~/types/ApiTypes";
 import { useFood } from "~/composables/useFood";
+import EmojiRating from "./EmojiRating.vue";
+import EmojiRatingBar from "./EmojiRatingBar.vue";
 
 const props = defineProps<{
   food: Food;
 }>();
 
-const foodId = props.food.id;
+const food = ref(props.food);
 
 const isLoading = ref(false);
 
@@ -42,13 +44,15 @@ const selectedRating: Ref<number> = ref(possibleRatings[5].id);
 
 const { $api } = useNuxtApp();
 
-const { data: myRating } = await $api.foodRating.getPersonalRating(foodId);
+const { data: myRating } = await $api.foodRating.getPersonalRating(
+  food.value.id,
+);
 selectedRating.value = myRating?.value?.rating ?? 1;
-const { data: ratings } = await $api.foodRating.getRatings(foodId);
+const { data: ratings } = await $api.foodRating.getRatings(food.value.id);
 
 async function handleDelete() {
   isLoading.value = true;
-  const { status, error } = await $api.food.delete(foodId);
+  const { status, error } = await $api.food.delete(food.value.id);
 
   if (status.value === "success") {
     navigateTo("/food");
@@ -65,7 +69,7 @@ async function handlePersist() {
   isLoading.value = true;
 
   const createRequest: UpsertFoodRatingRequest = {
-    food: foodId,
+    food: food.value.id,
     rating: selectedRating.value,
   };
   const {
@@ -82,21 +86,27 @@ async function handlePersist() {
   isLoading.value = false;
 }
 
-const { createdBy, assignedToGroup } = await useFood(props.food);
+const { createdBy, assignedToGroup } = await useFood(food.value);
+
+const personalRating = ref(props.food.personalRating?.rating ?? 6);
+
+async function updateRating(rating: number) {
+  const request: UpsertFoodRatingRequest = {
+    food: props.food.id,
+    rating: rating,
+  };
+  await $api.foodRating.upsert(request);
+  const { data } = await $api.food.get(props.food.id);
+  food.value = data.value;
+}
+
+watch(personalRating, (newValue) => {
+  updateRating(newValue);
+});
 </script>
 
 <template>
   <LoadingOverlay v-if="isLoading" />
-  <UButton
-    v-if="food.author === myRating?.createdBy"
-    label="Delete"
-    variant="soft"
-    size="xl"
-    class="mt-4 justify-center"
-    icon="i-heroicons-x-mark"
-    trailing
-    @click="handleDelete"
-  />
 
   <div class="dark:text-white">
     <div class="mx-auto max-w-2xl py-4 sm:py-24 lg:max-w-7xl">
@@ -145,55 +155,52 @@ const { createdBy, assignedToGroup } = await useFood(props.food);
 
         <!-- Product info -->
         <div class="mt-10 sm:mt-16 sm:px-0 lg:mt-0">
-          <h1 class="text-3xl font-bold tracking-tight white:text-gray-900">
-            {{ food.name }}
-          </h1>
+          <div class="flex flex-row w-full gap-2 items-center">
+            <EmojiRating :rating-value="food.averageRating" />
+            <h1 class="text-3xl font-bold tracking-tight white:text-gray-900">
+              {{ food.name }}
+            </h1>
+          </div>
           <div class="my-6">
             <h3 class="sr-only">Description</h3>
 
             <div class="space-y-6 text-base white:text-gray-700">
               {{ food.description }}
             </div>
-          </div>
-
-          <div class="mt-3">
-            <h3 class="sr-only">Ratings</h3>
-            <Rating :user-rating="selectedRating" />
+            <div>
+              <h3 class="font-bold text-xl mb-2">Personal rating</h3>
+              <EmojiRatingBar v-model="personalRating" />
+            </div>
+            <div v-if="ratings" class="my-4">
+              <h3 class="font-bold text-xl mb-2">All other ratings</h3>
+              <div v-for="rating in ratings.items" :key="rating.id">
+                <div
+                  v-if="myRating?.createdBy !== rating.createdBy.id"
+                  class="flex flex-row gap-2 content-center"
+                >
+                  <span class="content-center">{{
+                    rating.createdBy.email
+                  }}</span>
+                  <EmojiRating :rating-value="rating.rating" />
+                </div>
+              </div>
+            </div>
+            <div>Created by {{ createdBy }}</div>
+            <div>Visible for group {{ assignedToGroup }}</div>
           </div>
         </div>
       </div>
-      <div class="flex flex-fow gap-2">
-        <UInputMenu
-          v-model="selectedRating"
-          size="xl"
-          :options="possibleRatings"
-          value-attribute="id"
-          option-attribute="name"
-          class="my-4 basis-3/4"
-        />
-        <UButton
-          :loading="isLoading"
-          variant="soft"
-          class="justify-center my-4 basis-1/4"
-          icon="i-heroicons-check"
-          trailing
-          @click="handlePersist"
-        />
-      </div>
     </div>
-    <div class="my-4" v-if="ratings">
-      <h3 class="font-bold text-xl mb-2">All other ratings</h3>
-      <div v-for="rating in ratings.items">
-        <div
-          v-if="myRating?.createdBy !== rating.createdBy.id"
-          class="flex flex-row gap-2"
-        >
-          <Rating :user-rating="rating.rating" />
-          {{ rating.createdBy.email }}
-        </div>
-      </div>
-    </div>
-    <div>Created by {{ createdBy }}</div>
-    <div>Visible for group {{ assignedToGroup }}</div>
+    <UButton
+      v-if="food.author === myRating?.createdBy"
+      label="Delete"
+      variant="soft"
+      size="xl"
+      class="mt-4 justify-center"
+      icon="i-heroicons-x-mark"
+      color="red"
+      trailing
+      @click="handleDelete"
+    />
   </div>
 </template>
