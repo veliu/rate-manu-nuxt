@@ -7,9 +7,9 @@ const props = defineProps<{
   food: Food;
 }>();
 
-const food = reactive(props.food);
+const food = ref(props.food);
 
-const personalRating = ref(food.personalRating?.rating ?? 6);
+const personalRating = ref(food.value.personalRating?.rating ?? 6);
 
 const emojiRatings = [
   { value: 1, emoji: "❤" },
@@ -20,8 +20,6 @@ const emojiRatings = [
   { value: 6, emoji: "🤢" },
 ];
 
-const { createdBy, assignedToGroup } = await useFood(props.food);
-
 const { $api } = useNuxtApp();
 
 async function updateRating(rating: number) {
@@ -30,6 +28,8 @@ async function updateRating(rating: number) {
     rating: rating,
   };
   await $api.foodRating.upsert(request);
+  const { data } = await $api.food.get(food.value.id);
+  food.value = data.value;
 }
 
 watch(personalRating, (newValue) => {
@@ -41,6 +41,7 @@ watch(personalRating, (newValue) => {
   <UCard>
     <template #header>
       <div class="flex flex-row justify-between">
+        <span>Durschnittliche Bewertung </span>
         <Twemoji
           :emoji="
             food.averageRating
@@ -49,14 +50,9 @@ watch(personalRating, (newValue) => {
           "
           size="2em"
         />
-        <div>
-          <UBadge color="black" variant="solid">{{ createdBy }}</UBadge>
-        </div>
       </div>
     </template>
-    <div
-      class="aspect-h-2 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96"
-    >
+    <div class="aspect-h-2 aspect-w-3 sm:aspect-none hover:opacity-75 sm:h-96">
       <NuxtLink :to="'/food/' + food.id">
         <NuxtImg
           format="webp"
@@ -67,7 +63,7 @@ watch(personalRating, (newValue) => {
       </NuxtLink>
     </div>
     <div class="flex flex-1 flex-col space-y-2 py-4">
-      <h3 class="text-white text-xl font-medium">
+      <h3 class="text-xl font-medium">
         {{ food.name }}
       </h3>
       <div class="flex flex-1 flex-col justify-end">
@@ -77,9 +73,7 @@ watch(personalRating, (newValue) => {
       </div>
     </div>
     <template #footer>
-      <div>
-        <EmojiRating v-model="personalRating" />
-      </div>
+      <EmojiRating v-model="personalRating" />
     </template>
   </UCard>
 </template>
