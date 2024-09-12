@@ -5,6 +5,7 @@ import type { FormSubmitEvent } from "#ui/types";
 import type { LoginRequest, Token } from "~/types/ApiTypes";
 
 const { $api } = useNuxtApp();
+const toast = useToast();
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
@@ -34,6 +35,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     if (error.value?.statusCode === 401) {
       errorMessage.value = "Authentication failed!";
     }
+    toast.add({
+      id: "login-failed",
+      title: "Failed",
+      description: errorMessage.value,
+      icon: "i-heroicons-exclamation-triangle",
+      color: "red",
+    });
   }
 
   if (status.value === "success") {
@@ -41,6 +49,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     const loginCookie = useCookie("ratemanu-login");
     loginCookie.value = JSON.stringify(loginResponse);
     navigateTo("/");
+    toast.add({
+      id: "login-success",
+      title: "Welcome!",
+      icon: "i-heroicons-face-smile",
+    });
   }
 };
 </script>

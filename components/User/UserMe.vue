@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type InferType, object, string } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
-import type { PutMeRequest, User } from "~/types/ApiTypes";
+import type { PutMeRequest, Token, User } from "~/types/ApiTypes";
 
 const colorMode = useColorMode();
 const isDark = computed({
@@ -12,6 +12,8 @@ const isDark = computed({
     colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
   },
 });
+
+const toast = useToast();
 
 const props = defineProps<{
   user: User;
@@ -48,7 +50,23 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     state.username = <string>response?.value?.name;
   } else {
     console.log(error);
+    toast.add({
+      id: "put-me-failed",
+      title: "Failed",
+      icon: "i-heroicons-exclamation-triangle",
+      color: "red",
+    });
   }
+};
+
+const router = useRouter();
+
+const onLogout = async () => {
+  $api.auth.invalidateToken();
+  const loginCookie = useCookie("ratemanu-login") as Ref<Token | undefined>;
+  loginCookie.value = undefined;
+  router.push("/");
+  toast.add({ title: "Bye!" });
 };
 </script>
 
@@ -80,6 +98,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         aria-label="Theme"
         @click="isDark = !isDark"
       />
+    </div>
+    <div>
+      <UButton label="Logout" @click="onLogout" />
     </div>
   </div>
 </template>

@@ -8,14 +8,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/login");
   }
 
-  const token: Token = {
-    token: <string>loginCookie.value?.token,
-    refresh_token: <string>loginCookie.value?.refresh_token,
-  };
-
   const { $api } = useNuxtApp();
 
-  const { data, status } = await $api.auth.refreshToken(token.refresh_token);
+  const { data, status } = await $api.auth.refreshToken();
 
   if (status.value !== "success") {
     return navigateTo("/login");

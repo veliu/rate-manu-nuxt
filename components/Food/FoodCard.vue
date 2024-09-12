@@ -13,6 +13,8 @@ const personalRating = ref(food.value.personalRating?.rating ?? 6);
 
 const { $api } = useNuxtApp();
 
+const toast = useToast();
+
 async function updateRating(rating: number) {
   const request: UpsertFoodRatingRequest = {
     food: props.food.id,
@@ -25,6 +27,7 @@ async function updateRating(rating: number) {
 
 watch(personalRating, (newValue) => {
   updateRating(newValue);
+  toast.add({ title: "Successful updated" });
 });
 </script>
 
@@ -32,7 +35,7 @@ watch(personalRating, (newValue) => {
   <UCard>
     <template #header>
       <div class="flex flex-row justify-between">
-        <span>Durschnittliche Bewertung </span>
+        <span>Average Rating</span>
         <EmojiRating :rating-value="food.averageRating" />
       </div>
     </template>

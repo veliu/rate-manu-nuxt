@@ -11,6 +11,8 @@ import type {
 class AuthModule extends HttpFactory {
   private RESOURCE = "/authentication";
 
+  private loginCookie = useCookie("ratemanu-login") as Ref<Token>;
+
   async register(
     register: RegisterRequest,
     asyncDataOptions?: AsyncDataOptions<{}>,
@@ -60,12 +62,11 @@ class AuthModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async refreshToken(
-    refreshToken: string,
-    asyncDataOptions?: AsyncDataOptions<Token>,
-  ) {
+  async refreshToken(asyncDataOptions?: AsyncDataOptions<Token>) {
     return useAsyncData(() => {
-      const refreshTokenRequest = { refresh_token: refreshToken };
+      const refreshTokenRequest = {
+        refresh_token: this.loginCookie.value.refresh_token,
+      };
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
           "Accept-Language": "en-US",
@@ -74,6 +75,25 @@ class AuthModule extends HttpFactory {
       return this.call<Token>(
         "POST",
         "/token/refresh",
+        refreshTokenRequest,
+        fetchOptions,
+      );
+    }, asyncDataOptions);
+  }
+
+  async invalidateToken(asyncDataOptions?: AsyncDataOptions<Token>) {
+    return useAsyncData(() => {
+      const refreshTokenRequest = {
+        refresh_token: this.loginCookie.value.refresh_token,
+      };
+      const fetchOptions: FetchOptions<"json"> = {
+        headers: {
+          "Accept-Language": "en-US",
+        },
+      };
+      return this.call<Token>(
+        "POST",
+        "/token/invalidate",
         refreshTokenRequest,
         fetchOptions,
       );
