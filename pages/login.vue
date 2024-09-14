@@ -4,6 +4,8 @@ import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import type { LoginRequest, Token } from "~/types/ApiTypes";
 
+const isLoading = ref(false);
+
 const { $api } = useNuxtApp();
 const toast = useToast();
 
@@ -24,6 +26,7 @@ const state = reactive({
 const errorMessage = ref("");
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  isLoading.value = true;
   const credentials: LoginRequest = {
     username: event.data.email,
     password: event.data.password,
@@ -55,6 +58,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
       icon: "i-heroicons-face-smile",
     });
   }
+  isLoading.value = false;
 };
 </script>
 
@@ -89,7 +93,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
           <UInput v-model="state.password" type="password" />
         </UFormGroup>
 
-        <UButton type="submit"> Submit </UButton>
+        <UButton :loading="isLoading" type="submit"> Submit </UButton>
       </UForm>
     </div>
     <p class="mt-10 text-center text-sm text-gray-500">

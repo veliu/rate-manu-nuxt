@@ -6,6 +6,7 @@ import type {
   CreateFoodRequest,
   Food,
   FoodCollection,
+  SearchCriteria,
   Token,
   UpdateFoodImageRequest,
 } from "~/types/ApiTypes";
@@ -49,7 +50,9 @@ class FoodModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async search(asyncDataOptions?: AsyncDataOptions<FoodCollection>) {
+  async search(searchCriteria: SearchCriteria, asyncDataOptions?: AsyncDataOptions<FoodCollection>) {
+    const searchParamString  = new URLSearchParams(buildQueryParams(searchCriteria)).toString()
+    console.log(searchParamString)
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
@@ -59,7 +62,7 @@ class FoodModule extends HttpFactory {
       };
       return this.call<FoodCollection>(
         "GET",
-        `${this.RESOURCE}/`,
+        `${this.RESOURCE}/?${searchParamString}`,
         undefined,
         fetchOptions,
       );

@@ -84,3 +84,12 @@ export type UpsertFoodRatingRequest = {
   food: string;
   rating: number;
 };
+export type Sorting = {
+  propertyName: string;
+  direction: 'desc'|'asc'
+}
+export type SearchCriteria = {
+  limit: number,
+  offset: number,
+  sorting?: Sorting[]
+}
