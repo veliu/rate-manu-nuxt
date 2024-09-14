@@ -12,7 +12,7 @@ const defaultSearchCriteria: SearchCriteria = {
   offset: 0,
   limit: 500,
   sorting: [
-    {propertyName: 'averageRating', direction: 'desc'},
+    {propertyName: 'averageRating', direction: 'asc'},
     {propertyName: 'name', direction: 'asc'}
   ]
 } 
