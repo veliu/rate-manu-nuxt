@@ -50,9 +50,14 @@ class FoodModule extends HttpFactory {
     }, asyncDataOptions);
   }
 
-  async search(searchCriteria: SearchCriteria, asyncDataOptions?: AsyncDataOptions<FoodCollection>) {
-    const searchParamString  = new URLSearchParams(buildQueryParams(searchCriteria)).toString()
-    console.log(searchParamString)
+  async search(
+    searchCriteria: SearchCriteria,
+    asyncDataOptions?: AsyncDataOptions<FoodCollection>,
+  ) {
+    const searchParamString = new URLSearchParams(
+      buildQueryParams(searchCriteria),
+    ).toString();
+    console.log(searchParamString);
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {

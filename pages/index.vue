@@ -12,10 +12,10 @@ const defaultSearchCriteria: SearchCriteria = {
   offset: 0,
   limit: 500,
   sorting: [
-    {propertyName: 'averageRating', direction: 'asc'},
-    {propertyName: 'name', direction: 'asc'}
-  ]
-} 
+    { propertyName: "averageRating", direction: "asc" },
+    { propertyName: "name", direction: "asc" },
+  ],
+};
 const { data } = await $api.food.search(defaultSearchCriteria);
 
 const foodCollection = data.value as FoodCollection;

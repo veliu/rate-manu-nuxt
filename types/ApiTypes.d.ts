@@ -86,10 +86,10 @@ export type UpsertFoodRatingRequest = {
 };
 export type Sorting = {
   propertyName: string;
-  direction: 'desc'|'asc'
-}
+  direction: "desc" | "asc";
+};
 export type SearchCriteria = {
-  limit: number,
-  offset: number,
-  sorting?: Sorting[]
-}
+  limit: number;
+  offset: number;
+  sorting?: Sorting[];
+};
