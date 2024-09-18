@@ -9,15 +9,53 @@ definePageMeta({
 
 const { $api } = useNuxtApp();
 
+type SortingOption = {
+  propertyName: string;
+  direction: "asc" | "desc";
+  label: string;
+};
+
+const sortingOptions: SortingOption[] = [
+  {
+    propertyName: "averageRating",
+    direction: "asc",
+    label: "Bewertung aufsteigend",
+  },
+  {
+    propertyName: "averageRating",
+    direction: "desc",
+    label: "Bewertung absteigend",
+  },
+  {
+    propertyName: "name",
+    direction: "asc",
+    label: "Name aufsteigend",
+  },
+  {
+    propertyName: "name",
+    direction: "desc",
+    label: "Name absteigend",
+  },
+];
+
+const selectedSorting = ref("Bewertung aufsteigend");
+
+const getSortingOptionByLabel = (label: string): SortingOption => {
+  return sortingOptions.find(
+    (option) => option.label === label,
+  ) as SortingOption;
+};
+
 const itemsPerPage: Ref<number> = ref(9);
 const page: Ref<number> = ref(1);
 
 const buildSearchCriteria = (): SearchCriteria => {
   const offset = (page.value - 1) * itemsPerPage.value;
 
+  const s = getSortingOptionByLabel(selectedSorting.value);
+
   const sorting: Sorting[] = [
-    { propertyName: "averageRating", direction: "asc" },
-    { propertyName: "name", direction: "asc" },
+    { propertyName: s.propertyName, direction: s.direction },
   ];
 
   return {
@@ -43,6 +81,10 @@ const openFilterForm: Ref<boolean> = ref(false);
 watch(page, async () => {
   foodCollection.value = await fetchFoodCollection();
 });
+
+watch(selectedSorting, async () => {
+  foodCollection.value = await fetchFoodCollection();
+});
 </script>
 
 <template>
@@ -58,19 +100,29 @@ watch(page, async () => {
       <UButton
         class="justify-center"
         icon="i-heroicons-chart-pie"
-        label="Filter and Sorting"
+        label="Filter"
         @click="openFilterForm = true"
       />
     </div>
-    <UPagination
-      v-model="page"
-      class="justify-end"
-      :page-count="itemsPerPage"
-      :total="totalCount"
-      :active-button="{ variant: 'outline' }"
-      :inactive-button="{ color: 'gray' }"
-      size="sm"
-    />
+    <div class="flex justify-between">
+      <USelect
+        v-model="selectedSorting"
+        :options="sortingOptions"
+        option-attribute="label"
+        value-attribute="label"
+        icon="i-heroicons-arrows-up-down"
+        placeholder="Sortierung..."
+      />
+      <UPagination
+        v-model="page"
+        :page-count="itemsPerPage"
+        :total="totalCount"
+        :active-button="{ variant: 'outline' }"
+        :inactive-button="{ color: 'gray' }"
+        size="sm"
+      />
+    </div>
+
     <USlideover v-model="openCreateFoodForm">
       <div class="p-4 flex-1">
         <UButton
