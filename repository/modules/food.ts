@@ -57,7 +57,6 @@ class FoodModule extends HttpFactory {
     const searchParamString = new URLSearchParams(
       buildQueryParams(searchCriteria),
     ).toString();
-    console.log(searchParamString);
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {
         headers: {
