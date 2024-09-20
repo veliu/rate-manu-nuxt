@@ -155,5 +155,15 @@ watch(selectedSorting, async () => {
       </div>
     </USlideover>
     <FoodListing :food-collection="foodCollection" />
+    <div class="flex justify-end">
+      <UPagination
+        v-model="page"
+        :page-count="itemsPerPage"
+        :total="totalCount"
+        :active-button="{ variant: 'outline' }"
+        :inactive-button="{ color: 'gray' }"
+        size="sm"
+      />
+    </div>
   </div>
 </template>
