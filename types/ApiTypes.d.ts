@@ -88,8 +88,15 @@ export type Sorting = {
   propertyName: string;
   direction: "desc" | "asc";
 };
+export type Filter = {
+  entity: string;
+  propertyName: string;
+  operator: string;
+  value: string | number | boolean;
+};
 export type SearchCriteria = {
   limit: number;
   offset: number;
   sorting?: Sorting[];
+  filter?: Filter[];
 };

@@ -16,7 +16,11 @@ if (status.value === "error") {
 </script>
 
 <template>
-  <div v-for="group in groups?.items" class="flex flex-col gap-4 mt-8">
+  <div
+    v-for="group in groups?.items"
+    :key="group.id"
+    class="flex flex-col gap-4 mt-8"
+  >
     <GroupCard :group="group" />
   </div>
 </template>

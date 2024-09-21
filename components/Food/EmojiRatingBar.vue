@@ -1,7 +1,14 @@
 <script setup lang="ts">
-defineProps<{
-  modelValue: number;
-}>();
+withDefaults(
+  defineProps<{
+    modelValue: number;
+    emojiSize?: string;
+  }>(),
+  {
+    modelValue: 0,
+    emojiSize: "1.7em",
+  },
+);
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -29,7 +36,7 @@ const emojiRatings = {
     >
       <Twemoji
         :emoji="emojiRating.emoji"
-        size="1.7em"
+        :size="emojiSize"
         :class="
           emojiRating.value !== modelValue ? 'brightness-50' : 'animate-bounce'
         "

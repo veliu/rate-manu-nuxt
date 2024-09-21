@@ -79,7 +79,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         <UTextarea v-model="state.description" />
       </UFormGroup>
       <UFormGroup label="Image" name="image">
-        <UInput type="file" v-model="state.image" @change="setImage" />
+        <UInput v-model="state.image" type="file" @change="setImage" />
       </UFormGroup>
       <UButton type="submit" :loading="isLoading"> Submit</UButton>
     </UForm>
