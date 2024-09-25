@@ -56,7 +56,7 @@ importers:
         version: 6.12.1(magicast@0.3.5)(rollup@4.21.3)(webpack-sources@3.2.3)
       '@openapitools/openapi-generator-cli':
         specifier: ^2.13.7
-        version: 2.13.7
+        version: 2.13.9
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -990,8 +990,8 @@ packages:
   '@nuxtjs/tailwindcss@6.12.1':
     resolution: {integrity: sha512-UKmaPRVpxlFqLorhL6neEba2tySlsj6w6yDb7jzS6A0AAjyBQ6k3BQqWO+AaTy2iQLX7eR+1yj3/w43HzY8RtA==}
 
-  '@openapitools/openapi-generator-cli@2.13.7':
-    resolution: {integrity: sha512-DS3wWEma1WXPhlqcv+XRVPlCBkME0hkKBVr7GSwlQWvWwIekm/fU4PR8sxhVXYJ33EIpKHfGofT0ZH9+K2lvjQ==}
+  '@openapitools/openapi-generator-cli@2.13.9':
+    resolution: {integrity: sha512-GJaWGcHmLsvj/G1mRDytm9PTDwRGSYUDTf1uA/2FYxQAb5sq4nkZz1tD4Z7qDlZ3xTYSTw4Z8BQUdlsnrA8rcw==}
     engines: {node: '>=10.0.0'}
     hasBin: true
 
@@ -6063,7 +6063,7 @@ snapshots:
       - uWebSockets.js
       - webpack-sources
 
-  '@openapitools/openapi-generator-cli@2.13.7':
+  '@openapitools/openapi-generator-cli@2.13.9':
     dependencies:
       '@nestjs/axios': 3.0.3(@nestjs/common@10.4.3(reflect-metadata@0.1.13)(rxjs@7.8.1))(axios@1.7.4)(rxjs@7.8.1)
       '@nestjs/common': 10.4.3(reflect-metadata@0.1.13)(rxjs@7.8.1)
