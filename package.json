@@ -17,7 +17,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.1.5",
-    "@nuxt/eslint": "^0.5.7",
+    "@nuxt/eslint": "^0.6.0",
     "@nuxt/image": "^1.8.0",
     "@nuxt/ui": "^2.18.5",
     "@tailwindcss/aspect-ratio": "^0.4.2",
