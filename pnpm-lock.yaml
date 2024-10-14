@@ -50,7 +50,7 @@ importers:
     devDependencies:
       '@iconify-json/heroicons':
         specifier: ^1.2.0
-        version: 1.2.0
+        version: 1.2.1
       '@nuxtjs/tailwindcss':
         specifier: ^6.12.1
         version: 6.12.1(magicast@0.3.5)(rollup@4.21.3)(webpack-sources@3.2.3)
@@ -789,8 +789,8 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@iconify-json/heroicons@1.2.0':
-    resolution: {integrity: sha512-EmvGN0L9EUJCmQ82rkLGZ4tkz0YGQfZV7ugKT6UvHni/bxNitQrD0gLj6NJj2W9zsSoXyNHyCX236+EJmO4pmA==}
+  '@iconify-json/heroicons@1.2.1':
+    resolution: {integrity: sha512-TkKfS5U27kE5MXmSGLzPoz95BP5VA9xEJXwJFwmPMVLX+xyWq0OkoiWTUXB0uAoQODpb8BaRpzSydItrq9fIRA==}
 
   '@iconify/collections@1.0.463':
     resolution: {integrity: sha512-evy1hjBhc2M74M37RYorywTl+a96NrUHbY79kzcht1syCpXylWeg+6imtmDyj3An7JvxjDfdO4mLbiDsCDGxDQ==}
@@ -5582,7 +5582,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@iconify-json/heroicons@1.2.0':
+  '@iconify-json/heroicons@1.2.1':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -6033,7 +6033,7 @@ snapshots:
     dependencies:
       '@headlessui/tailwindcss': 0.2.1(tailwindcss@3.4.13)
       '@headlessui/vue': 1.7.23(vue@3.5.12(typescript@5.6.3))
-      '@iconify-json/heroicons': 1.2.0
+      '@iconify-json/heroicons': 1.2.1
       '@nuxt/icon': 1.5.1(magicast@0.3.5)(rollup@4.21.3)(vite@5.4.6(@types/node@22.5.5)(terser@5.33.0))(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)
       '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.21.3)(webpack-sources@3.2.3)
       '@nuxtjs/color-mode': 3.5.1(magicast@0.3.5)(rollup@4.21.3)(webpack-sources@3.2.3)
