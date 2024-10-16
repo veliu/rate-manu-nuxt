@@ -23,6 +23,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
+    "@vueuse/core": "^11.1.0",
     "nuxt": "^3.13.2",
     "nuxt-twemoji": "^3.6.2",
     "vue": "latest",

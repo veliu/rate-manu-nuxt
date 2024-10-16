@@ -43,6 +43,17 @@ export type InviteUserToGroupRequest = {
   email: string;
   group: string;
 };
+export type FoodComment = {
+  id: string;
+  author: string;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type FoodCommentCollection = {
+  count: number;
+  items: Array<FoodComment>;
+};
 export type Food = {
   id: string;
   name: string;
@@ -54,6 +65,7 @@ export type Food = {
   image?: string;
   averageRating: number;
   ratings?: string[];
+  comments?: string[];
   personalRating: FoodRating | null;
 };
 export type FoodCollection = {

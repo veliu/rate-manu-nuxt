@@ -4,12 +4,14 @@ import { $fetch, type FetchOptions } from "ofetch";
 import AuthModule from "~/repository/modules/auth";
 import FoodModule from "~/repository/modules/food";
 import FoodRatingModule from "~/repository/modules/food-rating";
+import FoodCommentModule from "~/repository/modules/food-comment";
 import UserModule from "~/repository/modules/user";
 
 export type IApiInstance = {
   auth: AuthModule;
   food: FoodModule;
   foodRating: FoodRatingModule;
+  foodComment: FoodCommentModule;
   user: UserModule;
 };
 
@@ -28,6 +30,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     auth: new AuthModule(apiFetcher),
     food: new FoodModule(apiFetcher),
     foodRating: new FoodRatingModule(apiFetcher),
+    foodComment: new FoodCommentModule(apiFetcher),
     user: new UserModule(apiFetcher),
   };
 

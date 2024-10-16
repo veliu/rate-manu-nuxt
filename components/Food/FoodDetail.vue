@@ -4,6 +4,7 @@ import type { UpsertFoodRatingRequest, Food } from "~/types/ApiTypes";
 import { useFood } from "~/composables/useFood";
 import EmojiRating from "./EmojiRating.vue";
 import EmojiRatingBar from "./EmojiRatingBar.vue";
+import { useFoodComments } from "~/composables/useFoodComments";
 
 const props = defineProps<{
   food: Food;
@@ -103,6 +104,35 @@ async function updateRating(rating: number) {
 watch(personalRating, (newValue) => {
   updateRating(newValue);
 });
+
+const {
+  loading: areCommentsLoading,
+  createComment,
+  loadComments,
+  comments,
+} = useFoodComments(food.value.id);
+
+const toast = useToast();
+
+const newComment = ref<string>("");
+
+const invokeCreateComment = async () => {
+  if (newComment.value === "") {
+    toast.add({
+      id: "create-comment-failed",
+      title: "Could not create comment",
+      description: "Comment empty...",
+      icon: "i-heroicons-exclamation-triangle",
+      color: "red",
+    });
+    return;
+  }
+  await createComment(newComment.value);
+  await loadComments();
+  newComment.value = "";
+};
+
+await loadComments();
 </script>
 
 <template>
@@ -171,7 +201,7 @@ watch(personalRating, (newValue) => {
               <h3 class="font-bold text-xl mb-2">Personal rating</h3>
               <EmojiRatingBar v-model="personalRating" />
             </div>
-            <div v-if="ratings" class="my-4">
+            <div v-if="ratings.items.length > 1" class="my-4">
               <h3 class="font-bold text-xl mb-2">All other ratings</h3>
               <div v-for="rating in ratings.items" :key="rating.id">
                 <div
@@ -190,6 +220,29 @@ watch(personalRating, (newValue) => {
           </div>
         </div>
       </div>
+      <section id="comments" class="my-8 flex flex-col gap-2 max-w-md">
+        <h3 class="text-2xl">Comments</h3>
+        <div class="my-2">
+          <FoodComment v-for="c in comments" :foodComment="c" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <UTextarea
+            v-model="newComment"
+            color="primary"
+            variant="outline"
+            placeholder="New Comment..."
+            autoresize
+          />
+          <UButton
+            :loading="areCommentsLoading"
+            :disabled="areCommentsLoading"
+            label="Submit"
+            variant="soft"
+            block
+            @click="invokeCreateComment"
+          />
+        </div>
+      </section>
     </div>
     <UButton
       v-if="food.author === myRating?.createdBy"

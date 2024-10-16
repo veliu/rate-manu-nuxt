@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { refreshUser } = useContext();
+await refreshUser();
+</script>
 
 <template>
   <div>
