@@ -1,4 +1,39 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "assignees": [
+    "veliu"
+  ],
+  "separateMultipleMajor": true,
+  "schedule": ["before 8am every monday"],
+  "extends": [
+    "config:recommended"
+  ],
+  "automergeStrategy": "rebase",
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "matchConfidence": ["high", "very high"],
+      "labels": ["patch"],
+      "groupName": "Minor Upgrade",
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "matchConfidence": ["high", "very high"],
+      "labels": ["minor"],
+      "groupName": "Minor Upgrade",
+      "automerge": true
+    },
+    {
+      "matchConfidence": ["neutral", "low"],
+      "labels": ["low-confidence"],
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["major"],
+      "automerge": false
+    }
+  ]
 }
