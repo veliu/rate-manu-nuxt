@@ -4,10 +4,9 @@ import type { RegisterRequest } from "~/types/ApiTypes";
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 
-const notificationSend = ref(false);
+const { register } = useUser();
+
 const loading = ref(false);
-const passwordViolations = ref("");
-const emailViolations = ref("");
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
@@ -18,17 +17,6 @@ const schema = object({
 
 type Schema = InferType<typeof schema>;
 
-type ViolationError = {
-  detail: string;
-  status: number;
-  title: string;
-  violations: Array<{
-    propertyPath: string;
-    title: string;
-  }>;
-};
-
-const { $api } = useNuxtApp();
 const state = reactive({
   email: "",
   password: "",
@@ -42,28 +30,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     password: event.data.password,
   };
 
-  const { status, error } = await $api.auth.register(credentials);
-
-  if (status.value === "success") {
-    notificationSend.value = true;
-    passwordViolations.value = "";
-    emailViolations.value = "";
-    state.email = "";
-    state.password = "";
-  }
-
-  if (status.value === "error") {
-    const errorResponse = error.value?.data as ViolationError;
-    console.log(errorResponse);
-    passwordViolations.value =
-      errorResponse.violations.find(
-        (violation) => violation.propertyPath === "password",
-      )?.title ?? "";
-    emailViolations.value =
-      errorResponse.violations.find(
-        (violation) => violation.propertyPath === "email",
-      )?.title ?? "";
-  }
+  register(credentials);
 
   loading.value = false;
 };

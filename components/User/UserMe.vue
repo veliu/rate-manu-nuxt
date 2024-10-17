@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type InferType, object, string } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
-import type { PutMeRequest, Token, User } from "~/types/ApiTypes";
+import type { PutMeRequest, User } from "~/types/ApiTypes";
 
 const colorMode = useColorMode();
 const isDark = computed({
@@ -59,15 +59,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   }
 };
 
-const router = useRouter();
-
-const onLogout = async () => {
-  $api.auth.invalidateToken();
-  const loginCookie = useCookie("ratemanu-login") as Ref<Token | undefined>;
-  loginCookie.value = undefined;
-  router.push("/");
-  toast.add({ title: "Bye!" });
-};
+const { logout } = useUser();
 </script>
 
 <template>
@@ -100,7 +92,7 @@ const onLogout = async () => {
       />
     </div>
     <div>
-      <UButton label="Logout" @click="onLogout" />
+      <UButton label="Logout" @click="logout" />
     </div>
   </div>
 </template>

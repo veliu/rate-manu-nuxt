@@ -5,21 +5,17 @@ const route = useRoute();
 
 const token = <string>route.query.token;
 
-const { $api } = useNuxtApp();
+const { confirmRegistration } = useUser();
 
 const request: ConfirmRegistrationRequest = {
   token: token,
 };
 
-const { status, error } = await $api.auth.confirmRegistration(request);
-
-if (status.value === "error") {
-  console.log(error);
-}
+const success = confirmRegistration(request);
 </script>
 
 <template>
   <div>
-    {{ status }}
+    {{ success }}
   </div>
 </template>

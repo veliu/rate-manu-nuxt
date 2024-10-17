@@ -3,11 +3,11 @@
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import type { LoginRequest, Token } from "~/types/ApiTypes";
+import { useUser } from "~/composables/useUser";
 
 const isLoading = ref(false);
 
-const { $api } = useNuxtApp();
-const toast = useToast();
+const { login } = useUser();
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
@@ -23,41 +23,16 @@ const state = reactive({
   password: "",
 });
 
-const errorMessage = ref("");
-
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   isLoading.value = true;
+
   const credentials: LoginRequest = {
     username: event.data.email,
     password: event.data.password,
   };
 
-  const { data, status, error } = await $api.auth.login(credentials);
+  await login(credentials);
 
-  if (status.value === "error") {
-    if (error.value?.statusCode === 401) {
-      errorMessage.value = "Authentication failed!";
-    }
-    toast.add({
-      id: "login-failed",
-      title: "Failed",
-      description: errorMessage.value,
-      icon: "i-heroicons-exclamation-triangle",
-      color: "red",
-    });
-  }
-
-  if (status.value === "success") {
-    const loginResponse = data.value as Token;
-    const loginCookie = useCookie("ratemanu-login");
-    loginCookie.value = JSON.stringify(loginResponse);
-    navigateTo("/");
-    toast.add({
-      id: "login-success",
-      title: "Welcome!",
-      icon: "i-heroicons-face-smile",
-    });
-  }
   isLoading.value = false;
 };
 </script>
