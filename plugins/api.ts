@@ -6,6 +6,7 @@ import FoodModule from "~/repository/modules/food";
 import FoodRatingModule from "~/repository/modules/food-rating";
 import FoodCommentModule from "~/repository/modules/food-comment";
 import UserModule from "~/repository/modules/user";
+import type { Token } from "~/types/ApiTypes";
 
 export type IApiInstance = {
   auth: AuthModule;
@@ -18,8 +19,14 @@ export type IApiInstance = {
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
+  const loginCookie = useCookie("ratemanu-login") as Ref<Token>;
+
   const fetchOptions: FetchOptions = {
     baseURL: config.public.apiBaseUrl,
+    headers: {
+      "Accept-Language": "en-US",
+      Authorization: `Bearer ${loginCookie.value?.token}`,
+    },
   };
 
   // Create a new instance of $fetcher with custom option

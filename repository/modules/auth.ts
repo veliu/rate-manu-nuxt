@@ -1,4 +1,3 @@
-import type { FetchOptions } from "ofetch";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
 import type {
@@ -15,50 +14,33 @@ class AuthModule extends HttpFactory {
 
   async register(
     register: RegisterRequest,
-    asyncDataOptions?: AsyncDataOptions<{}>,
+    asyncDataOptions?: AsyncDataOptions<undefined>,
   ) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<{}>(
+      return this.call<undefined>(
         "POST",
         `${this.RESOURCE}/register`,
         register,
-        fetchOptions,
       );
     }, asyncDataOptions);
   }
 
   async confirmRegistration(
     request: ConfirmRegistrationRequest,
-    asyncDataOptions?: AsyncDataOptions<{}>,
+    asyncDataOptions?: AsyncDataOptions<undefined>,
   ) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<{}>(
+      return this.call<undefined>(
         "POST",
         `${this.RESOURCE}/confirm-registration`,
         request,
-        fetchOptions,
       );
     }, asyncDataOptions);
   }
 
   async login(login: LoginRequest, asyncDataOptions?: AsyncDataOptions<Token>) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<Token>("POST", "/login_check", login, fetchOptions);
+      return this.call<Token>("POST", "/login_check", login);
     }, asyncDataOptions);
   }
 
@@ -67,17 +49,7 @@ class AuthModule extends HttpFactory {
       const refreshTokenRequest = {
         refresh_token: this.loginCookie.value.refresh_token,
       };
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<Token>(
-        "POST",
-        "/token/refresh",
-        refreshTokenRequest,
-        fetchOptions,
-      );
+      return this.call<Token>("POST", "/token/refresh", refreshTokenRequest);
     }, asyncDataOptions);
   }
 
@@ -86,17 +58,7 @@ class AuthModule extends HttpFactory {
       const refreshTokenRequest = {
         refresh_token: this.loginCookie.value.refresh_token,
       };
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<Token>(
-        "POST",
-        "/token/invalidate",
-        refreshTokenRequest,
-        fetchOptions,
-      );
+      return this.call<Token>("POST", "/token/invalidate", refreshTokenRequest);
     }, asyncDataOptions);
   }
 }

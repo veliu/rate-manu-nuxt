@@ -1,4 +1,3 @@
-import type { FetchOptions } from "ofetch";
 import type { Ref } from "vue";
 import HttpFactory from "../factory";
 import type { AsyncDataOptions } from "#app";
@@ -18,34 +17,16 @@ class FoodModule extends HttpFactory {
 
   async get(foodId: string, asyncDataOptions?: AsyncDataOptions<Food>) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          Authorization: `Bearer ${this.loginCookie.value.token}`,
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<Food>(
-        "GET",
-        `${this.RESOURCE}/${foodId}`,
-        undefined,
-        fetchOptions,
-      );
+      return this.call<Food>("GET", `${this.RESOURCE}/${foodId}`);
     }, asyncDataOptions);
   }
 
   async delete(foodId: string, asyncDataOptions?: AsyncDataOptions<undefined>) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          Authorization: `Bearer ${this.loginCookie.value.token}`,
-          "Accept-Language": "en-US",
-        },
-      };
       return this.call<undefined>(
         "DELETE",
         `${this.RESOURCE}/${foodId}`,
         undefined,
-        fetchOptions,
       );
     }, asyncDataOptions);
   }
@@ -58,17 +39,10 @@ class FoodModule extends HttpFactory {
       buildQueryParams(searchCriteria),
     ).toString();
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          Authorization: `Bearer ${this.loginCookie.value.token}`,
-          "Accept-Language": "en-US",
-        },
-      };
       return this.call<FoodCollection>(
         "GET",
         `${this.RESOURCE}/?${searchParamString}`,
         undefined,
-        fetchOptions,
       );
     }, asyncDataOptions);
   }
@@ -78,18 +52,7 @@ class FoodModule extends HttpFactory {
     asyncDataOptions?: AsyncDataOptions<Food>,
   ) {
     return useAsyncData(() => {
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          Authorization: `Bearer ${this.loginCookie.value.token}`,
-          "Accept-Language": "en-US",
-        },
-      };
-      return this.call<Food>(
-        "POST",
-        `${this.RESOURCE}/`,
-        request,
-        fetchOptions,
-      );
+      return this.call<Food>("POST", `${this.RESOURCE}/`, request);
     }, asyncDataOptions);
   }
 
@@ -101,17 +64,10 @@ class FoodModule extends HttpFactory {
     return useAsyncData(() => {
       const formData = new FormData();
       formData.append("image", request.image);
-      const fetchOptions: FetchOptions<"json"> = {
-        headers: {
-          Authorization: `Bearer ${this.loginCookie.value.token}`,
-          "Accept-Language": "en-US",
-        },
-      };
       return this.call<Food>(
         "POST",
         `${this.RESOURCE}/${foodId}/update-image`,
         formData,
-        fetchOptions,
       );
     }, asyncDataOptions);
   }

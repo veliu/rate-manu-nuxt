@@ -86,11 +86,15 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         @submit="onSubmit"
       >
         <UFormGroup label="Email" name="email">
-          <UInput v-model="state.email" />
+          <UInput v-model="state.email" autoComplete="email" />
         </UFormGroup>
 
         <UFormGroup label="Password" name="password">
-          <UInput v-model="state.password" type="password" />
+          <UInput
+            v-model="state.password"
+            type="password"
+            autoComplete="current-password"
+          />
         </UFormGroup>
 
         <UButton :loading="isLoading" type="submit"> Submit </UButton>
