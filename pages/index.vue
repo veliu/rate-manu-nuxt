@@ -3,10 +3,6 @@
 import type { FoodCollection, SearchCriteria } from "~/types/ApiTypes";
 import { ref, computed, watch } from "vue";
 
-definePageMeta({
-  middleware: "auth",
-});
-
 const pageLoaded = ref(false);
 const { $api } = useNuxtApp();
 

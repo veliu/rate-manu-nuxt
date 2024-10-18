@@ -16,8 +16,8 @@ export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
   const router = useRouter();
-  const { updateToken } = useSessionStore();
-  const { sessionToken } = useSessionStore();
+  const { token: tokenStore, refresh_token: refreshTokenStore } =
+    storeToRefs(useSessionStore());
 
   async function login(request: LoginRequest) {
     try {
@@ -25,7 +25,10 @@ export function useUser(): useUserReturn {
         method: "POST",
         body: request,
       });
-      updateToken(token);
+
+      tokenStore.value = token.token;
+      refreshTokenStore.value = token.refresh_token;
+
       toast.add({
         id: "login-success",
         title: "Welcome!",
@@ -64,22 +67,25 @@ export function useUser(): useUserReturn {
   }
 
   async function logout() {
-    await $apiFetcher("/token/invalidate", {
-      method: "POST",
-      body: {
-        refresh_token: sessionToken.refresh_token,
-      },
-    });
+    try {
+      await $apiFetcher("/token/invalidate", {
+        method: "POST",
+        body: {
+          refresh_token: refreshTokenStore.value,
+        },
+      });
+    } finally {
+      tokenStore.value = "";
+      refreshTokenStore.value = "";
 
-    updateToken({ token: "", refresh_token: "" });
+      toast.add({
+        id: "logout-success",
+        title: "You're logged out",
+        icon: "i-heroicons-face-smile",
+      });
 
-    toast.add({
-      id: "logout-success",
-      title: "You're logged out",
-      icon: "i-heroicons-face-smile",
-    });
-
-    await router.push("/login");
+      await router.push("/login");
+    }
   }
 
   async function confirmRegistration(request: ConfirmRegistrationRequest) {

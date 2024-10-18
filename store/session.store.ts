@@ -9,14 +9,18 @@ export const useSessionStore = defineStore(
       refresh_token: "",
     });
 
-    function updateToken(token: Token) {
-      sessionToken.token = token.token;
-      sessionToken.refresh_token = token.refresh_token;
-    }
+    const token = ref("");
+    const refresh_token = ref("");
+
+    const tokenObject = computed(() => ({
+      token: token.value,
+      refresh_token: refresh_token.value,
+    }));
 
     return {
-      sessionToken,
-      updateToken,
+      token,
+      refresh_token,
+      tokenObject,
     };
   },
   { persist: true },

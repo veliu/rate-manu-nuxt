@@ -4,7 +4,6 @@ import FoodModule from "~/repository/modules/food";
 import FoodRatingModule from "~/repository/modules/food-rating";
 import FoodCommentModule from "~/repository/modules/food-comment";
 import UserModule from "~/repository/modules/user";
-import type { Token } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
 
 export type IApiInstance = {
@@ -17,13 +16,13 @@ export type IApiInstance = {
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
-  const { sessionToken } = useSessionStore();
+  const { token } = storeToRefs(useSessionStore());
 
   const fetchOptions: FetchOptions = {
     baseURL: config.public.apiBaseUrl,
     headers: {
       "Accept-Language": "en-US",
-      Authorization: `Bearer ${sessionToken.token}`,
+      Authorization: `Bearer ${token.value}`,
     },
   };
 
