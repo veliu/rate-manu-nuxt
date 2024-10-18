@@ -1,13 +1,15 @@
-import type { Ref } from "vue";
 import type { Token } from "~/types/ApiTypes";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  if (from.name === "login") return;
+  if (import.meta.server) return;
+
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
 
   const loginCookie = useCookie<Token>("ratemanu-login");
 
-  if (typeof loginCookie.value == undefined) {
+  if (loginCookie.value === undefined) {
     toast.add({
       id: "session-expired",
       title: "Session expired",

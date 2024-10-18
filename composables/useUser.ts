@@ -9,7 +9,7 @@ export type useUserReturn = {
   login(request: LoginRequest): Promise<void>;
   register(request: RegisterRequest): Promise<void>;
   logout(): Promise<void>;
-  confirmRegistration(request: ConfirmRegistrationRequest): Promise<boolean>;
+  confirmRegistration(request: ConfirmRegistrationRequest): Promise<void>;
 };
 export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
@@ -18,14 +18,18 @@ export function useUser(): useUserReturn {
   const router = useRouter();
 
   async function login(request: LoginRequest) {
-    const { status, data, error } = await useAsyncData<Token>(() => {
-      return $apiFetcher("/login_check", {
+    try {
+      loginCookie.value = await $apiFetcher<Token>("/login_check", {
         method: "POST",
         body: request,
       });
-    });
-
-    if (status.value === "error") {
+      toast.add({
+        id: "login-success",
+        title: "Welcome!",
+        icon: "i-heroicons-face-smile",
+      });
+      navigateTo("/");
+    } catch (error) {
       toast.add({
         id: "login-failed",
         title: "Authentication failed!",
@@ -34,29 +38,19 @@ export function useUser(): useUserReturn {
         color: "red",
       });
     }
-
-    if (status.value === "success") {
-      const loginResponse = data.value as Token;
-      const loginCookie = useCookie("ratemanu-login");
-      loginCookie.value = JSON.stringify(loginResponse);
-      navigateTo("/");
-      toast.add({
-        id: "login-success",
-        title: "Welcome!",
-        icon: "i-heroicons-face-smile",
-      });
-    }
   }
 
   async function register(request: RegisterRequest) {
-    const { status } = await useAsyncData<undefined>(() => {
-      return $apiFetcher("/authentication/register", {
-        method: "POST",
-        body: request,
+    try {
+      const data = { method: "POST", body: request };
+      await $apiFetcher("/authentication/register", data);
+      toast.add({
+        id: "registration-success",
+        title: "Success!",
+        description: "Please check your inbox to verify your registration",
+        icon: "i-heroicons-face-smile",
       });
-    });
-
-    if (status.value === "error") {
+    } catch (error) {
       toast.add({
         id: "registration-failed",
         title: "Registration failed!",
@@ -64,25 +58,14 @@ export function useUser(): useUserReturn {
         color: "red",
       });
     }
-
-    if (status.value === "success") {
-      toast.add({
-        id: "registration-success",
-        title: "Success!",
-        description: "Please check your inbox to verify your registration",
-        icon: "i-heroicons-face-smile",
-      });
-    }
   }
 
   async function logout() {
-    await useAsyncData<undefined>(() => {
-      return $apiFetcher("/token/invalidate", {
-        method: "POST",
-        body: {
-          refresh_token: loginCookie.value?.refresh_token,
-        },
-      });
+    await $apiFetcher("/token/invalidate", {
+      method: "POST",
+      body: {
+        refresh_token: loginCookie.value?.refresh_token,
+      },
     });
 
     loginCookie.value = undefined;
@@ -97,25 +80,19 @@ export function useUser(): useUserReturn {
   }
 
   async function confirmRegistration(request: ConfirmRegistrationRequest) {
-    const { status } = await useAsyncData<undefined>(() => {
-      return $apiFetcher("/authentication/confirm-registration", {
+    try {
+      $apiFetcher("/authentication/confirm-registration", {
         method: "POST",
         body: request,
       });
-    });
-
-    if (status.value === "success") {
       toast.add({
         id: "registration-confirmation-success",
         title: "Successfully confirmed!",
         description: "Now please log in",
         icon: "i-heroicons-face-smile",
       });
-
-      return true;
-    }
-
-    if (status.value === "error") {
+      await router.push("/login");
+    } catch (error) {
       toast.add({
         id: "registration-confirmation-failed",
         title: "Confirmation failed!",
@@ -123,8 +100,6 @@ export function useUser(): useUserReturn {
         color: "red",
       });
     }
-
-    return false;
   }
 
   return {
