@@ -7,9 +7,7 @@ const token = <string>route.query.token;
 
 const { confirmRegistration } = useUser();
 
-const request: ConfirmRegistrationRequest = {
-  token: token,
-};
+const request: ConfirmRegistrationRequest = { token: token };
 
 const success = confirmRegistration(request);
 </script>

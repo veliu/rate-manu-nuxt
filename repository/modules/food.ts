@@ -13,8 +13,6 @@ import type {
 class FoodModule extends HttpFactory {
   private RESOURCE = "/food";
 
-  private loginCookie = useCookie("ratemanu-login") as Ref<Token>;
-
   async get(foodId: string, asyncDataOptions?: AsyncDataOptions<Food>) {
     return useAsyncData(() => {
       return this.call<Food>("GET", `${this.RESOURCE}/${foodId}`);

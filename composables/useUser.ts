@@ -4,6 +4,7 @@ import type {
   RegisterRequest,
   Token,
 } from "~/types/ApiTypes";
+import { useSessionStore } from "~/store/session.store";
 
 export type useUserReturn = {
   login(request: LoginRequest): Promise<void>;
@@ -14,15 +15,17 @@ export type useUserReturn = {
 export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
-  const loginCookie = useCookie<Token | undefined>("ratemanu-login");
   const router = useRouter();
+  const { updateToken } = useSessionStore();
+  const { sessionToken } = useSessionStore();
 
   async function login(request: LoginRequest) {
     try {
-      loginCookie.value = await $apiFetcher<Token>("/login_check", {
+      const token = await $apiFetcher<Token>("/login_check", {
         method: "POST",
         body: request,
       });
+      updateToken(token);
       toast.add({
         id: "login-success",
         title: "Welcome!",
@@ -64,11 +67,11 @@ export function useUser(): useUserReturn {
     await $apiFetcher("/token/invalidate", {
       method: "POST",
       body: {
-        refresh_token: loginCookie.value?.refresh_token,
+        refresh_token: sessionToken.refresh_token,
       },
     });
 
-    loginCookie.value = undefined;
+    updateToken({ token: "", refresh_token: "" });
 
     toast.add({
       id: "logout-success",

@@ -9,7 +9,14 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     },
   },
-  modules: ["@nuxt/image", "@nuxt/ui", "@nuxt/eslint", "nuxt-twemoji"],
+  modules: [
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@nuxt/eslint",
+    "nuxt-twemoji",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
+  ],
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   typescript: {

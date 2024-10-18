@@ -37,6 +37,7 @@ export default [
     name: "turn-off-deprected-rules",
     rules: {
       "vue/component-tags-order": "off",
+      "vue/multi-word-component-names": "off"
     },
   },
 ];

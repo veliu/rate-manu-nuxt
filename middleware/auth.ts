@@ -1,4 +1,5 @@
 import type { Token } from "~/types/ApiTypes";
+import { useSessionStore } from "~/store/session.store";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (from.name === "login") return;
@@ -7,24 +8,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
 
-  const loginCookie = useCookie<Token>("ratemanu-login");
-
-  if (loginCookie.value === undefined) {
-    toast.add({
-      id: "session-expired",
-      title: "Session expired",
-      description: "Please login again",
-      icon: "i-heroicons-exclamation-triangle",
-      color: "red",
-    });
-    return navigateTo("/login");
-  }
+  const { sessionToken } = storeToRefs(useSessionStore());
 
   const { status, data } = await useAsyncData<Token>(() => {
     return $apiFetcher<Token>("/token/refresh", {
       method: "POST",
       body: {
-        refresh_token: loginCookie.value?.refresh_token,
+        refresh_token: sessionToken.value?.refresh_token,
       },
     });
   });
@@ -40,5 +30,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/login");
   }
 
-  loginCookie.value = data.value as Token;
+  sessionToken.value = data.value as Token;
 });

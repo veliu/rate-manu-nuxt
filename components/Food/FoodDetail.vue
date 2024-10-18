@@ -223,7 +223,7 @@ await loadComments();
       <section id="comments" class="my-8 flex flex-col gap-2 max-w-md">
         <h3 class="text-2xl">Comments</h3>
         <div class="my-2">
-          <FoodComment v-for="c in comments" :foodComment="c" />
+          <FoodComment v-for="c in comments" :key="c.id" :food-comment="c" />
         </div>
         <div class="flex flex-col gap-2">
           <UTextarea

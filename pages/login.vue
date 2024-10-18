@@ -61,14 +61,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         @submit="onSubmit"
       >
         <UFormGroup label="Email" name="email">
-          <UInput v-model="state.email" autoComplete="email" />
+          <UInput v-model="state.email" auto-complete="email" />
         </UFormGroup>
 
         <UFormGroup label="Password" name="password">
           <UInput
             v-model="state.password"
             type="password"
-            autoComplete="current-password"
+            auto-complete="current-password"
           />
         </UFormGroup>
 
