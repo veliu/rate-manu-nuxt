@@ -24,11 +24,6 @@
       "automerge": true
     },
     {
-      "matchConfidence": ["neutral", "low"],
-      "labels": ["low-confidence"],
-      "automerge": false
-    },
-    {
       "matchUpdateTypes": ["major"],
       "labels": ["major"],
       "automerge": false
