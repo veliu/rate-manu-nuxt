@@ -11,7 +11,7 @@ export type useUserReturn = {
   logout(): Promise<void>;
   confirmRegistration(request: ConfirmRegistrationRequest): Promise<boolean>;
 };
-export function useUser() {
+export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
   const loginCookie = useCookie<Token | undefined>("ratemanu-login");

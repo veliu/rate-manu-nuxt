@@ -13,14 +13,12 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
-      "matchConfidence": ["high", "very high"],
       "labels": ["patch"],
       "groupName": "Minor Upgrade",
       "automerge": true
     },
     {
       "matchUpdateTypes": ["minor"],
-      "matchConfidence": ["high", "very high"],
       "labels": ["minor"],
       "groupName": "Minor Upgrade",
       "automerge": true
