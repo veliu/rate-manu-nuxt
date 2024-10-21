@@ -1,6 +1,7 @@
 import type {
   ConfirmRegistrationRequest,
   LoginRequest,
+  PutMeRequest,
   RegisterRequest,
   Token,
   User,
@@ -13,7 +14,7 @@ export type useUserReturn = {
   register(request: RegisterRequest): Promise<void>;
   logout(): Promise<void>;
   confirmRegistration(request: ConfirmRegistrationRequest): Promise<void>;
-  me: ComputedRef<User>;
+  updateMe(request: PutMeRequest): Promise<User>;
 };
 export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
@@ -23,8 +24,6 @@ export function useUser(): useUserReturn {
     storeToRefs(useSessionStore());
   const { resetSession } = useSessionStore();
 
-  const _me = ref<User | undefined>(undefined);
-
   const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
     headers: {
       Authorization: `Bearer ${token.value?.token}`,
@@ -32,11 +31,15 @@ export function useUser(): useUserReturn {
     },
   }));
 
-  async function refreshMe() {
-    user.value = await $apiFetcher<User>("/user/me", {
-      method: "GET",
-      ...fetchOptions.value,
-    });
+  async function refreshMe(newUser?: User) {
+    if (newUser) {
+      user.value = newUser;
+    } else {
+      user.value = await $apiFetcher<User>("/user/me", {
+        method: "GET",
+        ...fetchOptions.value,
+      });
+    }
   }
 
   async function login(request: LoginRequest) {
@@ -138,11 +141,36 @@ export function useUser(): useUserReturn {
     }
   }
 
+  async function updateMe(request: PutMeRequest): Promise<User> {
+    try {
+      const newUser = await $apiFetcher<User>("/user/me", {
+        method: "PUT",
+        body: request,
+        ...fetchOptions.value,
+      });
+      await refreshMe(newUser);
+      toast.add({
+        id: "update-me-success",
+        title: "Successfully updated!",
+        icon: "i-heroicons-face-smile",
+      });
+    } catch (error) {
+      toast.add({
+        id: "update-me-failed",
+        title: "Failed updating!",
+        icon: "i-heroicons-exclamation-triangle",
+        color: "red",
+      });
+    }
+
+    return user.value as User;
+  }
+
   return {
     login,
     register,
     logout,
     confirmRegistration,
-    me: computed(() => _me.value as User),
+    updateMe,
   };
 }

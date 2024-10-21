@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { type InferType, object, string } from "yup";
-import type { FormSubmitEvent } from "#ui/types";
-import type { PutMeRequest, User } from "~/types/ApiTypes";
+import { object, string } from "yup";
+import type { User } from "~/types/ApiTypes";
 
 const colorMode = useColorMode();
 const isDark = computed({
@@ -13,11 +12,11 @@ const isDark = computed({
   },
 });
 
-const toast = useToast();
-
 const props = defineProps<{
   user: User;
 }>();
+
+const user = toRef(props.user);
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
@@ -25,8 +24,6 @@ const schema = object({
     .min(3, "Must be at least 3 characters")
     .required("Required"),
 });
-
-type Schema = InferType<typeof schema>;
 
 const state = reactive({
   email: "",
@@ -36,51 +33,56 @@ const state = reactive({
 state.email = props.user.email;
 state.username = props.user.name ?? "";
 
-const { $api } = useNuxtApp();
+const updateMode = ref(false);
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-  const request: PutMeRequest = {
-    name: event.data.username,
-  };
+const { updateMe, logout } = useUser();
 
-  const { error, status, data: response } = await $api.user.putMe(request);
-
-  if (status.value === "success") {
-    state.email = <string>response?.value?.email;
-    state.username = <string>response?.value?.name;
-  } else {
-    console.log(error);
-    toast.add({
-      id: "put-me-failed",
-      title: "Failed",
-      icon: "i-heroicons-exclamation-triangle",
-      color: "red",
-    });
+const onSubmit = async () => {
+  if (user.value.name !== state.username) {
+    user.value = await updateMe({ name: state.username });
   }
+  updateMode.value = false;
 };
-
-const { logout } = useUser();
 </script>
 
 <template>
   <div class="my-8 flex flex-col gap-4">
-    <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UFormGroup label="Email" name="email">
         <UInput
+          v-model="state.email"
           placeholder="dexter.morgan@miami.com"
           icon="i-heroicons-envelope"
-          v-model="state.email"
           disabled
         />
       </UFormGroup>
       <UFormGroup label="Name" name="username">
-        <UInput placeholder="Dexter" v-model="state.username" />
+        <div class="flex flex-row w-full gap-2">
+          <UInput
+            v-model="state.username"
+            class="grow"
+            placeholder="Dexter"
+            :disabled="!updateMode"
+            :class="{ 'bg-transparent': !updateMode }"
+          />
+          <UButton
+            v-if="!updateMode"
+            icon="i-heroicons-pencil-square"
+            variant="outline"
+            @click="() => (updateMode = true)"
+          />
+          <UButton
+            v-if="updateMode"
+            icon="i-heroicons-check"
+            variant="outline"
+            @click="onSubmit"
+          />
+        </div>
       </UFormGroup>
-      <UButton class="justify-center" type="submit" label="Submit" />
     </UForm>
     <UDivider />
     <div class="flex flex-row justify-between">
-      <h2>Darstellung</h2>
+      <h2>Color Mode</h2>
       <UButton
         :icon="
           isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
@@ -92,7 +94,7 @@ const { logout } = useUser();
       />
     </div>
     <div>
-      <UButton label="Logout" @click="logout" />
+      <UButton color="red" label="Logout" @click="logout" />
     </div>
   </div>
 </template>
