@@ -25,16 +25,14 @@ type SortingOption = {
   label: string;
 };
 
-const { $api } = useNuxtApp();
+const { myGroups } = useGroups();
 
-const { data: groups } = await $api.user.myGroups();
-
-const groupOptions = groups.value.items.map(
+const groupOptions = myGroups.value.map(
   (g: GroupResponse): GroupSelect => ({ id: g.id, name: g.name }),
 );
 const selectedGroupOption = ref(undefined) as Ref<GroupSelect | undefined>;
 
-const memberOptions = groups.value.items.flatMap(
+const memberOptions = myGroups.value.flatMap(
   (g: GroupResponse): GroupSelect[] =>
     g.members.map(
       (m: GroupMember): MemberSelect => ({

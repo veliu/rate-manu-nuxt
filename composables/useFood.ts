@@ -1,4 +1,5 @@
 import type { Food, GroupResponse } from "~/types/ApiTypes";
+import { useSessionStore } from "~/store/session.store";
 
 export type useFoodReturn = {
   createdBy: string;
@@ -6,14 +7,13 @@ export type useFoodReturn = {
 };
 
 export async function useFood(food: Food): Promise<useFoodReturn> {
-  const { $api } = useNuxtApp();
-  const { data: me } = await $api.user.getMe();
-  const { data: myGroups } = await $api.user.myGroups();
+  const { user: me } = storeToRefs(useSessionStore());
+  const { myGroups } = useGroups();
 
   let createdBy = "unknown";
   let assignedToGroup = "unknown";
 
-  myGroups.value?.items.forEach((group: GroupResponse) => {
+  myGroups.value?.forEach((group: GroupResponse) => {
     if (group.id === food.group) {
       assignedToGroup = group.name;
     }

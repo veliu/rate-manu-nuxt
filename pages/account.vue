@@ -29,7 +29,7 @@ const items = [
         <UserMe :user="user" />
       </div>
       <div v-if="item.key === 'groups' && user">
-        <UserGroups :user="user" />
+        <UserGroups />
       </div>
     </template>
   </UTabs>

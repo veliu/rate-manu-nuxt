@@ -8,6 +8,7 @@ import type {
 } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
 import type { FetchOptions } from "ofetch";
+import { useGroups } from "~/composables/useGroups";
 
 export type useUserReturn = {
   login(request: LoginRequest): Promise<void>;
@@ -20,6 +21,7 @@ export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
   const router = useRouter();
+  const { fetchGroups } = useGroups();
   const { user, token, bearerToken, refreshToken } =
     storeToRefs(useSessionStore());
   const { resetSession } = useSessionStore();
@@ -59,6 +61,7 @@ export function useUser(): useUserReturn {
       });
 
       await refreshMe();
+      await fetchGroups();
 
       navigateTo("/");
     } catch (error) {
