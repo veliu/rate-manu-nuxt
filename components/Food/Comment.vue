@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { FoodComment } from "~/types/ApiTypes";
+import { useUser } from "~/composables/useUser";
+import { useSessionStore } from "~/store/session.store";
 
 const props = defineProps<{
   foodComment: FoodComment;
@@ -7,7 +9,7 @@ const props = defineProps<{
 
 const comment = toRef<FoodComment>(props.foodComment);
 
-const { me } = useContext();
+const { user: me } = storeToRefs(useSessionStore());
 
 const formattedDate = computed(() => {
   const date = new Date(comment.value.createdAt);
@@ -18,7 +20,8 @@ const formattedDate = computed(() => {
   });
 });
 
-const isMyComment = computed(() => me?.value?.id === comment.value.author);
+console.log(me.value);
+const isMyComment = computed(() => me.value?.id === comment.value.author);
 </script>
 
 <template>

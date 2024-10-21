@@ -1,9 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import { useSessionStore } from "~/store/session.store";
 
-const { $api } = useNuxtApp();
+definePageMeta({
+  middleware: "auth",
+});
 
-const { data: user } = await $api.user.getMe();
+const { user } = useSessionStore();
 
 const items = [
   {

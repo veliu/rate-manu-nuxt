@@ -22,7 +22,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     baseURL: config.public.apiBaseUrl,
     headers: {
       "Accept-Language": "en-US",
-      Authorization: `Bearer ${token.value}`,
+      Authorization: `Bearer ${token.value?.token}`,
     },
   };
 

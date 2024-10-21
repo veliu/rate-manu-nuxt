@@ -4,10 +4,12 @@ import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import type { LoginRequest, Token } from "~/types/ApiTypes";
 import { useUser } from "~/composables/useUser";
+import { useSessionStore } from "~/store/session.store";
 
 const isLoading = ref(false);
 
 const { login } = useUser();
+const { user } = storeToRefs(useSessionStore());
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),

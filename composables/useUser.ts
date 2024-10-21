@@ -3,37 +3,60 @@ import type {
   LoginRequest,
   RegisterRequest,
   Token,
+  User,
 } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
+import type { FetchOptions } from "ofetch";
 
 export type useUserReturn = {
   login(request: LoginRequest): Promise<void>;
   register(request: RegisterRequest): Promise<void>;
   logout(): Promise<void>;
   confirmRegistration(request: ConfirmRegistrationRequest): Promise<void>;
+  me: ComputedRef<User>;
 };
 export function useUser(): useUserReturn {
   const { $apiFetcher } = useNuxtApp();
   const toast = useToast();
   const router = useRouter();
-  const { token: tokenStore, refresh_token: refreshTokenStore } =
+  const { user, token, bearerToken, refreshToken } =
     storeToRefs(useSessionStore());
+  const { resetSession } = useSessionStore();
+
+  const _me = ref<User | undefined>(undefined);
+
+  const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
+    headers: {
+      Authorization: `Bearer ${token.value?.token}`,
+      "Accept-Language": "en-US",
+    },
+  }));
+
+  async function refreshMe() {
+    user.value = await $apiFetcher<User>("/user/me", {
+      method: "GET",
+      ...fetchOptions.value,
+    });
+  }
 
   async function login(request: LoginRequest) {
     try {
-      const token = await $apiFetcher<Token>("/login_check", {
+      const response = await $apiFetcher<Token>("/login_check", {
         method: "POST",
         body: request,
       });
 
-      tokenStore.value = token.token;
-      refreshTokenStore.value = token.refresh_token;
+      bearerToken.value = response.token;
+      refreshToken.value = response.refresh_token;
 
       toast.add({
         id: "login-success",
         title: "Welcome!",
         icon: "i-heroicons-face-smile",
       });
+
+      await refreshMe();
+
       navigateTo("/");
     } catch (error) {
       toast.add({
@@ -48,8 +71,11 @@ export function useUser(): useUserReturn {
 
   async function register(request: RegisterRequest) {
     try {
-      const data = { method: "POST", body: request };
-      await $apiFetcher("/authentication/register", data);
+      await $apiFetcher("/authentication/register", {
+        method: "POST",
+        body: request,
+        ...fetchOptions.value,
+      });
       toast.add({
         id: "registration-success",
         title: "Success!",
@@ -71,12 +97,12 @@ export function useUser(): useUserReturn {
       await $apiFetcher("/token/invalidate", {
         method: "POST",
         body: {
-          refresh_token: refreshTokenStore.value,
+          refresh_token: token.value.refresh_token,
         },
+        ...fetchOptions.value,
       });
     } finally {
-      tokenStore.value = "";
-      refreshTokenStore.value = "";
+      resetSession();
 
       toast.add({
         id: "logout-success",
@@ -93,6 +119,7 @@ export function useUser(): useUserReturn {
       $apiFetcher("/authentication/confirm-registration", {
         method: "POST",
         body: request,
+        ...fetchOptions.value,
       });
       toast.add({
         id: "registration-confirmation-success",
@@ -116,5 +143,6 @@ export function useUser(): useUserReturn {
     register,
     logout,
     confirmRegistration,
+    me: computed(() => _me.value as User),
   };
 }

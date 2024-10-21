@@ -1,6 +1,5 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-
 const route = useRoute();
 const foodId = route.params.id as string;
 const { $api } = useNuxtApp();

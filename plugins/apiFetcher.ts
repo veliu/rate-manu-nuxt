@@ -1,23 +1,26 @@
 import { $fetch, type FetchOptions } from "ofetch";
 
 import type { Token } from "~/types/ApiTypes";
+import { useSessionStore } from "~/store/session.store";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
-  const loginCookie = useCookie("ratemanu-login") as Ref<Token>;
+  const { token } = storeToRefs(useSessionStore());
 
-  const fetchOptions: FetchOptions = {
+  const bearerToken = computed(() => token.value?.token);
+
+  const globalFetchOptions: FetchOptions = {
     baseURL: config.public.apiBaseUrl,
     headers: {
+      Authorization: "Bearer " + bearerToken.value,
       "Accept-Language": "en-US",
-      Authorization: `Bearer ${loginCookie.value?.token}`,
     },
   };
 
   return {
     provide: {
-      apiFetcher: $fetch.create(fetchOptions),
+      apiFetcher: $fetch.create(globalFetchOptions),
     },
   };
 });

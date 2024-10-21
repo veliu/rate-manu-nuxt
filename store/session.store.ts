@@ -1,26 +1,31 @@
 import { defineStore } from "pinia";
-import type { Token } from "~/types/ApiTypes";
+import type { Token, User } from "~/types/ApiTypes";
+import user from "~/repository/modules/user";
 
 export const useSessionStore = defineStore(
   "session",
   () => {
-    const sessionToken = reactive<Token>({
-      token: "",
-      refresh_token: "",
-    });
+    const bearerToken = ref("");
+    const refreshToken = ref("");
 
-    const token = ref("");
-    const refresh_token = ref("");
-
-    const tokenObject = computed(() => ({
-      token: token.value,
-      refresh_token: refresh_token.value,
+    const token = computed(() => ({
+      token: bearerToken.value,
+      refresh_token: refreshToken.value,
     }));
+    const user = ref<User | undefined>(undefined);
+
+    function resetSession() {
+      bearerToken.value = "";
+      refreshToken.value = "";
+      user.value = undefined;
+    }
 
     return {
+      bearerToken,
+      refreshToken,
       token,
-      refresh_token,
-      tokenObject,
+      user,
+      resetSession,
     };
   },
   { persist: true },
