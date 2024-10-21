@@ -52,11 +52,11 @@ class FoodModule extends HttpFactory {
   }
 
   async search(
-    searchCriteria: SearchCriteria,
+    searchCriteria: Ref<SearchCriteria>,
     asyncDataOptions?: AsyncDataOptions<FoodCollection>,
   ) {
     const searchParamString = new URLSearchParams(
-      buildQueryParams(searchCriteria),
+      buildQueryParams(searchCriteria.value),
     ).toString();
     return useAsyncData(() => {
       const fetchOptions: FetchOptions<"json"> = {

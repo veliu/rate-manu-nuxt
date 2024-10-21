@@ -1,56 +1,55 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import type { FoodCollection, SearchCriteria } from "~/types/ApiTypes";
-import { ref, computed, watch } from "vue";
+import type { Filter, SearchCriteria, Sorting } from "~/types/ApiTypes";
+import { ref, computed } from "vue";
+import { useSearch } from "~/composables/useSearch";
+import { objectHash } from "ohash";
 
 definePageMeta({
   middleware: "auth",
 });
 
-const pageLoaded = ref(false);
-const { $api } = useNuxtApp();
+const { makeSearch } = useSearch();
 
 const itemsPerPage = ref(9);
 const page = ref(1);
+const offset = computed(() => (page.value - 1) * itemsPerPage.value);
+const sorting = ref<Sorting[]>([
+  { propertyName: "averageRating", direction: "asc" },
+]);
+const filter = ref<Filter[]>([]);
+
 const openCreateFoodForm = ref(false);
 const openFilterForm = ref(false);
-
-const offset = computed(() => (page.value - 1) * itemsPerPage.value);
 
 const searchCriteria = ref<SearchCriteria>({
   offset: offset.value,
   limit: itemsPerPage.value,
-  sorting: [{ propertyName: "averageRating", direction: "asc" }],
+  sorting: sorting.value,
+  filter: filter.value,
 });
 
-const fetchFoodCollection = async (): Promise<FoodCollection> => {
-  const { data } = await $api.food.search(searchCriteria.value);
-  return data.value as FoodCollection;
-};
+const sc = computed(() => ({
+  offset: offset.value,
+  limit: searchCriteria.value.limit,
+  sorting: searchCriteria.value.sorting,
+  filter: searchCriteria.value.filter,
+}));
 
-const foodCollection = ref(await fetchFoodCollection());
-const totalCount = computed(() => foodCollection.value?.count || 0);
+const searchHash = computed(() => objectHash(searchCriteria.value));
 
-watch(
-  searchCriteria,
-  async () => {
-    foodCollection.value = await fetchFoodCollection();
-  },
-  { deep: true },
+const { data: foodCollection } = useAsyncData(
+  searchHash.value,
+  () => makeSearch(sc),
+  { watch: [sc] },
 );
 
-watch([page, itemsPerPage], () => {
-  searchCriteria.value.offset = offset.value;
-  searchCriteria.value.limit = itemsPerPage.value;
-});
-
-onMounted(() => {
-  pageLoaded.value = true;
-});
+const totalCount = computed(() => foodCollection.value?.count || 0);
+const items = computed(() => foodCollection.value?.items || []);
 </script>
 
 <template>
-  <div v-if="pageLoaded">
+  <div>
     <DefaultHeader />
     <div class="grid grid-cols-1 gap-4 mb-8">
       <div class="flex flex-row gap-2">
@@ -109,7 +108,7 @@ onMounted(() => {
           <FilterAndSorting v-model="searchCriteria" />
         </div>
       </USlideover>
-      <FoodListing :food-collection="foodCollection" />
+      <FoodListing :food-collection="items" />
       <div class="flex justify-end">
         <UPagination
           v-model="page"

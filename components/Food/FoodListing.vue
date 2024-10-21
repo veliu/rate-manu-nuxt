@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { FoodCollection } from "~/types/ApiTypes";
+import type { Food, FoodCollection } from "~/types/ApiTypes";
 
 defineProps<{
-  foodCollection: FoodCollection;
+  foodCollection: Food[];
 }>();
 </script>
 
@@ -16,11 +16,7 @@ defineProps<{
         v-if="foodCollection"
         class="group relative flex flex-col gap-8 overflow-hidden rounded-lg md:grid md:grid-cols-3"
       >
-        <FoodCard
-          v-for="food in foodCollection.items"
-          :key="food.id"
-          :food="food"
-        />
+        <FoodCard v-for="food in foodCollection" :key="food.id" :food="food" />
       </div>
     </div>
   </div>

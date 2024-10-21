@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type {
   SearchCriteria,
-  Sorting,
   GroupResponse,
   GroupMember,
 } from "~/types/ApiTypes";
 
 const props = defineProps<{ modelValue: SearchCriteria }>();
+const searchCriteria = toRef(props.modelValue);
 const emit = defineEmits(["update:modelValue"]);
 
 type GroupSelect = {
@@ -19,11 +19,7 @@ type MemberSelect = {
   name: string;
 };
 
-type SortingOption = {
-  propertyName: string;
-  direction: "asc" | "desc";
-  label: string;
-};
+const { buildSearchCriteria, sortingOptions } = useSearch();
 
 const { myGroups } = useGroups();
 
@@ -44,42 +40,13 @@ const memberOptions = myGroups.value.flatMap(
 const selectedMemberOption = ref(undefined) as Ref<MemberSelect | undefined>;
 const selectedRatingOption = ref(0) as Ref<number>;
 
-const sortingOptions: SortingOption[] = [
-  {
-    propertyName: "averageRating",
-    direction: "asc",
-    label: "Avg rating ascending",
-  },
-  {
-    propertyName: "averageRating",
-    direction: "desc",
-    label: "Avg rating descending",
-  },
-  { propertyName: "name", direction: "asc", label: "Name ascending" },
-  { propertyName: "name", direction: "desc", label: "Name descending" },
-];
-
 const selectedSorting = ref("Avg rating ascending");
 
-const getSortingOptionByLabel = (label: string): Sorting => {
-  return sortingOptions.find((option) => option.label === label) as Sorting;
-};
-
-const buildSearchCriteria = (): SearchCriteria => {
-  const sortingOption = getSortingOptionByLabel(selectedSorting.value);
-  return {
-    ...props.modelValue,
-    sorting: [
-      {
-        propertyName: sortingOption.propertyName,
-        direction: sortingOption.direction,
-      },
-    ],
-  };
-};
-
 watch(selectedSorting, () => {
-  const updatedSearchCriteria = buildSearchCriteria();
+  const updatedSearchCriteria = buildSearchCriteria(
+    searchCriteria,
+    selectedSorting,
+  );
   emit("update:modelValue", updatedSearchCriteria);
 });
 </script>

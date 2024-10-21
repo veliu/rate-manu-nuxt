@@ -27,6 +27,7 @@
     "@vueuse/core": "^11.1.0",
     "nuxt": "^3.13.2",
     "nuxt-twemoji": "^3.6.2",
+    "ohash": "^1.1.4",
     "pinia-plugin-persistedstate": "^4.1.1",
     "vue": "latest",
     "vue3-carousel-nuxt": "^1.1.3",
