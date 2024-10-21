@@ -2,6 +2,7 @@ import type {
   ConfirmRegistrationRequest,
   GroupCollectionResponse,
   GroupResponse,
+  InviteUserToGroupRequest,
   LoginRequest,
   PutMeRequest,
   RegisterRequest,
@@ -14,6 +15,7 @@ import type { FetchOptions } from "ofetch";
 export type useGroupsReturn = {
   fetchGroups(): Promise<void>;
   myGroups: ComputedRef<GroupResponse[]>;
+  inviteUserToGroup(request: InviteUserToGroupRequest): Promise<void>;
 };
 export function useGroups(): useGroupsReturn {
   const { $apiFetcher } = useNuxtApp();
@@ -50,8 +52,33 @@ export function useGroups(): useGroupsReturn {
     }
   }
 
+  async function inviteUserToGroup(
+    request: InviteUserToGroupRequest,
+  ): Promise<void> {
+    try {
+      await $apiFetcher<GroupCollectionResponse>("/user/invite", {
+        method: "POST",
+        body: request,
+        ...fetchOptions.value,
+      });
+      toast.add({
+        id: "invite-user-success",
+        title: "Invitation send!",
+        icon: "i-heroicons-face-smile",
+      });
+    } catch (error) {
+      toast.add({
+        id: "invite-user-failed",
+        title: "Could not invite user!",
+        icon: "i-heroicons-exclamation-triangle",
+        color: "red",
+      });
+    }
+  }
+
   return {
     fetchGroups,
     myGroups: computed(() => _groups.value),
+    inviteUserToGroup,
   };
 }

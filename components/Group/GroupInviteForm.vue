@@ -1,46 +1,43 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from "#ui/types";
-import { type InferType, object, string } from "yup";
-import type { InviteUserToGroupRequest } from "~/types/ApiTypes";
+import { object, string } from "yup";
 
 const props = defineProps<{
   groupId: string;
 }>();
 
-const { $api } = useNuxtApp();
+const groupId = toRef(props.groupId);
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
 });
 
-type Schema = InferType<typeof schema>;
-
 const state = reactive({
   email: "",
 });
 
+const { inviteUserToGroup } = useGroups();
+
 const isLoading = ref(false);
 
-const invited = ref(false);
-
-const onSubmitGroupInvite = async (event: FormSubmitEvent<Schema>) => {
+const onSubmitGroupInvite = async () => {
   isLoading.value = true;
 
-  const request: InviteUserToGroupRequest = {
-    email: event.data.email,
-    group: props.groupId,
-  };
+  await inviteUserToGroup({
+    email: state.email,
+    group: groupId.value,
+  });
 
-  const { status } = await $api.user.inviteUserToGroup(request);
-
-  invited.value = status.value === "success";
-  isLoading.value = !(status.value === "success");
+  isLoading.value = false;
 };
 </script>
 
 <template>
   <div>
-    <UForm :schema="schema" :state="state" @submit="onSubmitGroupInvite">
+    <UForm
+      :schema="schema"
+      :state="state"
+      @submit.prevent="onSubmitGroupInvite"
+    >
       <UFormGroup
         label="Invite a group member"
         help="The user will receive an email invitation "

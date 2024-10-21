@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import type { Token, User } from "~/types/ApiTypes";
-import user from "~/repository/modules/user";
+import type { User } from "~/types/ApiTypes";
 
 export const useSessionStore = defineStore(
   "session",
