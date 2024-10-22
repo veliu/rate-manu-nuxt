@@ -2,6 +2,7 @@
 import type { Food, UpsertFoodRatingRequest } from "~/types/ApiTypes";
 import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
 import EmojiRating from "~/components/Food/EmojiRating.vue";
+import { useFoodRating } from "~/composables/useFoodRating";
 
 const props = defineProps<{
   food: Food;
@@ -10,7 +11,7 @@ const props = defineProps<{
 const food = toRef(props.food);
 const foodId = computed(() => food.value.id);
 
-const { personalRating, updateRating } = useFood(food);
+const { ratings, personalRating, updateRating } = useFoodRating(food);
 const { getFood } = useSearch();
 
 const selectedRating = ref<number>(0);

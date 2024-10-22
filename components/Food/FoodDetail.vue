@@ -4,6 +4,8 @@ import type { Food } from "~/types/ApiTypes";
 import EmojiRating from "./EmojiRating.vue";
 import EmojiRatingBar from "./EmojiRatingBar.vue";
 import { useSessionStore } from "~/store/session.store";
+import { useFoodRating } from "~/composables/useFoodRating";
+import { useFoodComment } from "~/composables/useFoodComment";
 
 const props = defineProps<{
   food: Food;
@@ -14,16 +16,9 @@ const foodId = computed(() => food.value.id);
 
 const { user } = useSessionStore();
 
-const {
-  assignedToGroup,
-  createdBy,
-  updateRating,
-  personalRating,
-  deleteProduct,
-  ratings,
-  comments,
-  createComment,
-} = useFood(food);
+const { assignedToGroup, createdBy, deleteProduct } = useFood(food);
+const { ratings, personalRating, updateRating } = useFoodRating(food);
+const { comments, addComment } = useFoodComment(food);
 
 const { getFood } = useSearch();
 
@@ -39,7 +34,7 @@ watch(selectedRating, async () => {
 const newComment = ref<string>("");
 
 const invokeCreateComment = async () => {
-  await createComment(newComment);
+  await addComment(newComment);
   newComment.value = "";
 };
 
