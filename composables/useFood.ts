@@ -1,16 +1,12 @@
-import type {
-  Food,
-  FoodComment,
-  FoodCommentCollection,
-  GroupResponse,
-} from "~/types/ApiTypes";
+import type { Food, GroupResponse } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
 import type { FetchOptions } from "ofetch";
 
 export type useFoodReturn = {
-  createdBy: string;
-  assignedToGroup: string;
+  createdBy: ComputedRef<string>;
+  assignedToGroup: ComputedRef<string>;
   deleteProduct(): Promise<void>;
+  addImage(file: File): Promise<Food | undefined>;
 };
 
 export function useFood(food: Ref<Food>): useFoodReturn {
@@ -29,22 +25,22 @@ export function useFood(food: Ref<Food>): useFoodReturn {
     },
   }));
 
-  let createdBy = "unknown";
-  let assignedToGroup = "unknown";
+  let _createdBy = ref<string>("unknown");
+  let _assignedToGroup = ref<string>("unknown");
 
   myGroups.value?.forEach((group: GroupResponse) => {
     if (group.id === food.value?.group) {
-      assignedToGroup = group.name;
+      _assignedToGroup.value = group.name;
     }
     group.members.forEach((member) => {
       if (member.id === food.value?.author) {
-        createdBy = member.name ?? member.email;
+        _createdBy.value = member.name ?? member.email;
       }
     });
   });
 
   if (me.value?.id === food.value?.author) {
-    createdBy = "me";
+    _createdBy.value = "me";
   }
 
   async function deleteProduct(): Promise<void> {
@@ -69,9 +65,25 @@ export function useFood(food: Ref<Food>): useFoodReturn {
     }
   }
 
+  async function addImage(file: File): Promise<Food | undefined> {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      return await $apiFetcher<Food>(`/food/${food.value.id}/update-image`, {
+        method: "POST",
+        body: formData,
+        ...fetchOptions.value,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return {
-    createdBy,
-    assignedToGroup,
+    createdBy: computed(() => _createdBy.value),
+    assignedToGroup: computed(() => _assignedToGroup.value),
     deleteProduct,
+    addImage,
   };
 }
