@@ -3,7 +3,6 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import type { Food } from "~/types/ApiTypes";
 import EmojiRating from "./EmojiRating.vue";
 import EmojiRatingBar from "./EmojiRatingBar.vue";
-import { useFoodComments } from "~/composables/useFoodComments";
 import { useSessionStore } from "~/store/session.store";
 
 const props = defineProps<{
@@ -22,6 +21,8 @@ const {
   personalRating,
   deleteProduct,
   ratings,
+  comments,
+  createComment,
 } = useFood(food);
 
 const { getFood } = useSearch();
@@ -30,42 +31,15 @@ const isLoading = ref(false);
 
 const selectedRating: Ref<number> = ref(0);
 
-const { data: updatedRating } = useAsyncData(
-  "update-food-rating",
-  () => updateRating(selectedRating),
-  { watch: [selectedRating] },
-);
-
-watch(updatedRating, async () => {
+watch(selectedRating, async () => {
+  await updateRating(selectedRating);
   food.value = await getFood(foodId);
 });
-
-const {
-  loading: areCommentsLoading,
-  createComment,
-  loadComments,
-  comments,
-} = useFoodComments(food.value.id);
-
-await loadComments();
-
-const toast = useToast();
 
 const newComment = ref<string>("");
 
 const invokeCreateComment = async () => {
-  if (newComment.value === "") {
-    toast.add({
-      id: "create-comment-failed",
-      title: "Could not create comment",
-      description: "Comment empty...",
-      icon: "i-heroicons-exclamation-triangle",
-      color: "red",
-    });
-    return;
-  }
-  await createComment(newComment.value);
-  await loadComments();
+  await createComment(newComment);
   newComment.value = "";
 };
 
@@ -173,8 +147,7 @@ onMounted(() => {
             autoresize
           />
           <UButton
-            :loading="areCommentsLoading"
-            :disabled="areCommentsLoading"
+            :disabled="newComment === ''"
             label="Submit"
             variant="soft"
             block

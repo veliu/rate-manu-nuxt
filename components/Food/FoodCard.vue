@@ -7,27 +7,16 @@ const props = defineProps<{
   food: Food;
 }>();
 
-const food = ref(props.food);
+const food = toRef(props.food);
+const foodId = computed(() => food.value.id);
 
-const personalRating = ref(food.value.personalRating?.rating ?? 6);
+const { personalRating, updateRating } = useFood(food);
+const { getFood } = useSearch();
 
-const { $api } = useNuxtApp();
+const selectedRating = ref<number>(0);
 
-const toast = useToast();
-
-async function updateRating(rating: number) {
-  const request: UpsertFoodRatingRequest = {
-    food: props.food.id,
-    rating: rating,
-  };
-  await $api.foodRating.upsert(request);
-  const { data } = await $api.food.get(food.value.id);
-  food.value = data.value;
-}
-
-watch(personalRating, (newValue) => {
-  updateRating(newValue);
-  toast.add({ title: "Successful updated" });
+onMounted(() => {
+  selectedRating.value = personalRating.value?.rating ?? 0;
 });
 </script>
 
@@ -60,7 +49,7 @@ watch(personalRating, (newValue) => {
       </div>
     </div>
     <template #footer>
-      <EmojiRatingBar v-model="personalRating" />
+      <EmojiRatingBar v-model="selectedRating" />
     </template>
   </UCard>
 </template>
