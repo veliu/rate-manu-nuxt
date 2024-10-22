@@ -20,7 +20,6 @@ const formattedDate = computed(() => {
   });
 });
 
-console.log(me.value);
 const isMyComment = computed(() => me.value?.id === comment.value.author);
 </script>
 

@@ -1,12 +1,12 @@
 import type {
-  Filter,
+  Food,
   FoodCollection,
   SearchCriteria,
   Sorting,
 } from "~/types/ApiTypes";
 import type { FetchOptions } from "ofetch";
 import { useSessionStore } from "~/store/session.store";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 export type SortingOption = {
   propertyName: string;
@@ -21,6 +21,7 @@ export type useSearchReturn = {
     selectedSorting: Ref<string>,
   ): SearchCriteria;
   sortingOptions: SortingOption[];
+  getFood(id: Ref<string>): Promise<Food>;
 };
 
 export function useSearch(): useSearchReturn {
@@ -82,9 +83,17 @@ export function useSearch(): useSearchReturn {
     };
   };
 
+  const getFood = async (foodId: Ref<string>): Promise<Food> => {
+    return await $apiFetcher<Food>(`/food/${foodId.value}`, {
+      method: "GET",
+      ...fetchOptions.value,
+    });
+  };
+
   return {
     makeSearch,
     buildSearchCriteria,
     sortingOptions,
+    getFood,
   };
 }

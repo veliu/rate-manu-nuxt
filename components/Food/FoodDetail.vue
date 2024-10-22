@@ -1,108 +1,43 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import type { UpsertFoodRatingRequest, Food } from "~/types/ApiTypes";
-import { useFood } from "~/composables/useFood";
+import type { Food } from "~/types/ApiTypes";
 import EmojiRating from "./EmojiRating.vue";
 import EmojiRatingBar from "./EmojiRatingBar.vue";
 import { useFoodComments } from "~/composables/useFoodComments";
+import { useSessionStore } from "~/store/session.store";
 
 const props = defineProps<{
   food: Food;
 }>();
 
-const food = ref(props.food);
+const food = toRef(props.food);
+const foodId = computed(() => food.value.id);
+
+const { user } = useSessionStore();
+
+const {
+  assignedToGroup,
+  createdBy,
+  updateRating,
+  personalRating,
+  deleteProduct,
+  ratings,
+} = useFood(food);
+
+const { getFood } = useSearch();
 
 const isLoading = ref(false);
 
-const possibleRatings = [
-  {
-    id: 1,
-    name: "1 Lieblingsessen",
-  },
-  {
-    id: 2,
-    name: "2 Lecker",
-  },
-  {
-    id: 3,
-    name: "3 Gut - esse ich ab und zu",
-  },
-  {
-    id: 4,
-    name: "4 Nichts Besonderes",
-  },
-  {
-    id: 5,
-    name: "5 Der Hunger treibts runter",
-  },
-  {
-    id: 6,
-    name: "6 Bitte nie wieder!",
-  },
-];
+const selectedRating: Ref<number> = ref(0);
 
-const selectedRating: Ref<number> = ref(possibleRatings[5].id);
-
-const { $api } = useNuxtApp();
-
-const { data: myRating } = await $api.foodRating.getPersonalRating(
-  food.value.id,
+const { data: updatedRating } = useAsyncData(
+  "update-food-rating",
+  () => updateRating(selectedRating),
+  { watch: [selectedRating] },
 );
-selectedRating.value = myRating?.value?.rating ?? 1;
-const { data: ratings } = await $api.foodRating.getRatings(food.value.id);
 
-async function handleDelete() {
-  isLoading.value = true;
-  const { status, error } = await $api.food.delete(food.value.id);
-
-  if (status.value === "success") {
-    navigateTo("/food");
-  }
-
-  if (status.value === "error") {
-    console.log(error.value);
-  }
-
-  isLoading.value = false;
-}
-
-async function handlePersist() {
-  isLoading.value = true;
-
-  const createRequest: UpsertFoodRatingRequest = {
-    food: food.value.id,
-    rating: selectedRating.value,
-  };
-  const {
-    status,
-    error,
-    data: myRating,
-  } = await $api.foodRating.upsert(createRequest);
-
-  if (status.value === "error") {
-    console.log(error.value);
-  }
-
-  selectedRating.value = myRating?.value?.rating ?? 1;
-  isLoading.value = false;
-}
-
-const { createdBy, assignedToGroup } = await useFood(food.value);
-
-const personalRating = ref(props.food.personalRating?.rating ?? 6);
-
-async function updateRating(rating: number) {
-  const request: UpsertFoodRatingRequest = {
-    food: props.food.id,
-    rating: rating,
-  };
-  await $api.foodRating.upsert(request);
-  const { data } = await $api.food.get(props.food.id);
-  food.value = data.value;
-}
-
-watch(personalRating, (newValue) => {
-  updateRating(newValue);
+watch(updatedRating, async () => {
+  food.value = await getFood(foodId);
 });
 
 const {
@@ -111,6 +46,8 @@ const {
   loadComments,
   comments,
 } = useFoodComments(food.value.id);
+
+await loadComments();
 
 const toast = useToast();
 
@@ -132,7 +69,9 @@ const invokeCreateComment = async () => {
   newComment.value = "";
 };
 
-await loadComments();
+onMounted(() => {
+  selectedRating.value = personalRating.value?.rating ?? 0;
+});
 </script>
 
 <template>
@@ -199,13 +138,13 @@ await loadComments();
             </div>
             <div>
               <h3 class="font-bold text-xl mb-2">Personal rating</h3>
-              <EmojiRatingBar v-model="personalRating" />
+              <EmojiRatingBar v-model="selectedRating" />
             </div>
-            <div v-if="ratings.items.length > 1" class="my-4">
+            <div v-if="ratings.length > 1" class="my-4">
               <h3 class="font-bold text-xl mb-2">All other ratings</h3>
-              <div v-for="rating in ratings.items" :key="rating.id">
+              <div v-for="rating in ratings" :key="rating.id">
                 <div
-                  v-if="myRating?.createdBy !== rating.createdBy.id"
+                  v-if="user?.id !== rating.createdBy.id"
                   class="flex flex-row gap-2 content-center"
                 >
                   <span class="content-center">{{
@@ -245,7 +184,7 @@ await loadComments();
       </section>
     </div>
     <UButton
-      v-if="food.author === myRating?.createdBy"
+      v-if="food.author === user?.id"
       label="Delete"
       variant="soft"
       size="xl"
@@ -253,7 +192,7 @@ await loadComments();
       icon="i-heroicons-x-mark"
       color="red"
       trailing
-      @click="handleDelete"
+      @click="deleteProduct"
     />
   </div>
 </template>

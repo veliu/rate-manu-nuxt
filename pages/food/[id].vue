@@ -1,9 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
+import type { Food } from "~/types/ApiTypes";
+
+definePageMeta({
+  middleware: "auth",
+});
+
+const { getFood } = useSearch();
+
 const route = useRoute();
-const foodId = route.params.id as string;
-const { $api } = useNuxtApp();
-const { data: food } = await $api.food.get(foodId);
+const foodId = ref<string>(route.params.id.toString());
+
+const { data: food } = await useAsyncData<Food>(`food/${foodId.value}`, () =>
+  getFood(foodId),
+);
 </script>
 
 <template>
