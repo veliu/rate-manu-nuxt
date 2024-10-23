@@ -1,15 +1,14 @@
 <script setup lang="ts">
+
 const route = useRoute();
 
-const token = <string>route.query.token;
+const token = route.query.token as string;
 
 const { confirmRegistration } = useUser();
 
-const success = confirmRegistration({ token: token });
+const success = confirmRegistration(token);
 </script>
 
 <template>
-  <div>
-    {{ success }}
-  </div>
+  <div>{{ success }}</div>
 </template>

@@ -2,6 +2,7 @@
 
 <template>
   <div>
+    <NuxtPwaManifest />
     <UNotifications class="fixed bottom-10 right-0 z-50 max-h-fit sm:top-20" />
     <NuxtLoadingIndicator />
     <NuxtLayout>

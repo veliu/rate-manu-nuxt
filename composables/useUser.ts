@@ -14,7 +14,7 @@ export type useUserReturn = {
   login(request: LoginRequest): Promise<void>;
   register(request: RegisterRequest): Promise<void>;
   logout(): Promise<void>;
-  confirmRegistration(request: ConfirmRegistrationRequest): Promise<void>;
+  confirmRegistration(token: string): Promise<void>;
   updateMe(request: PutMeRequest): Promise<User>;
 };
 export function useUser(): useUserReturn {
@@ -120,11 +120,11 @@ export function useUser(): useUserReturn {
     }
   }
 
-  async function confirmRegistration(request: ConfirmRegistrationRequest) {
+  async function confirmRegistration(token: string) {
     try {
       $apiFetcher("/authentication/confirm-registration", {
         method: "POST",
-        body: request,
+        body: { token: token },
         ...fetchOptions.value,
       });
       toast.add({
