@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { Food, UpsertFoodRatingRequest } from "~/types/ApiTypes";
-import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
-import EmojiRating from "~/components/Food/EmojiRating.vue";
+import type { Food } from "~/types/ApiTypes";
 import { useFoodRating } from "~/composables/useFoodRating";
+import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
 
 const props = defineProps<{
   food: Food;
@@ -23,12 +22,6 @@ onMounted(() => {
 
 <template>
   <UCard>
-    <template #header>
-      <div class="flex flex-row justify-between">
-        <span>Average Rating</span>
-        <EmojiRating :rating-value="food.averageRating" />
-      </div>
-    </template>
     <div class="aspect-h-2 aspect-w-3 sm:aspect-none hover:opacity-75 sm:h-96">
       <NuxtLink :to="'/food/' + food.id">
         <NuxtImg
@@ -39,18 +32,16 @@ onMounted(() => {
         />
       </NuxtLink>
     </div>
-    <div class="flex flex-1 flex-col space-y-2 py-4">
+    <div class="flex flex-1 flex-col mt-4">
       <h3 class="text-xl font-medium">
         {{ food.name }}
       </h3>
-      <div class="flex flex-1 flex-col justify-end">
-        <p class="text-sm italic text-gray-500">
-          {{ food.description }}
-        </p>
-      </div>
+      <p class="text-sm italic text-gray-500">
+        {{ food.description }}
+      </p>
     </div>
     <template #footer>
-      <EmojiRatingBar v-model="selectedRating" />
+      <EmojiRatingBar class="mt-auto" :food="food" />
     </template>
   </UCard>
 </template>

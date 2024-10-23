@@ -5,12 +5,12 @@ import { useSessionStore } from "~/store/session.store";
 export type useFoodRatingReturn = {
   ratings: ComputedRef<FoodRating[]>;
   personalRating: ComputedRef<FoodRating | null>;
-  updateRating(rating: Ref<number>): Promise<FoodRating | undefined>;
+  updateRating(
+    rating: MaybeRefOrGetter<number>,
+  ): Promise<FoodRating | undefined>;
 };
 
 export function useFoodRating(food: Ref<Food>): useFoodRatingReturn {
-  const _latestRating = ref<FoodRating | undefined>(undefined);
-
   const { $apiFetcher } = useNuxtApp();
   const { token } = storeToRefs(useSessionStore());
   const toast = useToast();
@@ -29,12 +29,6 @@ export function useFoodRating(food: Ref<Food>): useFoodRatingReturn {
     });
   }
 
-  const { data: _ratings } = useAsyncData<FoodRatingCollection>(
-    "fetch-food-rating" + food.value.id,
-    () => fetchRatings(food.value.id),
-    { watch: [food, _latestRating] },
-  );
-
   const fetchPersonalRating = async (foodId: string): Promise<FoodRating> => {
     return $apiFetcher<FoodRating>("/food-rating/my/" + foodId, {
       method: "GET",
@@ -46,6 +40,12 @@ export function useFoodRating(food: Ref<Food>): useFoodRatingReturn {
     "fetch-personal-food-rating" + food.value.id,
     () => fetchPersonalRating(food.value.id),
     { watch: [food] },
+  );
+
+  const { data: _ratings } = useAsyncData<FoodRatingCollection>(
+    "fetch-food-rating" + food.value.id,
+    () => fetchRatings(food.value.id),
+    { watch: [food, _personalRating] },
   );
 
   async function upsertPersonalRating(
@@ -63,13 +63,15 @@ export function useFoodRating(food: Ref<Food>): useFoodRatingReturn {
   }
 
   async function updateRating(
-    rating: Ref<number>,
+    rating: MaybeRefOrGetter<number>,
   ): Promise<FoodRating | undefined> {
+    const _rating = toRef(rating);
     try {
-      _latestRating.value = await upsertPersonalRating(
+      _personalRating.value = await upsertPersonalRating(
         food.value.id,
-        rating.value,
+        _rating.value,
       );
+      return _personalRating.value as FoodRating;
     } catch (error) {
       toast.add({
         id: "update-rating-failed",
@@ -79,8 +81,6 @@ export function useFoodRating(food: Ref<Food>): useFoodRatingReturn {
       });
       console.error(error);
     }
-
-    return _latestRating.value;
   }
 
   return {

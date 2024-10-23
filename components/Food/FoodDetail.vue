@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import type { Food, UpdateFoodRequest } from "~/types/ApiTypes";
-import EmojiRating from "./EmojiRating.vue";
-import EmojiRatingBar from "./EmojiRatingBar.vue";
 import { useSessionStore } from "~/store/session.store";
-import { useFoodRating } from "~/composables/useFoodRating";
 import { useFoodComment } from "~/composables/useFoodComment";
+import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
+import EmojiRating from "~/components/Food/EmojiRating.vue";
 
 const props = defineProps<{
   food: Food;
@@ -17,15 +16,11 @@ const foodId = computed(() => food.value.id);
 const { user } = useSessionStore();
 
 const { createdBy, deleteProduct, updateFood } = useFood(food);
-const { ratings, personalRating, updateRating } = useFoodRating(food);
 const { comments, addComment } = useFoodComment(food);
-
 const { getFood } = useSearch();
 
 const isLoading = ref(false);
 const updateMode = ref(false);
-
-const selectedRating: Ref<number> = ref(0);
 
 const name = ref(food.value.name);
 const description = ref(food.value.description ?? undefined);
@@ -35,10 +30,9 @@ const updateRequest = computed<UpdateFoodRequest>(() => ({
   description: description.value === "" ? undefined : description.value,
 }));
 
-watch(selectedRating, async () => {
-  await updateRating(selectedRating);
+const invokeRefreshFood = async () => {
   food.value = await getFood(foodId);
-});
+};
 
 const newComment = ref<string>("");
 
@@ -51,10 +45,6 @@ const invokeUpdateFood = async () => {
   await updateFood(updateRequest);
   updateMode.value = false;
 };
-
-onMounted(() => {
-  selectedRating.value = personalRating.value?.rating ?? 0;
-});
 </script>
 
 <template>
@@ -161,20 +151,7 @@ onMounted(() => {
 
         <section id="product-rating">
           <div class="my-6">
-            <h3 class="text-2xl">Personal rating</h3>
-            <EmojiRatingBar v-model="selectedRating" />
-          </div>
-          <div v-if="ratings.length > 1" class="my-4">
-            <h3 class="font-bold text-xl mb-2">All other ratings</h3>
-            <div v-for="rating in ratings" :key="rating.id">
-              <div
-                v-if="user?.id !== rating.createdBy.id"
-                class="flex flex-row gap-2 content-center"
-              >
-                <span class="content-center">{{ rating.createdBy.email }}</span>
-                <EmojiRating :rating-value="rating.rating" />
-              </div>
-            </div>
+            <EmojiRatingBar :food="food" @update:rating="invokeRefreshFood" />
           </div>
         </section>
       </section>

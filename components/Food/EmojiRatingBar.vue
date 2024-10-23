@@ -1,22 +1,17 @@
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    modelValue: number;
-    emojiSize?: string;
-  }>(),
-  {
-    modelValue: 0,
-    emojiSize: "1.7em",
-  },
-);
+import type { Food, FoodRating } from "~/types/ApiTypes";
 
-const emit = defineEmits(["update:modelValue"]);
+const props = defineProps<{
+  food: Food;
+}>();
 
-const handleInput = (rating: number) => {
-  emit("update:modelValue", rating);
-};
+const food = toRef(props.food);
 
-const emojiRatings = {
+const emit = defineEmits(["update:rating"]);
+
+const { ratings, updateRating, personalRating } = useFoodRating(food);
+
+const emojis = {
   1: { value: 1, emoji: "❤" },
   2: { value: 2, emoji: "👍" },
   3: { value: 3, emoji: "😐" },
@@ -24,23 +19,39 @@ const emojiRatings = {
   5: { value: 5, emoji: "😫" },
   6: { value: 6, emoji: "🤢" },
 };
+
+const personalRatingValue = computed(() => personalRating.value?.rating);
+
+const countRatingsFor = (rating: number): number => {
+  let filtered: FoodRating[];
+  filtered = ratings.value.filter((r) => r.rating === rating);
+  return filtered.length;
+};
+
+const invokeUpdateRating = async (value: number) => {
+  await updateRating(value);
+  emit("update:rating", value);
+};
 </script>
 
 <template>
-  <div class="flex flex-row justify-between">
-    <UButton
-      v-for="emojiRating in emojiRatings"
-      :key="emojiRating.value"
-      variant="link"
-      @click="handleInput(emojiRating.value)"
+  <div class="flex flex-row justify-evenly">
+    <div
+      v-for="emoji in emojis"
+      :key="emoji.value"
+      class="py-1 px-2 border border-1 rounded-lg flex flex-row gap-2 border-gray-600 hover:border-primary"
+      :class="{
+        'border-primary hover:border-primary-300':
+          personalRatingValue === emoji.value,
+      }"
     >
-      <Twemoji
-        :emoji="emojiRating.emoji"
-        :size="emojiSize"
-        :class="
-          emojiRating.value !== modelValue ? 'brightness-50' : 'animate-bounce'
-        "
-      />
-    </UButton>
+      <button
+        class="flex flex-row justify-center items-center gap-1"
+        @click="invokeUpdateRating(emoji.value)"
+      >
+        <Twemoji size="1.2em" :emoji="emoji.emoji" />
+        <span class="font-bold">{{ countRatingsFor(emoji.value) }}</span>
+      </button>
+    </div>
   </div>
 </template>
