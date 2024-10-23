@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import type { Food } from "~/types/ApiTypes";
+import type { Food, UpdateFoodRequest } from "~/types/ApiTypes";
 import EmojiRating from "./EmojiRating.vue";
 import EmojiRatingBar from "./EmojiRatingBar.vue";
 import { useSessionStore } from "~/store/session.store";
@@ -16,15 +16,24 @@ const foodId = computed(() => food.value.id);
 
 const { user } = useSessionStore();
 
-const { assignedToGroup, createdBy, deleteProduct } = useFood(food);
+const { createdBy, deleteProduct, updateFood } = useFood(food);
 const { ratings, personalRating, updateRating } = useFoodRating(food);
 const { comments, addComment } = useFoodComment(food);
 
 const { getFood } = useSearch();
 
 const isLoading = ref(false);
+const updateMode = ref(false);
 
 const selectedRating: Ref<number> = ref(0);
+
+const name = ref(food.value.name);
+const description = ref(food.value.description ?? undefined);
+
+const updateRequest = computed<UpdateFoodRequest>(() => ({
+  name: name.value,
+  description: description.value === "" ? undefined : description.value,
+}));
 
 watch(selectedRating, async () => {
   await updateRating(selectedRating);
@@ -38,6 +47,11 @@ const invokeCreateComment = async () => {
   newComment.value = "";
 };
 
+const invokeUpdateFood = async () => {
+  await updateFood(updateRequest);
+  updateMode.value = false;
+};
+
 onMounted(() => {
   selectedRating.value = personalRating.value?.rating ?? 0;
 });
@@ -48,87 +62,123 @@ onMounted(() => {
 
   <div class="dark:text-white">
     <div class="mx-auto max-w-2xl py-4 sm:py-24 lg:max-w-7xl">
-      <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-        <!-- Image gallery -->
-        <TabGroup as="div" class="flex flex-col-reverse">
-          <!-- Image selector -->
-          <div
-            class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none"
-          >
-            <TabList v-if="food.image" class="grid grid-cols-4 gap-6">
-              <Tab
-                :key="food.image"
-                v-slot="{ selected }"
-                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-              >
-                <span class="sr-only">{{ food.image }}</span>
-                <span class="absolute inset-0 overflow-hidden rounded-md">
-                  <NuxtImg
-                    :src="food.image ? food.image : `/pizza.jpeg`"
-                    alt=""
-                    class="h-full w-full object-cover object-center"
+      <section
+        id="product-base-information"
+        class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8"
+      >
+        <section id="product-image">
+          <TabGroup as="div" class="flex flex-col-reverse">
+            <div
+              class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none"
+            >
+              <TabList v-if="food.image" class="grid grid-cols-4 gap-6">
+                <Tab
+                  :key="food.image"
+                  v-slot="{ selected }"
+                  class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                >
+                  <span class="sr-only">{{ food.image }}</span>
+                  <span class="absolute inset-0 overflow-hidden rounded-md">
+                    <NuxtImg
+                      :src="food.image ? food.image : `/pizza.jpeg`"
+                      alt=""
+                      class="h-full w-full object-cover object-center"
+                    />
+                  </span>
+                  <span
+                    :class="[
+                      selected ? 'ring-indigo-500' : 'ring-transparent',
+                      'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2',
+                    ]"
+                    aria-hidden="true"
                   />
-                </span>
-                <span
-                  :class="[
-                    selected ? 'ring-indigo-500' : 'ring-transparent',
-                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2',
-                  ]"
-                  aria-hidden="true"
+                </Tab>
+              </TabList>
+            </div>
+
+            <TabPanels class="aspect-h-2 aspect-w-3 w-full">
+              <TabPanel>
+                <div class="relative w-full h-64 sm:h-full">
+                  <NuxtImg
+                    :src="food.image"
+                    :alt="food.image"
+                    class="h-full w-full object-cover object-center sm:rounded-lg"
+                  />
+                  <div class="absolute top-2 right-2">
+                    <EmojiRating :rating-value="food.averageRating" />
+                  </div>
+                  <div class="absolute top-2 left-2">
+                    <UBadge color="white" variant="solid"
+                      >Created by {{ createdBy }}</UBadge
+                    >
+                  </div>
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </section>
+
+        <section id="product-description" class="mt-6 sm:mt-16 sm:px-0 lg:mt-0">
+          <div v-if="updateMode" class="flex flex-col gap-2">
+            <UFormGroup label="Name">
+              <UInput v-model="name" />
+            </UFormGroup>
+            <UFormGroup label="Description">
+              <UTextarea v-model="description" />
+            </UFormGroup>
+            <UButton
+              block
+              variant="outline"
+              label="Save"
+              icon="i-heroicons-check"
+              @click="invokeUpdateFood"
+            />
+          </div>
+          <div v-else class="flex flex-col w-full gap-2">
+            <div id="food-title" class="flex flex-row items-center gap-2">
+              <UTooltip
+                text="Update name and description"
+                :popper="{ arrow: true }"
+              >
+                <UButton
+                  variant="outline"
+                  icon="i-heroicons-pencil"
+                  @click="updateMode = true"
                 />
-              </Tab>
-            </TabList>
-          </div>
+              </UTooltip>
 
-          <TabPanels class="aspect-h-2 aspect-w-3 w-full">
-            <TabPanel>
-              <NuxtImg
-                :src="food.image"
-                :alt="food.image"
-                class="h-full w-full object-cover object-center sm:rounded-lg"
-              />
-            </TabPanel>
-          </TabPanels>
-        </TabGroup>
+              <h1 class="text-3xl font-bold tracking-tight white:text-gray-900">
+                {{ food.name }}
+              </h1>
+            </div>
 
-        <!-- Product info -->
-        <div class="mt-10 sm:mt-16 sm:px-0 lg:mt-0">
-          <div class="flex flex-row w-full gap-2 items-center">
-            <EmojiRating :rating-value="food.averageRating" />
-            <h1 class="text-3xl font-bold tracking-tight white:text-gray-900">
-              {{ food.name }}
-            </h1>
-          </div>
-          <div class="my-6">
-            <h3 class="sr-only">Description</h3>
-
-            <div class="space-y-6 text-base white:text-gray-700">
+            <div id="food-description text-base white:text-gray-700">
+              <h3 class="sr-only">Description</h3>
               {{ food.description }}
             </div>
-            <div>
-              <h3 class="font-bold text-xl mb-2">Personal rating</h3>
-              <EmojiRatingBar v-model="selectedRating" />
-            </div>
-            <div v-if="ratings.length > 1" class="my-4">
-              <h3 class="font-bold text-xl mb-2">All other ratings</h3>
-              <div v-for="rating in ratings" :key="rating.id">
-                <div
-                  v-if="user?.id !== rating.createdBy.id"
-                  class="flex flex-row gap-2 content-center"
-                >
-                  <span class="content-center">{{
-                    rating.createdBy.email
-                  }}</span>
-                  <EmojiRating :rating-value="rating.rating" />
-                </div>
+          </div>
+        </section>
+
+        <section id="product-rating">
+          <div class="my-6">
+            <h3 class="text-2xl">Personal rating</h3>
+            <EmojiRatingBar v-model="selectedRating" />
+          </div>
+          <div v-if="ratings.length > 1" class="my-4">
+            <h3 class="font-bold text-xl mb-2">All other ratings</h3>
+            <div v-for="rating in ratings" :key="rating.id">
+              <div
+                v-if="user?.id !== rating.createdBy.id"
+                class="flex flex-row gap-2 content-center"
+              >
+                <span class="content-center">{{ rating.createdBy.email }}</span>
+                <EmojiRating :rating-value="rating.rating" />
               </div>
             </div>
-            <div>Created by {{ createdBy }}</div>
-            <div>Visible for group {{ assignedToGroup }}</div>
           </div>
-        </div>
-      </div>
-      <section id="comments" class="my-8 flex flex-col gap-2 max-w-md">
+        </section>
+      </section>
+      <section id="comments" class="my-6 flex flex-col gap-2 max-w-md">
         <h3 class="text-2xl">Comments</h3>
         <div class="my-2">
           <FoodComment v-for="c in comments" :key="c.id" :food-comment="c" />

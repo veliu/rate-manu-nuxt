@@ -1,4 +1,4 @@
-import type { Food, GroupResponse } from "~/types/ApiTypes";
+import type { Food, GroupResponse, UpdateFoodRequest } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
 import type { FetchOptions } from "ofetch";
 
@@ -7,6 +7,7 @@ export type useFoodReturn = {
   assignedToGroup: ComputedRef<string>;
   deleteProduct(): Promise<void>;
   addImage(file: File): Promise<Food | undefined>;
+  updateFood(request: Ref<UpdateFoodRequest>): Promise<void>;
 };
 
 export function useFood(food: Ref<Food>): useFoodReturn {
@@ -40,7 +41,7 @@ export function useFood(food: Ref<Food>): useFoodReturn {
   });
 
   if (me.value?.id === food.value?.author) {
-    _createdBy.value = "me";
+    _createdBy.value = "you";
   }
 
   async function deleteProduct(): Promise<void> {
@@ -80,10 +81,41 @@ export function useFood(food: Ref<Food>): useFoodReturn {
     }
   }
 
+  async function putFood(
+    foodId: string,
+    request: UpdateFoodRequest,
+  ): Promise<Food | undefined> {
+    return $apiFetcher<Food>(`/food/${foodId}`, {
+      method: "PUT",
+      body: request,
+      ...fetchOptions.value,
+    });
+  }
+
+  async function updateFood(request: Ref<UpdateFoodRequest>): Promise<void> {
+    try {
+      food.value = (await putFood(food.value.id, request.value)) as Food;
+      toast.add({
+        id: "update-food-success" + food.value.id,
+        title: "Food updated!",
+        icon: "i-heroicons-face-smile",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.add({
+        id: "update-food-failed" + food.value.id,
+        title: "Could not update product!",
+        icon: "i-heroicons-exclamation-triangle",
+        color: "red",
+      });
+    }
+  }
+
   return {
     createdBy: computed(() => _createdBy.value),
     assignedToGroup: computed(() => _assignedToGroup.value),
     deleteProduct,
     addImage,
+    updateFood,
   };
 }

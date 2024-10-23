@@ -77,6 +77,10 @@ export type CreateFoodRequest = {
   name: string;
   description?: string | null;
 };
+export type UpdateFoodRequest = {
+  name: string;
+  description?: string | null;
+};
 export type UpdateFoodImageRequest = {
   image: string | File;
 };
