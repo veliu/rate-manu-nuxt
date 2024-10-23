@@ -23,14 +23,16 @@ const items = [
 </script>
 
 <template>
-  <UTabs :items="items" class="my-8">
-    <template #item="{ item }">
-      <div v-if="item.key === 'me' && user">
-        <UserMe :user="user" />
-      </div>
-      <div v-if="item.key === 'groups' && user">
-        <UserGroups />
-      </div>
-    </template>
-  </UTabs>
+  <div class="mx-auto max-w-2xl lg:max-w-2xl">
+    <UTabs :items="items" class="my-8">
+      <template #item="{ item }">
+        <div v-if="item.key === 'me' && user">
+          <UserMe :user="user" />
+        </div>
+        <div v-if="item.key === 'groups' && user">
+          <UserGroups />
+        </div>
+      </template>
+    </UTabs>
+  </div>
 </template>
