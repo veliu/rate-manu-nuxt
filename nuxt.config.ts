@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "pinia-plugin-persistedstate/nuxt",
     "@vite-pwa/nuxt",
+    "@nuxtjs/storybook",
   ],
 
   pwa: {
@@ -70,5 +71,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: {
     typeCheck: true,
+  },
+  vite: {
+    optimizeDeps: {
+      include: ['storybook > @storybook/core > jsdoc-type-pratt-parser'],
+    },
   },
 });
