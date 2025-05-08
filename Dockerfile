@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:22-alpine
 
 ARG PNPM_VERSION=9.7.0
 ARG API_BASE_URL='https://my.shop/store-api'
@@ -12,9 +12,7 @@ WORKDIR /usr/src/app
 RUN apk update && apk upgrade
 RUN apk add git
 
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
-
-RUN npm add --global pnpm
+RUN npm add --global pnpm@${PNPM_VERSION}
 
 # Files required by pnpm install
 COPY . /usr/src/app

@@ -1,13 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "assignees": [
-    "veliu"
-  ],
+  "assignees": ["veliu"],
   "separateMultipleMajor": true,
   "schedule": ["before 8am every monday"],
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "automergeStrategy": "rebase",
   "labels": ["dependencies"],
   "packageRules": [

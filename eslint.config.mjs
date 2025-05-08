@@ -6,12 +6,7 @@ export default [
   ...pluginVue.configs["flat/recommended"],
   {
     name: "nuxt:ignore-generated-files",
-    ignores: [
-      "**/dist/",
-      "**/node_modules/",
-      "**/.output/",
-      "**/.nuxt/",
-    ],
+    ignores: ["**/dist/", "**/node_modules/", "**/.output/", "**/.nuxt/"],
   },
   {
     name: "prettier:recommended",
@@ -37,7 +32,7 @@ export default [
     name: "turn-off-deprected-rules",
     rules: {
       "vue/component-tags-order": "off",
-      "vue/multi-word-component-names": "off"
+      "vue/multi-word-component-names": "off",
     },
   },
 ];
