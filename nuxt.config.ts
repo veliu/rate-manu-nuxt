@@ -24,51 +24,26 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     },
   },
+
+  css: ["~/assets/css/main.css"],
+
   modules: [
-    "@nuxt/image",
-    "@nuxt/ui",
+    "@nuxt/ui-pro",
     "@nuxt/eslint",
-    "nuxt-twemoji",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/test-utils",
     "@pinia/nuxt",
     "pinia-plugin-persistedstate/nuxt",
-    "@vite-pwa/nuxt",
+    "nuxt-twemoji",
   ],
 
-  pwa: {
-    manifest: {
-      name: "Rate Manu",
-      short_name: "RateManu",
-      theme_color: "#4ADE78",
-      icons: [
-        {
-          src: "android-chrome-192x192.png",
-          sizes: "192x192",
-          type: "image/png",
-        },
-        {
-          src: "android-chrome-512x512.png",
-          sizes: "512x512",
-          type: "image/png",
-        },
-        {
-          src: "android-chrome-512x512.png",
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "any maskable",
-        },
-        {
-          src: "apple-touch-icon.png",
-          sizes: "180x180",
-          type: "image/png",
-          purpose: "any maskable",
-        },
-      ],
-    },
+  future: {
+    compatibilityVersion: 4,
   },
 
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: "2024-11-27",
+
   devtools: { enabled: true },
-  typescript: {
-    typeCheck: true,
-  },
 });

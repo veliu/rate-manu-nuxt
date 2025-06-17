@@ -5,6 +5,7 @@ services:
       args:
         PNPM_VERSION: ${PNPM_VERSION:-9.6.0}
         API_BASE_URL: ${API_BASE_URL:-https://my.shop/store-api}
+        NUXT_UI_PRO_LICENSE: ${NUXT_UI_PRO_LICENSE:-license}
     volumes:
       - ".:/usr/src/app"
     env_file:

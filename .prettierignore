@@ -1,6 +1,0 @@
-# Ignore artifacts:
-.nuxt
-node_modules
-pnpm-lock.yaml
-tsconfig.json
-sw.*
