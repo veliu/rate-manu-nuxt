@@ -88,7 +88,11 @@ const items = computed(() => foodCollection.value?.items || []);
         />
       </div>
 
-      <FoodListing class="my-4" :food-collection="items" />
+      <div class="my-8">
+        <UPageGrid>
+          <FoodCard v-for="food in items" :key="food.id" :food="food" />
+        </UPageGrid>
+      </div>
 
       <div class="flex justify-end">
         <UPagination
