@@ -56,7 +56,7 @@ export function useFoodComment(food: Ref<Food>): useFoodCommentReturn {
         id: "create-comment-failed",
         title: "Could not create comment",
         icon: "i-heroicons-exclamation-triangle",
-        color: "red",
+        color: "error",
       });
       console.error(error);
     }

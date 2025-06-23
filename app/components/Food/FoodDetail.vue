@@ -16,7 +16,6 @@ const foodId = computed(() => food.value.id);
 const { user } = useSessionStore();
 
 const { createdBy, deleteProduct, updateFood } = useFood(food);
-const { comments, addComment } = useFoodComment(food);
 const { getFood } = useSearch();
 
 const isLoading = ref(false);
@@ -32,13 +31,6 @@ const updateRequest = computed<UpdateFoodRequest>(() => ({
 
 const invokeRefreshFood = async () => {
   food.value = await getFood(foodId);
-};
-
-const newComment = ref<string>("");
-
-const invokeCreateComment = async () => {
-  await addComment(newComment);
-  newComment.value = "";
 };
 
 const invokeUpdateFood = async () => {
@@ -98,7 +90,7 @@ const invokeUpdateFood = async () => {
                     <EmojiRating :rating-value="food.averageRating" />
                   </div>
                   <div class="absolute top-2 left-2">
-                    <UBadge color="white" variant="solid"
+                    <UBadge color="primary" variant="solid"
                       >Created by {{ createdBy }}</UBadge
                     >
                   </div>
@@ -110,12 +102,12 @@ const invokeUpdateFood = async () => {
 
         <section id="product-description" class="mt-6 sm:mt-16 sm:px-0 lg:mt-0">
           <div v-if="updateMode" class="flex flex-col gap-2">
-            <UFormGroup label="Name">
+            <UFormField label="Name">
               <UInput v-model="name" />
-            </UFormGroup>
-            <UFormGroup label="Description">
+            </UFormField>
+            <UFormField label="Description">
               <UTextarea v-model="description" />
-            </UFormGroup>
+            </UFormField>
             <UButton
               block
               variant="outline"
@@ -155,28 +147,7 @@ const invokeUpdateFood = async () => {
           </div>
         </section>
       </section>
-      <section id="comments" class="my-6 flex flex-col gap-2 max-w-md">
-        <h3 class="text-2xl">Comments</h3>
-        <div class="my-2">
-          <FoodComment v-for="c in comments" :key="c.id" :food-comment="c" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <UTextarea
-            v-model="newComment"
-            color="primary"
-            variant="outline"
-            placeholder="New Comment..."
-            autoresize
-          />
-          <UButton
-            :disabled="newComment === ''"
-            label="Submit"
-            variant="soft"
-            block
-            @click="invokeCreateComment"
-          />
-        </div>
-      </section>
+      <FoodComments :food="food" />
     </div>
     <UButton
       v-if="food.author === user?.id"
@@ -185,7 +156,7 @@ const invokeUpdateFood = async () => {
       size="xl"
       class="mt-4 justify-center"
       icon="i-heroicons-x-mark"
-      color="red"
+      color="error"
       trailing
       @click="deleteProduct"
     />
