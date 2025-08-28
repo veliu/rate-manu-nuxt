@@ -42,9 +42,23 @@ const state = reactive({
   image: undefined,
 });
 
-const setImage = async (fileList: FileList) => {
-  file.value = fileList.item(0);
-  const fileSize = file?.value?.size ?? 0;
+const setImage = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const fileList = input.files;
+
+  if (!fileList || fileList.length === 0) {
+    console.warn("No file selected.");
+    return;
+  }
+
+  const selectedFile = fileList.item(0);
+  if (!selectedFile) {
+    console.warn("No file found in the list.");
+    return;
+  }
+
+  file.value = selectedFile;
+  const fileSize = selectedFile.size;
   fileToBig.value = fileSize > 8388608;
 };
 
