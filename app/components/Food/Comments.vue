@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Food } from "~/types/ApiTypes";
 import { useFoodComment } from "~/composables/useFoodComment";
 import { useSessionStore } from "~/store/session.store";
+import type { FoodResponse } from "ratemanu-api-client";
 
 const props = defineProps<{
-  food: Food;
+  food: FoodResponse;
 }>();
 
 const food = toRef(props.food);
@@ -58,8 +58,8 @@ const invokeCreateComment = async () => {
       :messages="messages"
     />
     <UChatPrompt
-      placeholder="Add Comment..."
       v-model="newComment"
+      placeholder="Add Comment..."
       @submit="invokeCreateComment"
     >
       <UChatPromptSubmit />

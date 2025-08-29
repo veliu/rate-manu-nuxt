@@ -1,10 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { useSessionStore } from "~/store/session.store";
-
-definePageMeta({
-  middleware: "auth",
-});
+import UserGroups from "~/components/User/UserGroups.vue";
 
 const { user } = useSessionStore();
 

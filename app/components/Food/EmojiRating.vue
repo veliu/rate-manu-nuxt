@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    ratingValue: number;
+    ratingValue?: number;
   }>(),
   {
     ratingValue: 0,

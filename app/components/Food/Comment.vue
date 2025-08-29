@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { FoodComment } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
+import type { CommentResponse } from "ratemanu-api-client";
 
 const props = defineProps<{
-  foodComment: FoodComment;
+  foodComment: CommentResponse;
 }>();
 
-const comment = toRef<FoodComment>(props.foodComment);
+const comment = toRef<CommentResponse>(props.foodComment);
 
 const { user: me } = storeToRefs(useSessionStore());
 

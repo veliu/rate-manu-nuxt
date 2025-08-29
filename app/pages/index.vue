@@ -1,14 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import type { Filter, SearchCriteria, Sorting } from "~/types/ApiTypes";
 import { ref, computed } from "vue";
 import { useSearch } from "~/composables/useSearch";
 import { hash } from "ohash";
-
-definePageMeta({
-  middleware: "auth",
-});
-
+import type { Sorting } from "ratemanu-api-client";
 const { makeSearch } = useSearch();
 
 const itemsPerPage = ref(9);
@@ -49,7 +44,8 @@ const items = computed(() => foodCollection.value?.items || []);
 </script>
 
 <template>
-  <div>
+  <UContainer>
+    <FoodSearch />
     <div class="mx-auto max-w-2xl lg:max-w-7xl">
       <DesktopActionBar
         class="hidden md:flex"
@@ -111,5 +107,5 @@ const items = computed(() => foodCollection.value?.items || []);
       @toggle:filter-form="openFilterForm = true"
       @toggle:create-form="openCreateFoodForm = true"
     />
-  </div>
+  </UContainer>
 </template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Food } from "~/types/ApiTypes";
 import { useFoodRating } from "~/composables/useFoodRating";
 import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
+import type { FoodResponse } from "ratemanu-api-client";
 
 const props = defineProps<{
-  food: Food;
+  food: FoodResponse;
 }>();
 
 const food = toRef(props.food);

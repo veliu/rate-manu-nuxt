@@ -1,12 +1,4 @@
-import type {
-  Food,
-  FoodCollection,
-  SearchCriteria,
-  Sorting,
-} from "~/types/ApiTypes";
-import type { FetchOptions } from "ofetch";
-import { useSessionStore } from "~/store/session.store";
-import { computed } from "vue";
+import type { FoodCollectionResponse, Sorting } from "ratemanu-api-client";
 
 export type SortingOption = {
   propertyName: string;
@@ -14,26 +6,31 @@ export type SortingOption = {
   label: string;
 };
 
+export type SearchCriteria = {
+  limit: number;
+  offset: number;
+  sorting?: Sorting[];
+  filter?: Filter[];
+};
+
+export type Filter = {
+  entity: string;
+  propertyName: string;
+  operator: string;
+  value: string | number | boolean;
+};
+
 export type useSearchReturn = {
-  makeSearch(criteria: Ref<SearchCriteria>): Promise<FoodCollection>;
+  makeSearch(criteria: Ref<SearchCriteria>): Promise<FoodCollectionResponse>;
   buildSearchCriteria(
     criteria: Ref<SearchCriteria>,
     selectedSorting: Ref<string>,
   ): SearchCriteria;
   sortingOptions: SortingOption[];
-  getFood(id: Ref<string>): Promise<Food>;
 };
 
 export function useSearch(): useSearchReturn {
-  const { $apiFetcher } = useNuxtApp();
-  const { token } = storeToRefs(useSessionStore());
-
-  const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
-    headers: {
-      Authorization: `Bearer ${token.value?.token}`,
-      "Accept-Language": "en-US",
-    },
-  }));
+  const { $foodApi } = useNuxtApp();
 
   const sortingOptions: SortingOption[] = [
     {
@@ -52,15 +49,13 @@ export function useSearch(): useSearchReturn {
 
   async function makeSearch(
     criteria: Ref<SearchCriteria>,
-  ): Promise<FoodCollection> {
-    const searchParamString = new URLSearchParams(
-      buildQueryParams(criteria.value),
-    ).toString();
+  ): Promise<FoodCollectionResponse> {
+    const { data } = await $foodApi.foodSearch(
+      criteria.value.offset,
+      criteria.value.limit,
+    );
 
-    return await $apiFetcher<FoodCollection>(`/food/?${searchParamString}`, {
-      method: "GET",
-      ...fetchOptions.value,
-    });
+    return data;
   }
 
   const getSortingOptionByLabel = (label: string): Sorting => {
@@ -83,17 +78,9 @@ export function useSearch(): useSearchReturn {
     };
   };
 
-  const getFood = async (foodId: Ref<string>): Promise<Food> => {
-    return await $apiFetcher<Food>(`/food/${foodId.value}`, {
-      method: "GET",
-      ...fetchOptions.value,
-    });
-  };
-
   return {
     makeSearch,
     buildSearchCriteria,
     sortingOptions,
-    getFood,
   };
 }

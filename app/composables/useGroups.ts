@@ -1,75 +1,53 @@
-import { useSessionStore } from "~/store/session.store";
-import { storeToRefs } from "pinia";
 import type {
-  GroupCollectionResponse,
-  GroupResponse,
-  InviteUserToGroupRequest,
-} from "~/types/ApiTypes";
-import type { FetchOptions } from "ofetch";
+  InviteUserRequest,
+  UserGroupsResponse,
+} from "ratemanu-api-client";
+import type { AxiosError } from "axios";
 
 export type useGroupsReturn = {
   fetchGroups(): Promise<void>;
-  myGroups: ComputedRef<GroupResponse[]>;
-  inviteUserToGroup(request: InviteUserToGroupRequest): Promise<void>;
+  myGroups: ComputedRef<UserGroupsResponse | undefined>;
+  inviteUserToGroup(request: InviteUserRequest): Promise<void>;
 };
 export function useGroups(): useGroupsReturn {
-  const { $apiFetcher } = useNuxtApp();
+  const { $userApi } = useNuxtApp();
   const toast = useToast();
-  const { token } = storeToRefs(useSessionStore());
 
-  const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
-    headers: {
-      Authorization: `Bearer ${token.value?.token}`,
-      "Accept-Language": "en-US",
-    },
-  }));
-
-  const _groups = ref<GroupResponse[]>([]);
+  const _groups = ref<UserGroupsResponse | undefined>(undefined);
 
   async function fetchGroups(): Promise<void> {
     try {
-      const response = await $apiFetcher<GroupCollectionResponse>(
-        "/user/my-groups",
-        {
-          method: "GET",
-          ...fetchOptions.value,
-        },
-      );
-
-      _groups.value = response.items;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+      const { data } = await $userApi.userGroups();
+      _groups.value = data;
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
       toast.add({
         id: "fetch-groups-failed",
-        title: "Could not get groups!",
+        title: axiosError.response?.data?.message ?? "Could not fetch groups.",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
+      console.error(error);
     }
   }
 
-  async function inviteUserToGroup(
-    request: InviteUserToGroupRequest,
-  ): Promise<void> {
+  async function inviteUserToGroup(request: InviteUserRequest): Promise<void> {
     try {
-      await $apiFetcher<GroupCollectionResponse>("/user/invite", {
-        method: "POST",
-        body: request,
-        ...fetchOptions.value,
-      });
+      $userApi.userInvite(request);
       toast.add({
         id: "invite-user-success",
         title: "Invitation send!",
         icon: "i-heroicons-face-smile",
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
       toast.add({
         id: "invite-user-failed",
-        title: "Could not invite user!",
+        title: axiosError.response?.data?.message ?? "Could not invite user.",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
+      console.error(error);
     }
   }
 

@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import type { Food, UpdateFoodRequest } from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
-import { useFoodComment } from "~/composables/useFoodComment";
 import EmojiRatingBar from "~/components/Food/EmojiRatingBar.vue";
 import EmojiRating from "~/components/Food/EmojiRating.vue";
+import type { FoodResponse, UpdateUserRequest } from "ratemanu-api-client";
 
 const props = defineProps<{
-  food: Food;
+  food: FoodResponse;
 }>();
 
 const food = toRef(props.food);
 const foodId = computed(() => food.value.id);
 
+const { $foodApi } = useNuxtApp();
 const { user } = useSessionStore();
 
 const { createdBy, deleteProduct, updateFood } = useFood(food);
-const { getFood } = useSearch();
 
 const isLoading = ref(false);
 const updateMode = ref(false);
@@ -24,13 +23,14 @@ const updateMode = ref(false);
 const name = ref(food.value.name);
 const description = ref(food.value.description ?? undefined);
 
-const updateRequest = computed<UpdateFoodRequest>(() => ({
+const updateRequest = computed<UpdateUserRequest>(() => ({
   name: name.value,
   description: description.value === "" ? undefined : description.value,
 }));
 
 const invokeRefreshFood = async () => {
-  food.value = await getFood(foodId);
+  const { data } = await $foodApi.foodGet(foodId.value);
+  food.value = data;
 };
 
 const invokeUpdateFood = async () => {

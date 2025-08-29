@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { object, string, type InferType } from "yup";
-import type { LoginRequest } from "~/types/ApiTypes";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { useUser } from "~/composables/useUser";
+import type { LoginCheckRequest } from "ratemanu-api-client";
 
 const isLoading = ref(false);
 
@@ -42,7 +42,7 @@ const fields = [
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   isLoading.value = true;
 
-  const credentials: LoginRequest = {
+  const credentials: LoginCheckRequest = {
     username: event.data.email,
     password: event.data.password,
   };

@@ -8,10 +8,11 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "prettier": "prettier --check \"**/*.{ts,tsx,md,vue}\"",
-    "prettier:fix": "prettier --check \"**/*.{ts,tsx,md,vue}\" --write"
+    "eslint": "eslint app/",
+    "eslint:fix": "eslint --fix app/",
+    "prettier": "prettier --check app/",
+    "prettier:fix": "prettier --check app/ --write",
+    "api:generate": "npx openapi-generator-cli generate -i https://api.ratemanu.com/doc.json -g typescript-axios -o ./api --additional-properties=supportsES6=true,npmName=ratemanu-api-client,npmVersion=1.0.0"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
@@ -30,10 +31,12 @@
     "ohash": "^2.0.11",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.3.0",
+    "ratemanu-api-client": "link:api",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.4.1",
+    "@openapitools/openapi-generator-cli": "^2.23.1",
     "eslint": "^9.29.0",
     "prettier": "^3.6.0",
     "typescript": "^5.8.3"

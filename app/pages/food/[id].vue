@@ -1,21 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import type { Food } from "~/types/ApiTypes";
-
-definePageMeta({
-  middleware: "auth",
-});
-
-const { getFood } = useSearch();
+const { $foodApi } = useNuxtApp();
 
 const route = useRoute();
-const foodId = ref<string>(route.params.id.toString());
+const foodId = computed(() => `user-${route.params.id}`);
 
-const { data: food } = await useAsyncData<Food>(`food/${foodId.value}`, () =>
-  getFood(foodId),
+// When the route changes and userId updates, the data will be automatically refetched
+const { data: food } = useAsyncData(foodId, () =>
+  $foodApi.foodGet(route.params.id),
 );
 </script>
 
 <template>
-  <FoodDetail v-if="food" :food="food" />
+  <FoodDetail v-if="food" :food="food.data" />
 </template>

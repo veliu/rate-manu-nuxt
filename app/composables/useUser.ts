@@ -1,57 +1,47 @@
-import type {
-  LoginRequest,
-  PutMeRequest,
-  RegisterRequest,
-  Token,
-  User,
-} from "~/types/ApiTypes";
 import { useSessionStore } from "~/store/session.store";
-import type { FetchOptions } from "ofetch";
 import { useGroups } from "~/composables/useGroups";
+import type {
+  ConfirmUserRegistrationRequest,
+  LoginCheckRequest,
+  RegisterUserRequest,
+  UpdateUserRequest,
+  UserResponse,
+} from "ratemanu-api-client";
+import type { AxiosError } from "axios";
 
 export type useUserReturn = {
-  login(request: LoginRequest): Promise<void>;
-  register(request: RegisterRequest): Promise<void>;
+  login(request: LoginCheckRequest): Promise<void>;
+  register(request: RegisterUserRequest): Promise<void>;
   logout(): Promise<void>;
   confirmRegistration(token: string): Promise<void>;
-  updateMe(request: PutMeRequest): Promise<User>;
+  updateMe(request: UpdateUserRequest): Promise<UserResponse | undefined>;
 };
 export function useUser(): useUserReturn {
-  const { $apiFetcher } = useNuxtApp();
+  const { $userApi, $authenticationApi } = useNuxtApp();
   const toast = useToast();
   const router = useRouter();
   const { fetchGroups } = useGroups();
-  const { user, token, bearerToken, refreshToken } =
-    storeToRefs(useSessionStore());
+  const { user, bearerToken, refreshToken } = storeToRefs(useSessionStore());
   const { resetSession } = useSessionStore();
 
-  const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
-    headers: {
-      Authorization: `Bearer ${token.value?.token}`,
-      "Accept-Language": "en-US",
-    },
-  }));
-
-  async function refreshMe(newUser?: User) {
+  async function refreshMe(newUser?: UserResponse) {
     if (newUser) {
       user.value = newUser;
     } else {
-      user.value = await $apiFetcher<User>("/user/me", {
-        method: "GET",
-        ...fetchOptions.value,
-      });
+      const { data } = await $userApi.meGet();
+      user.value = data;
     }
   }
 
-  async function login(request: LoginRequest) {
+  async function login(request: LoginCheckRequest) {
     try {
-      const response = await $apiFetcher<Token>("/login_check", {
-        method: "POST",
-        body: request,
-      });
+      const { data } = await $authenticationApi.loginCheck(request);
 
-      bearerToken.value = response.token;
-      refreshToken.value = response.refresh_token;
+      bearerToken.value = data.token;
+      refreshToken.value = data.refresh_token;
+
+      await refreshMe();
+      await fetchGroups();
 
       toast.add({
         id: "login-success",
@@ -59,113 +49,102 @@ export function useUser(): useUserReturn {
         icon: "i-heroicons-face-smile",
       });
 
-      await refreshMe();
-      await fetchGroups();
-
       navigateTo("/");
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>; // Cast inside the catch block
       toast.add({
         id: "login-failed",
-        title: "Authentication failed!",
-        description: "User or password wrong",
+        title: axiosError.response?.data?.message ?? "Login failed!",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
+      console.error(error);
     }
   }
 
-  async function register(request: RegisterRequest) {
+  async function register(request: RegisterUserRequest) {
     try {
-      await $apiFetcher("/authentication/register", {
-        method: "POST",
-        body: request,
-        ...fetchOptions.value,
-      });
+      await $authenticationApi.register(request);
       toast.add({
         id: "registration-success",
         title: "Success!",
         description: "Please check your inbox to verify your registration",
         icon: "i-heroicons-face-smile",
       });
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>; // Cast inside the catch block
       toast.add({
         id: "registration-failed",
-        title: "Registration failed!",
+        title: axiosError.response?.data?.message ?? "Registration failed!",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
+      console.error(error);
     }
   }
 
   async function logout() {
-    try {
-      await $apiFetcher("/token/invalidate", {
-        method: "POST",
-        body: {
-          refresh_token: token.value.refresh_token,
-        },
-        ...fetchOptions.value,
-      });
-    } finally {
-      resetSession();
+    resetSession();
 
-      toast.add({
-        id: "logout-success",
-        title: "You're logged out",
-        icon: "i-heroicons-face-smile",
-      });
+    toast.add({
+      id: "logout-success",
+      title: "You're logged out",
+      icon: "i-heroicons-face-smile",
+    });
 
-      await router.push("/login");
-    }
+    await router.push("/login");
   }
 
   async function confirmRegistration(token: string) {
     try {
-      $apiFetcher("/authentication/confirm-registration", {
-        method: "POST",
-        body: { token: token },
-        ...fetchOptions.value,
-      });
+      await $authenticationApi.confirmRegistration({
+        token: token,
+      } as ConfirmUserRegistrationRequest);
+
       toast.add({
         id: "registration-confirmation-success",
         title: "Successfully confirmed!",
         description: "Now please log in",
         icon: "i-heroicons-face-smile",
       });
+
       await router.push("/login");
-    } catch (error) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
       toast.add({
         id: "registration-confirmation-failed",
-        title: "Confirmation failed!",
+        title: axiosError.response?.data?.message ?? "Confirmation failed!",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
+      console.error(error);
     }
   }
 
-  async function updateMe(request: PutMeRequest): Promise<User> {
+  async function updateMe(
+    request: UpdateUserRequest,
+  ): Promise<UserResponse | undefined> {
     try {
-      const newUser = await $apiFetcher<User>("/user/me", {
-        method: "PUT",
-        body: request,
-        ...fetchOptions.value,
-      });
-      await refreshMe(newUser);
+      const { data } = await $userApi.meUpdate(request);
+
+      await refreshMe(data);
+
       toast.add({
         id: "update-me-success",
         title: "Successfully updated!",
         icon: "i-heroicons-face-smile",
       });
-    } catch (error) {
+
+      return data;
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
       toast.add({
         id: "update-me-failed",
-        title: "Failed updating!",
+        title: axiosError.response?.data?.message ?? "Update failed!",
         icon: "i-heroicons-exclamation-triangle",
         color: "error",
       });
     }
-
-    return user.value as User;
   }
 
   return {

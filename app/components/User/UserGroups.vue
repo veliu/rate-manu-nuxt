@@ -8,7 +8,7 @@ onMounted(() => fetchGroups());
 
 <template>
   <div
-    v-for="group in myGroups"
+    v-for="group in myGroups?.items ?? []"
     :key="group.id"
     class="flex flex-col gap-4 mt-8"
   >

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { object, string } from "yup";
-import type { User } from "~/types/ApiTypes";
+import type { UserResponse } from "~~/api/api";
 
 const colorMode = useColorMode();
 const isDark = computed({
@@ -13,10 +13,10 @@ const isDark = computed({
 });
 
 const props = defineProps<{
-  user: User;
+  user?: UserResponse | undefined;
 }>();
 
-const user = toRef(props.user);
+const { user } = toRefs(props);
 
 const schema = object({
   email: string().email("Invalid email").required("Required"),
@@ -30,15 +30,15 @@ const state = reactive({
   username: "",
 });
 
-state.email = props.user.email;
-state.username = props.user.name ?? "";
+state.email = user.value?.email ?? "";
+state.username = user.value?.name ?? "";
 
 const updateMode = ref(false);
 
 const { updateMe, logout } = useUser();
 
 const onSubmit = async () => {
-  if (user.value.name !== state.username) {
+  if (user.value?.name !== state.username) {
     user.value = await updateMe({ name: state.username });
   }
   updateMode.value = false;

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Food, FoodRating } from "~/types/ApiTypes";
+import type { FoodResponse } from "ratemanu-api-client";
 
 const props = defineProps<{
-  food: Food;
+  food: FoodResponse;
 }>();
 
 const food = toRef(props.food);
@@ -23,8 +23,7 @@ const emojis = {
 const personalRatingValue = computed(() => personalRating.value?.rating);
 
 const countRatingsFor = (rating: number): number => {
-  let filtered: FoodRating[];
-  filtered = ratings.value.filter((r) => r.rating === rating);
+  const filtered = ratings.value.filter((r) => r.rating === rating);
   return filtered.length;
 };
 

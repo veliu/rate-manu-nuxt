@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { GroupResponse } from "~/types/ApiTypes";
+import type { GroupResponse } from "ratemanu-api-client";
 
-defineProps<{
-  group: GroupResponse;
+const props = defineProps<{
+  group?: GroupResponse | undefined;
 }>();
+
+const { group } = toRefs(props);
 
 const columns = [
   {
@@ -14,7 +16,7 @@ const columns = [
 </script>
 
 <template>
-  <UCard>
+  <UCard v-if="group">
     <template #header>
       <div class="flex flex-row justify-between">
         <h3 class="pb-2">Group: {{ group.name }}</h3>

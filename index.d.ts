@@ -1,14 +1,24 @@
-import type { IApiInstance } from "~/types/ApiTypes";
+import type { FoodApi, UserApi, AuthenticationApi, FoodImagesApi, FoodRatingApi, FoodCommentsApi } from "ratemanu-api-client";
 
 declare module "#app" {
   interface NuxtApp {
-    $api: IApiInstance;
+    $authenticationApi: AuthenticationApi;
+    $userApi: UserApi;
+    $foodApi: FoodApi;
+    $foodImagesApi: FoodImagesApi
+    $foodRatingApi: FoodRatingApi
+    $foodCommentsApi: FoodCommentsApi
   }
 }
 
 declare module "vue" {
   interface ComponentCustomProperties {
-    $api: IApiInstance;
+    $authenticationApi: AuthenticationApi;
+    $userApi: UserApi;
+    $foodApi: FoodApi;
+    $foodImagesApi: FoodImagesApi
+    $foodRatingApi: FoodRatingApi
+    $foodCommentsApi: FoodCommentsApi
   }
 }
 

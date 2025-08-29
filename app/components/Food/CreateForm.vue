@@ -1,26 +1,18 @@
 <script setup lang="ts">
 import { object, string, mixed } from "yup";
-import type { CreateFoodRequest, Food } from "~/types/ApiTypes";
-import { useSessionStore } from "~/store/session.store";
-import type { FetchOptions } from "ofetch";
+import type { CreateFoodRequest } from "ratemanu-api-client";
 
-const isLoading = ref(false);
+const { createFood } = useFood(ref(undefined));
 
-const { $apiFetcher } = useNuxtApp();
 const toast = useToast();
-const { token } = storeToRefs(useSessionStore());
 const router = useRouter();
-
-const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
-  headers: {
-    Authorization: `Bearer ${token.value?.token}`,
-    "Accept-Language": "en-US",
-  },
-}));
 
 const file: Ref<File | null> = ref(null);
 
+const isLoading = ref(false);
+
 const createFoodRequest = computed<CreateFoodRequest>(() => ({
+  id: null,
   name: state.name,
   description: state.description,
 }));
@@ -62,34 +54,15 @@ const setImage = async (event: Event) => {
   fileToBig.value = fileSize > 8388608;
 };
 
-async function createFood() {
+async function handleCreateFood() {
   isLoading.value = true;
 
-  const formData = new FormData();
+  const food = await createFood(createFoodRequest);
+  isLoading.value = false;
 
-  try {
-    const newFood = await $apiFetcher<Food>("/food/", {
-      method: "POST",
-      body: createFoodRequest.value,
-      ...fetchOptions.value,
-    });
+  console.log(food);
 
-    if (file.value && !fileToBig.value) {
-      formData.append("image", file.value);
-
-      await $apiFetcher<Food>(`/food/${newFood.id}/update-image`, {
-        method: "POST",
-        body: formData,
-        ...fetchOptions.value,
-      });
-    }
-
-    await router.push(`/food/${newFood.id}`);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isLoading.value = false;
-  }
+  await router.push(`/food/${food?.id}`);
 }
 
 watch(fileToBig, () => {
@@ -109,7 +82,7 @@ watch(fileToBig, () => {
       :schema="schema"
       :state="state"
       class="space-y-4"
-      @submit.prevent="createFood"
+      @submit.prevent="handleCreateFood"
     >
       <UFormField label="Name" name="name">
         <UInput v-model="state.name" />

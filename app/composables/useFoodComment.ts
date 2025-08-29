@@ -1,54 +1,41 @@
 import type {
-  Food,
-  FoodComment,
-  FoodCommentCollection,
-} from "~/types/ApiTypes";
-import { useSessionStore } from "~/store/session.store";
-import type { FetchOptions } from "ofetch";
+  CommentCollectionResponse,
+  CommentResponse,
+  FoodResponse,
+} from "ratemanu-api-client";
 
 export type useFoodCommentReturn = {
-  comments: ComputedRef<FoodComment[]>;
-  addComment(comment: Ref<string>): Promise<FoodComment | undefined>;
+  comments: ComputedRef<CommentResponse[]>;
+  addComment(comment: Ref<string>): Promise<CommentResponse | undefined>;
 };
 
-export function useFoodComment(food: Ref<Food>): useFoodCommentReturn {
-  const { $apiFetcher } = useNuxtApp();
+export function useFoodComment(food: Ref<FoodResponse>): useFoodCommentReturn {
+  const { $foodCommentsApi } = useNuxtApp();
   const toast = useToast();
-  const { token } = storeToRefs(useSessionStore());
 
-  const fetchOptions: ComputedRef<FetchOptions<"json">> = computed(() => ({
-    headers: {
-      Authorization: `Bearer ${token.value?.token}`,
-      "Accept-Language": "en-US",
-    },
-  }));
-
-  const latestComment = ref<FoodComment | undefined>(undefined);
+  const latestComment = ref<CommentResponse | undefined>(undefined);
 
   async function fetchComments(foodId: string) {
-    return $apiFetcher<FoodCommentCollection>(`/food/${foodId}/comment`, {
-      method: "GET",
-      ...fetchOptions.value,
-    });
+    const { data } = await $foodCommentsApi.foodCommentsGet(foodId);
+    return data;
   }
 
-  const { data: _foodComments } = useAsyncData<FoodCommentCollection>(
+  const { data: _foodComments } = useAsyncData<CommentCollectionResponse>(
     "fetch-comments" + food.value.id,
     () => fetchComments(food.value.id),
     { watch: [food, latestComment] },
   );
 
   async function createComment(foodId: string, comment: string) {
-    return $apiFetcher<FoodComment>(`/food/${foodId}/comment`, {
-      method: "POST",
-      body: { comment: comment },
-      ...fetchOptions.value,
+    const { data } = await $foodCommentsApi.foodCommentsCreate(foodId, {
+      comment: comment,
     });
+    return data;
   }
 
   async function addComment(
     comment: Ref<string>,
-  ): Promise<FoodComment | undefined> {
+  ): Promise<CommentResponse | undefined> {
     try {
       latestComment.value = await createComment(food.value.id, comment.value);
     } catch (error) {

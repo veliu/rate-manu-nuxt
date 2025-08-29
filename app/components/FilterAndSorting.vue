@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { SearchCriteria } from "~/types/ApiTypes";
-
 const props = defineProps<{ modelValue: SearchCriteria }>();
 const searchCriteria = toRef(props.modelValue);
 const emit = defineEmits(["update:modelValue"]);
