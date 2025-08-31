@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
-const items = computed<NavigationMenuItem[]>(() => []);
+const items = computed<NavigationMenuItem[]>(() => [
+  {
+    label: "Food",
+    to: "/",
+  },
+  {
+    label: "Ingredients",
+    to: "/ingredients",
+  },
+]);
 const footerItems = computed<NavigationMenuItem[]>(() => []);
 </script>
 

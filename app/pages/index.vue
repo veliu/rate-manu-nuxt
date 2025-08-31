@@ -36,7 +36,7 @@ const searchHash = computed(() => hash(searchCriteria.value));
 const { data: foodCollection } = useAsyncData(
   searchHash.value,
   () => makeSearch(sc),
-  { watch: [sc] },
+  { watch: [sc], server: false },
 );
 
 const totalCount = computed(() => foodCollection.value?.count || 0);
@@ -50,14 +50,7 @@ const items = computed(() => foodCollection.value?.items || []);
       description="Here you can find all your food entries"
     />
     <UPageBody>
-      <FoodSearch />
       <div class="mx-auto max-w-2xl lg:max-w-7xl">
-        <DesktopActionBar
-          class="hidden md:flex"
-          @toggle:filter-form="openFilterForm = true"
-          @toggle:create-form="openCreateFoodForm = true"
-        />
-
         <USlideover
           v-model:open="openCreateFoodForm"
           title="Create Food"
@@ -78,7 +71,13 @@ const items = computed(() => foodCollection.value?.items || []);
           </template>
         </USlideover>
 
-        <div class="flex justify-end my-2">
+        <div class="flex justify-between my-8 items-center">
+          <DesktopActionBar
+            class="hidden md:flex"
+            @toggle:filter-form="openFilterForm = true"
+            @toggle:create-form="openCreateFoodForm = true"
+          />
+          <FoodSearch />
           <UPagination
             v-model:page="page"
             :items-per-page="itemsPerPage"
@@ -93,7 +92,7 @@ const items = computed(() => foodCollection.value?.items || []);
           <FoodCard v-for="food in items" :key="food.id" :food="food" />
         </UPageGrid>
 
-        <div class="flex justify-end my-2">
+        <div class="flex justify-end my-8">
           <UPagination
             v-model:page="page"
             :items-per-page="itemsPerPage"

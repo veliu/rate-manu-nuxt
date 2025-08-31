@@ -1,4 +1,4 @@
-import type { FoodApi, UserApi, AuthenticationApi, FoodImagesApi, FoodRatingApi, FoodCommentsApi } from "ratemanu-api-client";
+import type { FoodApi, UserApi, AuthenticationApi, FoodImagesApi, FoodRatingApi, FoodCommentsApi, FoodIngredientsApi, IngredientApi } from "ratemanu-api-client";
 
 declare module "#app" {
   interface NuxtApp {
@@ -8,6 +8,8 @@ declare module "#app" {
     $foodImagesApi: FoodImagesApi
     $foodRatingApi: FoodRatingApi
     $foodCommentsApi: FoodCommentsApi
+    $ingredientApi: IngredientApi
+    $foodIngredients: FoodIngredientsApi
   }
 }
 
@@ -19,6 +21,8 @@ declare module "vue" {
     $foodImagesApi: FoodImagesApi
     $foodRatingApi: FoodRatingApi
     $foodCommentsApi: FoodCommentsApi
+    $ingredientApi: IngredientApi
+    $foodIngredients: FoodIngredientsApi
   }
 }
 

@@ -4,7 +4,9 @@ import {
   FoodApi,
   FoodCommentsApi,
   FoodImagesApi,
+  FoodIngredientsApi,
   FoodRatingApi,
+  IngredientApi,
   UserApi,
 } from "ratemanu-api-client";
 import { useSessionStore } from "~/store/session.store";
@@ -25,6 +27,8 @@ export default defineNuxtPlugin(() => {
   const foodImagesApi = new FoodImagesApi(apiConfig);
   const foodRatingApi = new FoodRatingApi(apiConfig);
   const foodCommentsApi = new FoodCommentsApi(apiConfig);
+  const ingredientApi = new IngredientApi(apiConfig);
+  const foodIngredientsApi = new FoodIngredientsApi(apiConfig);
 
   return {
     provide: {
@@ -34,6 +38,8 @@ export default defineNuxtPlugin(() => {
       foodImagesApi,
       foodRatingApi,
       foodCommentsApi,
+      ingredientApi,
+      foodIngredientsApi,
     },
   };
 });
