@@ -45,62 +45,66 @@ const items = computed(() => foodCollection.value?.items || []);
 
 <template>
   <UContainer>
-    <FoodSearch />
-    <div class="mx-auto max-w-2xl lg:max-w-7xl">
-      <DesktopActionBar
-        class="hidden md:flex"
-        @toggle:filter-form="openFilterForm = true"
-        @toggle:create-form="openCreateFoodForm = true"
-      />
-
-      <USlideover
-        v-model:open="openCreateFoodForm"
-        title="Create Food"
-        :close="{ color: 'primary' }"
-      >
-        <template #body>
-          <FoodCreateForm />
-        </template>
-      </USlideover>
-
-      <USlideover
-        v-model:open="openFilterForm"
-        title="Sorting"
-        :close="{ color: 'primary' }"
-      >
-        <template #body>
-          <FilterAndSorting v-model="searchCriteria" />
-        </template>
-      </USlideover>
-
-      <div class="flex justify-end">
-        <UPagination
-          v-model:page="page"
-          :items-per-page="itemsPerPage"
-          :total="totalCount"
-          :active-button="{ variant: 'outline' }"
-          :inactive-button="{ color: 'gray' }"
-          size="sm"
+    <UPageHeader
+      title="Food"
+      description="Here you can find all your food entries"
+    />
+    <UPageBody>
+      <FoodSearch />
+      <div class="mx-auto max-w-2xl lg:max-w-7xl">
+        <DesktopActionBar
+          class="hidden md:flex"
+          @toggle:filter-form="openFilterForm = true"
+          @toggle:create-form="openCreateFoodForm = true"
         />
-      </div>
 
-      <div class="my-8">
+        <USlideover
+          v-model:open="openCreateFoodForm"
+          title="Create Food"
+          :close="{ color: 'primary' }"
+        >
+          <template #body>
+            <FoodCreateForm />
+          </template>
+        </USlideover>
+
+        <USlideover
+          v-model:open="openFilterForm"
+          title="Sorting"
+          :close="{ color: 'primary' }"
+        >
+          <template #body>
+            <FilterAndSorting v-model="searchCriteria" />
+          </template>
+        </USlideover>
+
+        <div class="flex justify-end my-2">
+          <UPagination
+            v-model:page="page"
+            :items-per-page="itemsPerPage"
+            :total="totalCount"
+            :active-button="{ variant: 'outline' }"
+            :inactive-button="{ color: 'gray' }"
+            size="sm"
+          />
+        </div>
+
         <UPageGrid>
           <FoodCard v-for="food in items" :key="food.id" :food="food" />
         </UPageGrid>
-      </div>
 
-      <div class="flex justify-end">
-        <UPagination
-          v-model:page="page"
-          :items-per-page="itemsPerPage"
-          :total="totalCount"
-          :active-button="{ variant: 'outline' }"
-          :inactive-button="{ color: 'gray' }"
-          size="sm"
-        />
+        <div class="flex justify-end my-2">
+          <UPagination
+            v-model:page="page"
+            :items-per-page="itemsPerPage"
+            :total="totalCount"
+            :active-button="{ variant: 'outline' }"
+            :inactive-button="{ color: 'gray' }"
+            size="sm"
+          />
+        </div>
       </div>
-    </div>
+    </UPageBody>
 
     <MobileActionBar
       class="md:hidden"

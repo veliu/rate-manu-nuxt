@@ -2,7 +2,7 @@
 import { object, string, mixed } from "yup";
 import type { CreateFoodRequest } from "ratemanu-api-client";
 
-const { createFood } = useFood(ref(undefined));
+const { createFood, addImage } = useFood(ref(undefined));
 
 const toast = useToast();
 const router = useRouter();
@@ -58,9 +58,12 @@ async function handleCreateFood() {
   isLoading.value = true;
 
   const food = await createFood(createFoodRequest);
-  isLoading.value = false;
 
-  console.log(food);
+  if (file.value && !fileToBig.value) {
+    await addImage(file.value);
+  }
+
+  isLoading.value = false;
 
   await router.push(`/food/${food?.id}`);
 }
