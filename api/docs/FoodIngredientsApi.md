@@ -8,7 +8,7 @@ All URIs are relative to *http://localhost*
 |[**foodIngredientsRead**](#foodingredientsread) | **GET** /api/food/{foodId}/ingredients | |
 
 # **foodIngredientsAdd**
-> Array<FoodIngredientResponse> foodIngredientsAdd(createFoodIngredientsRequest)
+> FoodIngredientCollectionResponse foodIngredientsAdd(createFoodIngredientsRequest)
 
 
 ### Example
@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.foodIngredientsAdd(
 
 ### Return type
 
-**Array<FoodIngredientResponse>**
+**FoodIngredientCollectionResponse**
 
 ### Authorization
 
@@ -64,7 +64,7 @@ const { status, data } = await apiInstance.foodIngredientsAdd(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **foodIngredientsRead**
-> Array<FoodIngredientResponse> foodIngredientsRead()
+> FoodIngredientCollectionResponse foodIngredientsRead()
 
 
 ### Example
@@ -94,7 +94,7 @@ const { status, data } = await apiInstance.foodIngredientsRead(
 
 ### Return type
 
-**Array<FoodIngredientResponse>**
+**FoodIngredientCollectionResponse**
 
 ### Authorization
 

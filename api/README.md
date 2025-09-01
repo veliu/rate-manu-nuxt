@@ -90,6 +90,7 @@ Class | Method | HTTP request | Description
  - [Filter](docs/Filter.md)
  - [FilterValue](docs/FilterValue.md)
  - [FoodCollectionResponse](docs/FoodCollectionResponse.md)
+ - [FoodIngredientCollectionResponse](docs/FoodIngredientCollectionResponse.md)
  - [FoodIngredientResponse](docs/FoodIngredientResponse.md)
  - [FoodResponse](docs/FoodResponse.md)
  - [GroupMemberResponse](docs/GroupMemberResponse.md)

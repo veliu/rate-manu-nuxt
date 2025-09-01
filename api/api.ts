@@ -286,6 +286,25 @@ export interface FoodCollectionResponse {
 /**
  * 
  * @export
+ * @interface FoodIngredientCollectionResponse
+ */
+export interface FoodIngredientCollectionResponse {
+    /**
+     * Unique identifier of the food
+     * @type {string}
+     * @memberof FoodIngredientCollectionResponse
+     */
+    'foodId': string;
+    /**
+     * List of food ingredients
+     * @type {Array<FoodIngredientResponse>}
+     * @memberof FoodIngredientCollectionResponse
+     */
+    'ingredients': Array<FoodIngredientResponse>;
+}
+/**
+ * 
+ * @export
  * @interface FoodIngredientResponse
  */
 export interface FoodIngredientResponse {
@@ -2104,7 +2123,7 @@ export const FoodIngredientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FoodIngredientResponse>>> {
+        async foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsAdd(foodId, createFoodIngredientsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsAdd']?.[localVarOperationServerIndex]?.url;
@@ -2116,7 +2135,7 @@ export const FoodIngredientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FoodIngredientResponse>>> {
+        async foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsRead(foodId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsRead']?.[localVarOperationServerIndex]?.url;
@@ -2139,7 +2158,7 @@ export const FoodIngredientsApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<FoodIngredientResponse>> {
+        foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
             return localVarFp.foodIngredientsAdd(foodId, createFoodIngredientsRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2148,7 +2167,7 @@ export const FoodIngredientsApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<FoodIngredientResponse>> {
+        foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
             return localVarFp.foodIngredientsRead(foodId, options).then((request) => request(axios, basePath));
         },
     };

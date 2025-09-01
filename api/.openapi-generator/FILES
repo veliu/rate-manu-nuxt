@@ -20,6 +20,7 @@ docs/FoodApi.md
 docs/FoodCollectionResponse.md
 docs/FoodCommentsApi.md
 docs/FoodImagesApi.md
+docs/FoodIngredientCollectionResponse.md
 docs/FoodIngredientResponse.md
 docs/FoodIngredientsApi.md
 docs/FoodRatingApi.md
