@@ -17,9 +17,7 @@ export type useFoodReturn = {
   updateFood(
     request: Ref<UpdateFoodRequest>,
   ): Promise<FoodResponse | undefined>;
-  createFood(
-    request: Ref<CreateFoodRequest>,
-  ): Promise<FoodResponse | undefined>;
+  createFood(request: CreateFoodRequest): Promise<FoodResponse | undefined>;
 };
 
 export function useFood(food: Ref<FoodResponse | undefined>): useFoodReturn {
@@ -141,10 +139,10 @@ export function useFood(food: Ref<FoodResponse | undefined>): useFoodReturn {
   }
 
   async function createFood(
-    request: Ref<CreateFoodRequest>,
+    request: CreateFoodRequest,
   ): Promise<FoodResponse | undefined> {
     try {
-      const { data } = await $foodApi.foodCreate(request.value);
+      const { data } = await $foodApi.foodCreate(request);
       toast.add({
         id: "create-food-success" + data.id,
         title: "Food created!",
