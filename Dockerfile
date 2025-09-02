@@ -19,6 +19,8 @@ RUN npm add --global pnpm@${PNPM_VERSION}
 # Files required by pnpm install
 COPY . /usr/src/app
 
+RUN pnpm --dir api install
+
 RUN pnpm install --frozen-lockfile --prefer-offline
 
 RUN pnpm build
