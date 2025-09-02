@@ -4,11 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**foodIngredientsAdd**](#foodingredientsadd) | **POST** /api/food/{foodId}/ingredients | |
-|[**foodIngredientsRead**](#foodingredientsread) | **GET** /api/food/{foodId}/ingredients | |
+|[**foodIngredientsCreate**](#foodingredientscreate) | **POST** /api/food/{foodId}/ingredients | |
+|[**foodIngredientsDelete**](#foodingredientsdelete) | **DELETE** /api/food/{foodId}/ingredients{ingredientId} | |
+|[**foodIngredientsGet**](#foodingredientsget) | **GET** /api/food/{foodId}/ingredients | |
 
-# **foodIngredientsAdd**
-> FoodIngredientCollectionResponse foodIngredientsAdd(createFoodIngredientsRequest)
+# **foodIngredientsCreate**
+> FoodIngredientCollectionResponse foodIngredientsCreate(createFoodIngredientsRequest)
 
 
 ### Example
@@ -26,7 +27,7 @@ const apiInstance = new FoodIngredientsApi(configuration);
 let foodId: string; //The ID of the food (default to undefined)
 let createFoodIngredientsRequest: CreateFoodIngredientsRequest; //
 
-const { status, data } = await apiInstance.foodIngredientsAdd(
+const { status, data } = await apiInstance.foodIngredientsCreate(
     foodId,
     createFoodIngredientsRequest
 );
@@ -63,8 +64,62 @@ const { status, data } = await apiInstance.foodIngredientsAdd(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **foodIngredientsRead**
-> FoodIngredientCollectionResponse foodIngredientsRead()
+# **foodIngredientsDelete**
+> FoodIngredientCollectionResponse foodIngredientsDelete()
+
+
+### Example
+
+```typescript
+import {
+    FoodIngredientsApi,
+    Configuration
+} from 'ratemanu-api-client';
+
+const configuration = new Configuration();
+const apiInstance = new FoodIngredientsApi(configuration);
+
+let foodId: string; //The ID of the food (default to undefined)
+let ingredientId: string; //The ID of the ingredient (default to undefined)
+
+const { status, data } = await apiInstance.foodIngredientsDelete(
+    foodId,
+    ingredientId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **foodId** | [**string**] | The ID of the food | defaults to undefined|
+| **ingredientId** | [**string**] | The ID of the ingredient | defaults to undefined|
+
+
+### Return type
+
+**FoodIngredientCollectionResponse**
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Returns food ingredients |  -  |
+|**404** | Food does not exist |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **foodIngredientsGet**
+> FoodIngredientCollectionResponse foodIngredientsGet()
 
 
 ### Example
@@ -80,7 +135,7 @@ const apiInstance = new FoodIngredientsApi(configuration);
 
 let foodId: string; //The ID of the food (default to undefined)
 
-const { status, data } = await apiInstance.foodIngredientsRead(
+const { status, data } = await apiInstance.foodIngredientsGet(
     foodId
 );
 ```

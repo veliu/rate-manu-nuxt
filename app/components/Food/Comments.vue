@@ -38,7 +38,7 @@ const invokeCreateComment = async () => {
 </script>
 
 <template>
-  <UContainer class="border-1 border-primary rounded-xl p-8">
+  <UContainer class="border-1 border-secondary rounded-xl p-8">
     <h2 class="text-2xl font-bold mb-4">Comments</h2>
     <UChatMessages
       :user="{

@@ -63,8 +63,9 @@ Class | Method | HTTP request | Description
 *FoodCommentsApi* | [**foodCommentsCreate**](docs/FoodCommentsApi.md#foodcommentscreate) | **POST** /api/food/{id}/comment | 
 *FoodCommentsApi* | [**foodCommentsGet**](docs/FoodCommentsApi.md#foodcommentsget) | **GET** /api/food/{id}/comment | 
 *FoodImagesApi* | [**foodImagesUpdate**](docs/FoodImagesApi.md#foodimagesupdate) | **POST** /api/food/{id}/update-image | 
-*FoodIngredientsApi* | [**foodIngredientsAdd**](docs/FoodIngredientsApi.md#foodingredientsadd) | **POST** /api/food/{foodId}/ingredients | 
-*FoodIngredientsApi* | [**foodIngredientsRead**](docs/FoodIngredientsApi.md#foodingredientsread) | **GET** /api/food/{foodId}/ingredients | 
+*FoodIngredientsApi* | [**foodIngredientsCreate**](docs/FoodIngredientsApi.md#foodingredientscreate) | **POST** /api/food/{foodId}/ingredients | 
+*FoodIngredientsApi* | [**foodIngredientsDelete**](docs/FoodIngredientsApi.md#foodingredientsdelete) | **DELETE** /api/food/{foodId}/ingredients{ingredientId} | 
+*FoodIngredientsApi* | [**foodIngredientsGet**](docs/FoodIngredientsApi.md#foodingredientsget) | **GET** /api/food/{foodId}/ingredients | 
 *FoodRatingApi* | [**foodRatingGet**](docs/FoodRatingApi.md#foodratingget) | **GET** /api/food-rating/{foodId} | 
 *FoodRatingApi* | [**foodRatingGetPersonal**](docs/FoodRatingApi.md#foodratinggetpersonal) | **GET** /api/food-rating/my/{foodId} | 
 *FoodRatingApi* | [**foodRatingUpsert**](docs/FoodRatingApi.md#foodratingupsert) | **POST** /api/food-rating/ | 

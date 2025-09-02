@@ -11,6 +11,6 @@ defineProps<{ imageUrls: string[] | undefined | null }>();
     arrows
     dots
   >
-    <NuxtImg :src="item" class="rounded-lg" />
+    <NuxtImg :src="item" width="600" height="600" class="rounded-lg" />
   </UCarousel>
 </template>

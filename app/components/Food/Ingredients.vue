@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import { h, resolveComponent } from "vue";
 import type {
   CreateFoodIngredientsRequest,
   FoodIngredientResponse,
   FoodResponse,
 } from "ratemanu-api-client";
 import type { TableColumn } from "@nuxt/ui";
+import type { Row } from "@tanstack/vue-table";
 
 const props = defineProps<{
   food: FoodResponse;
 }>();
+
+const UButton = resolveComponent("UButton");
+const UDropdownMenu = resolveComponent("UDropdownMenu");
 
 const { $foodIngredientsApi, $ingredientApi } = useNuxtApp();
 
@@ -18,7 +23,7 @@ const { data: foodIngredients, refresh: refreshFoodIngredients } =
   await useAsyncData<FoodIngredientResponse[]>(
     "food-ingredients" + foodId.value,
     async () => {
-      const { data } = await $foodIngredientsApi.foodIngredientsRead(
+      const { data } = await $foodIngredientsApi.foodIngredientsGet(
         foodId.value,
       );
       return data.ingredients;
@@ -35,19 +40,86 @@ const { data: ingredients, status } = await useAsyncData<{ label: string }[]>(
   { lazy: true },
 );
 
-const columns: TableColumn<FoodIngredientResponse>[] = [
+async function handleDeleteIngredient(foodIngredientId: string) {
+  await $foodIngredientsApi.foodIngredientsDelete(
+    foodId.value,
+    foodIngredientId,
+  );
+  await refreshFoodIngredients();
+}
+
+function getRowItems(row: Row<TableRowEntry>) {
+  return [
+    {
+      type: "label",
+      label: "Actions",
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "Delete",
+      onSelect() {
+        handleDeleteIngredient(row.original.ingredientId);
+      },
+    },
+  ];
+}
+
+type TableRowEntry = {
+  id: string;
+  ingredientId: string;
+  name: string;
+  amount: string;
+};
+
+const tableRowEntries = computed<TableRowEntry[]>(
+  () =>
+    foodIngredients.value?.map((i: FoodIngredientResponse) => ({
+      id: i.id,
+      ingredientId: i.ingredientId,
+      name: i.ingredient.name,
+      amount: i.amount + i.unit,
+    })) || [],
+);
+
+console.log(tableRowEntries.value);
+
+const columns: TableColumn<TableRowEntry>[] = [
   {
-    accessorKey: "ingredient.name",
+    accessorKey: "name",
     header: "Name",
   },
   {
     accessorKey: "amount",
     header: "Amount",
-    cell: ({ row }) => `${row.getValue("amount")} ${row.getValue("unit")}`,
   },
   {
-    accessorKey: "unit",
-    header: "Unit",
+    id: "actions",
+    cell: ({ row }) => {
+      return h(
+        "div",
+        { class: "text-right" },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: "end",
+            },
+            items: getRowItems(row),
+            "aria-label": "Actions dropdown",
+          },
+          () =>
+            h(UButton, {
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
+              "aria-label": "Actions dropdown",
+            }),
+        ),
+      );
+    },
   },
 ];
 
@@ -61,7 +133,7 @@ const selectedIngredient = ref<{ key: string; label: string } | undefined>(
 
 async function addIngredient() {
   if (selectedIngredient.value && selectedAmount.value > 0) {
-    await $foodIngredientsApi.foodIngredientsAdd(foodId.value, {
+    await $foodIngredientsApi.foodIngredientsCreate(foodId.value, {
       ingredients: [
         {
           ingredientId: selectedIngredient.value.key,
@@ -80,8 +152,13 @@ async function addIngredient() {
   <div>
     <h2 class="text-2xl font-bold mb-4 p-8">Ingredients</h2>
     <div v-if="foodIngredients">
-      <UTable :data="foodIngredients" :columns="columns" class="flex-1" />
-      <div class="flex flex-row gap-2">
+      <UTable
+        ref="table"
+        :data="tableRowEntries"
+        :columns="columns"
+        class="flex-1"
+      />
+      <div class="flex flex-row gap-2 my-8">
         <UInputMenu
           v-model="selectedIngredient"
           :items="ingredients"
@@ -98,7 +175,7 @@ async function addIngredient() {
           class=""
         />
         <UButton
-          label="Add"
+          icon="i-lucide-plus"
           color="neutral"
           variant="subtle"
           @click="addIngredient"

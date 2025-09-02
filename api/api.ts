@@ -2033,11 +2033,11 @@ export const FoodIngredientsApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsAdd: async (foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        foodIngredientsCreate: async (foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'foodId' is not null or undefined
-            assertParamExists('foodIngredientsAdd', 'foodId', foodId)
+            assertParamExists('foodIngredientsCreate', 'foodId', foodId)
             // verify required parameter 'createFoodIngredientsRequest' is not null or undefined
-            assertParamExists('foodIngredientsAdd', 'createFoodIngredientsRequest', createFoodIngredientsRequest)
+            assertParamExists('foodIngredientsCreate', 'createFoodIngredientsRequest', createFoodIngredientsRequest)
             const localVarPath = `/api/food/{foodId}/ingredients`
                 .replace(`{${"foodId"}}`, encodeURIComponent(String(foodId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2072,12 +2072,53 @@ export const FoodIngredientsApiAxiosParamCreator = function (configuration?: Con
         /**
          * 
          * @param {string} foodId The ID of the food
+         * @param {string} ingredientId The ID of the ingredient
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsRead: async (foodId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        foodIngredientsDelete: async (foodId: string, ingredientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'foodId' is not null or undefined
-            assertParamExists('foodIngredientsRead', 'foodId', foodId)
+            assertParamExists('foodIngredientsDelete', 'foodId', foodId)
+            // verify required parameter 'ingredientId' is not null or undefined
+            assertParamExists('foodIngredientsDelete', 'ingredientId', ingredientId)
+            const localVarPath = `/api/food/{foodId}/ingredients{ingredientId}`
+                .replace(`{${"foodId"}}`, encodeURIComponent(String(foodId)))
+                .replace(`{${"ingredientId"}}`, encodeURIComponent(String(ingredientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} foodId The ID of the food
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        foodIngredientsGet: async (foodId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'foodId' is not null or undefined
+            assertParamExists('foodIngredientsGet', 'foodId', foodId)
             const localVarPath = `/api/food/{foodId}/ingredients`
                 .replace(`{${"foodId"}}`, encodeURIComponent(String(foodId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2123,10 +2164,23 @@ export const FoodIngredientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsAdd(foodId, createFoodIngredientsRequest, options);
+        async foodIngredientsCreate(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsCreate(foodId, createFoodIngredientsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsAdd']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} foodId The ID of the food
+         * @param {string} ingredientId The ID of the ingredient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async foodIngredientsDelete(foodId: string, ingredientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsDelete(foodId, ingredientId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2135,10 +2189,10 @@ export const FoodIngredientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsRead(foodId, options);
+        async foodIngredientsGet(foodId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FoodIngredientCollectionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.foodIngredientsGet(foodId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsRead']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['FoodIngredientsApi.foodIngredientsGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2158,8 +2212,18 @@ export const FoodIngredientsApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
-            return localVarFp.foodIngredientsAdd(foodId, createFoodIngredientsRequest, options).then((request) => request(axios, basePath));
+        foodIngredientsCreate(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
+            return localVarFp.foodIngredientsCreate(foodId, createFoodIngredientsRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} foodId The ID of the food
+         * @param {string} ingredientId The ID of the ingredient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        foodIngredientsDelete(foodId: string, ingredientId: string, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
+            return localVarFp.foodIngredientsDelete(foodId, ingredientId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2167,8 +2231,8 @@ export const FoodIngredientsApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
-            return localVarFp.foodIngredientsRead(foodId, options).then((request) => request(axios, basePath));
+        foodIngredientsGet(foodId: string, options?: RawAxiosRequestConfig): AxiosPromise<FoodIngredientCollectionResponse> {
+            return localVarFp.foodIngredientsGet(foodId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2188,8 +2252,20 @@ export class FoodIngredientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FoodIngredientsApi
      */
-    public foodIngredientsAdd(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig) {
-        return FoodIngredientsApiFp(this.configuration).foodIngredientsAdd(foodId, createFoodIngredientsRequest, options).then((request) => request(this.axios, this.basePath));
+    public foodIngredientsCreate(foodId: string, createFoodIngredientsRequest: CreateFoodIngredientsRequest, options?: RawAxiosRequestConfig) {
+        return FoodIngredientsApiFp(this.configuration).foodIngredientsCreate(foodId, createFoodIngredientsRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} foodId The ID of the food
+     * @param {string} ingredientId The ID of the ingredient
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FoodIngredientsApi
+     */
+    public foodIngredientsDelete(foodId: string, ingredientId: string, options?: RawAxiosRequestConfig) {
+        return FoodIngredientsApiFp(this.configuration).foodIngredientsDelete(foodId, ingredientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2199,8 +2275,8 @@ export class FoodIngredientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FoodIngredientsApi
      */
-    public foodIngredientsRead(foodId: string, options?: RawAxiosRequestConfig) {
-        return FoodIngredientsApiFp(this.configuration).foodIngredientsRead(foodId, options).then((request) => request(this.axios, this.basePath));
+    public foodIngredientsGet(foodId: string, options?: RawAxiosRequestConfig) {
+        return FoodIngredientsApiFp(this.configuration).foodIngredientsGet(foodId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
