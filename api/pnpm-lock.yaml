@@ -13,7 +13,7 @@ importers:
         version: 1.11.0
     devDependencies:
       '@types/node':
-        specifier: 12.11.5 - 12.20.42
+        specifier: 12.11.5 - 12.20
         version: 12.20.42
       typescript:
         specifier: ^4.0 || ^5.0
